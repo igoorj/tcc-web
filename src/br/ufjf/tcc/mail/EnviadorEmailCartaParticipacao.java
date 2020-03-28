@@ -29,36 +29,45 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		String titulo = tcc.getNomeTCC();
-		List<Usuario> participacoes;
-		for(Participacao participacao : tcc.getParticipacoes()) {
-			
-		}
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Carta de participação da banca - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezado(a) (nome completo do membro da banca), ").breakLine(); 
-		emailBuilder.appendMensagem("Gostaríamos de agradecer, em nome do Curso " + nomeCurso + ", ");
-		emailBuilder.appendMensagem("a sua participação como Membro em Banca Examinadora do ");
-		emailBuilder.appendMensagem("Trabalho de Conclusão de Curso, conforme as especificações:").breakLine(); 
-		emailBuilder.appendMensagem("Candidato(a): " + nomeAluno).breakLine();
-		emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine(); 
-		emailBuilder.appendMensagem("Coorientador(a): (nome completo, mas colocar apenas se tiver)").breakLine();
-		emailBuilder.appendMensagem("Título: " + titulo).breakLine();
-		emailBuilder.appendMensagem("Data da Defesa: (data e hora).").breakLine();
-		emailBuilder.appendMensagem("Banca Examinadora:").breakLine();
-		emailBuilder.appendMensagem("(membros da banca que o coordenador confirmou a participação)").breakLine(); 
-		emailBuilder.appendMensagem("Atenciosamente,").breakLine();
-		emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
-		emailBuilder.appendMensagem("______________________________________").breakLine(); 
-		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
-		emailBuilder.appendMensagem("Coordenador(a) do Curso " + nomeCurso).breakLine();
-		emailBuilder.appendLinkSistema();
+		List<Participacao> participacoes = tcc.getParticipacoes();
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		// Verifica quem prticipou
+		for(Participacao participacao : participacoes) {
+			if(!participacao.isParticipou()) {
+				participacoes.remove(participacao);
+			}
+		}
+		
+		
+		for(Participacao participacao : participacoes) {
+			
+			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Carta de participação da banca - " + nomeAluno);
+			emailBuilder.appendMensagem("Prezado(a) " + participacao.getProfessor().getNomeUsuario() + ", ").breakLine(); 
+			emailBuilder.appendMensagem("Gostaríamos de agradecer, em nome do Curso " + nomeCurso + ", ");
+			emailBuilder.appendMensagem("a sua participação como Membro em Banca Examinadora do ");
+			emailBuilder.appendMensagem("Trabalho de Conclusão de Curso, conforme as especificações:").breakLine(); 
+			emailBuilder.appendMensagem("Candidato(a): " + nomeAluno).breakLine();
+			emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine();
+			if(tcc.possuiCoorientador())
+				emailBuilder.appendMensagem("Co-orientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
+			emailBuilder.appendMensagem("Título: " + titulo).breakLine();
+			emailBuilder.appendMensagem("Data da Defesa: (data e hora).").breakLine();
+			emailBuilder.appendMensagem("Banca Examinadora:").breakLine();
+			for(Participacao part : participacoes) {
+				emailBuilder.appendMensagem(part.getProfessor().getNomeUsuario()).breakLine();				
+			}
+			emailBuilder.appendMensagem("Atenciosamente,").breakLine();
+			emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
+			emailBuilder.appendMensagem("______________________________________").breakLine(); 
+			emailBuilder.appendMensagem(nomeCoordenador).breakLine();
+			emailBuilder.appendMensagem("Coordenação do Curso " + nomeCurso).breakLine();
+			emailBuilder.appendLinkSistema();
+			
+			List<Usuario> destinatarios = new ArrayList<>();
+			destinatarios.add(participacao.getProfessor());
+			inserirDestinatarios(destinatarios, emailBuilder);
 	
+		}
 		return emailBuilder;
 		
 	}

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.ufjf.tcc.business.UsuarioBusiness;
+import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
@@ -21,14 +22,14 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 	@Override
 	protected EmailBuilder gerarEmail(TCC tcc, String statusInicial) {
 		EmailBuilder emailBuilder = null;
-		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
 		
-		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+		UsuarioBusiness ub = new UsuarioBusiness();
+//		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+//		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
-		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
-		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
+		Curso curso = tcc.getAluno().getCurso();
 		String titulo = tcc.getNomeTCC();
 		
 		Date dataApresentacao = tcc.getDataApresentacao();
@@ -38,33 +39,39 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 		String horaApresentacao = formatter.format(dataApresentacao);
 		
 		
+		List<String> suplentes = new ArrayList<String>();
+		List<String> membros = new ArrayList<String>();
+		for(Participacao participacao : tcc.getParticipacoes()) {
+			if(participacao.isSuplente())
+				suplentes.add(participacao.getProfessor().getNomeUsuario());
+			else
+				membros.add(participacao.getProfessor().getNomeUsuario());
+		}
+		
+		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Informes dos Dados de Defesa - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados, ").breakLine();
 		emailBuilder.appendMensagem("no dia " + dataApresentacaoString + " às " + horaApresentacao + " na(o) " + tcc.getSalaDefesa() + " acontecerá a ");
 		emailBuilder.appendMensagem("Defesa do Trabalho de Conclusão de Curso " + titulo);
 		emailBuilder.appendMensagem(" do(a) discente " + nomeAluno + ". A Banca Examinadora será composta por: ").breakLine(); 
 		emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine();
-		emailBuilder.appendMensagem("Co-orientador(a) (se houver)").breakLine();
-		for(Participacao participacao : tcc.getParticipacoes()) {
-			emailBuilder.appendMensagem("Membro da banca: " + participacao.getProfessor().getNomeUsuario()).breakLine();
+		if(tcc.possuiCoorientador())
+			emailBuilder.appendMensagem("Coorientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
+		for(String membro : membros) {
+			emailBuilder.appendMensagem("Membro da banca: " + membro).breakLine();
 		}
-		
-//		emailBuilder.appendMensagem("Membro 1 ").breakLine();
-//		emailBuilder.appendMensagem("Membro 2 ").breakLine(); 
-//		emailBuilder.appendMensagem("Suplente").breakLine();
-		
-		emailBuilder.appendMensagem("A Coordenação do Curso " + nomeCurso + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
+		for(String suplente : suplentes) {
+			emailBuilder.appendMensagem("Membro da banca: " + suplente).breakLine();
+		}
+		emailBuilder.appendMensagem("A Coordenação do Curso " + curso.getNomeCurso() + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();
-		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
-		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
+//		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
+		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + curso.getNomeCurso()).breakLine();
 		emailBuilder.appendLinkSistema();
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.addAll(ub.getSecretariasByCurso(curso));
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

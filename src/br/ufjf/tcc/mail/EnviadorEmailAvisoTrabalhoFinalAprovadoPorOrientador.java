@@ -18,15 +18,15 @@ public class EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador extends Enviad
 	@Override
 	protected EmailBuilder gerarEmail(TCC tcc, String statusInicial) {
 		EmailBuilder emailBuilder = null;
-		
+		UsuarioBusiness ub = new UsuarioBusiness();
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
 		String titulo = tcc.getNomeTCC();
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Final Aprovado por Orientador - "+nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Final Aprovado por Orientador - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezada Coordenação, ");
 		emailBuilder.appendMensagem("a Versão Final do Trabalho de Conclusão de Curso do(a) discente " + nomeAluno + ", com o título ");
-		emailBuilder.appendMensagem(titulo + ", foi aprovada pelo(a) orientador(a) " + nomeOrientador + ".").breakLine();
+		emailBuilder.appendMensagem( titulo + ", foi aprovada pelo(a) orientador(a) " + nomeOrientador + ".").breakLine();
 		emailBuilder.appendMensagem("A Coordenação/bolsista da Coordenação precisa avaliar ");
 		emailBuilder.appendMensagem("a formatação do TCC, conferir a documentação de Defesa e confirmar ");
 		emailBuilder.appendMensagem("no Sistema de Monografias os membros que efetivamente participaram ");
@@ -39,12 +39,9 @@ public class EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador extends Enviad
 		emailBuilder.appendLinkSistema();
 		
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.addAll(ub.getSecretariasByCurso(tcc.getAluno().getCurso()));
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

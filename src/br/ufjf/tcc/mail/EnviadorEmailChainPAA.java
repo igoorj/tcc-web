@@ -26,7 +26,7 @@ public class EnviadorEmailChainPAA extends EnviadorEmailChain {
 			emailBuilder.appendMensagem("Título do projeto: "+tcc.getNomeTCC()).breakLine();
 			emailBuilder.appendMensagem("Orientador(a): "+tcc.getOrientador().getNomeUsuario()).breakLine();
 			if(tcc.possuiCoorientador()){
-				emailBuilder.appendMensagem("Coorientador(a): "+tcc.getCoOrientador().getNomeUsuario()).breakLine();
+				emailBuilder.appendMensagem("Coorientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
 			}
 			emailBuilder.appendMensagem("Resumo: "+tcc.getResumoTCC()).breakLine();
 			emailBuilder.appendMensagem("Palavras-chave: "+tcc.getPalavrasChave()).breakLine().breakLine();

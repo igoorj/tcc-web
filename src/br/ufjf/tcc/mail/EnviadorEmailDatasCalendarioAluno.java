@@ -1,11 +1,11 @@
 package br.ufjf.tcc.mail;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import br.ufjf.tcc.business.PrazoBusiness;
-import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
@@ -25,20 +25,20 @@ public class EnviadorEmailDatasCalendarioAluno extends  EnviadorEmailChain{
 		EmailBuilder emailBuilder = null;
 		PrazoBusiness prazoBusiness = new PrazoBusiness();
 		
-		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+//		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+//		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+//		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
-		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
 		CalendarioSemestre calendario = tcc.getCalendarioSemestre();
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
-		Date dataLimiteSubmissaoProjeto = prazos.get(0).getDataFinal();
-		Date dataLimiteEntregaBanca = prazos.get(1).getDataFinal();
-		Date dataLimiteDefesa = prazos.get(2).getDataFinal();
-		Date dataLimiteSubmissaoTrabalhoFinal = prazos.get(3).getDataFinal();
+		String dataLimiteSubmissaoProjeto = new DateTime(prazos.get(0).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteEntregaBanca = new DateTime(prazos.get(1).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteDefesa = new DateTime(prazos.get(2).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteSubmissaoTrabalhoFinal = new DateTime(prazos.get(3).getDataFinal()).toString("dd/MM/yyyy");
 				
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Datas do calendário");
 		emailBuilder.appendMensagem("Prezado(a) " + nomeAluno + ",").breakLine();
@@ -52,16 +52,13 @@ public class EnviadorEmailDatasCalendarioAluno extends  EnviadorEmailChain{
 		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para entrega na Coordenação das Fichas de Avaliação da Banca Examinadora da Ata de Defesa.").breakLine();
 		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para submissão da Versão Final do TCC no Sistema de Monografias.").breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
-		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
+//		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.add(tcc.getAluno());
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

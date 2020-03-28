@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import br.ufjf.tcc.business.PrazoBusiness;
-import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
@@ -25,12 +24,12 @@ public class EnviadorEmailDatasCalendarioOrientador extends EnviadorEmailChain {
 		EmailBuilder emailBuilder = null;
 		PrazoBusiness prazoBusiness = new PrazoBusiness();
 		
-		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+//		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+//		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+//		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
-		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
 		CalendarioSemestre calendario = tcc.getCalendarioSemestre();
@@ -54,16 +53,13 @@ public class EnviadorEmailDatasCalendarioOrientador extends EnviadorEmailChain {
 		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal +" Data limite para submissão da Versão Final do TCC no Sistema de Monografias.").breakLine().breakLine();
 		
 		emailBuilder.appendMensagem("Att.,").breakLine();
-		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
+//		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.add(tcc.getOrientador());
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

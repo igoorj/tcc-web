@@ -43,12 +43,9 @@ public class EnviadorEmailAvisoTrabalhoFinalSubmetido extends EnviadorEmailChain
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.add(tcc.getOrientador());
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

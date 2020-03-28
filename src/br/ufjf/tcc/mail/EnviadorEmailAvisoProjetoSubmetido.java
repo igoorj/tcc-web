@@ -17,8 +17,10 @@ public class EnviadorEmailAvisoProjetoSubmetido extends EnviadorEmailChain{
 	@Override
 	protected EmailBuilder gerarEmail(TCC tcc, String statusInicial) {
 		EmailBuilder emailBuilder = null;
+		UsuarioBusiness ub = new UsuarioBusiness();
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String titulo = tcc.getNomeTCC();
+		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de projeto submetido - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) Coordenador(a),").breakLine();
 		emailBuilder.appendMensagem("O Projeto do Trabalho de Conclusão de Curso do(a) discente ");
@@ -32,12 +34,9 @@ public class EnviadorEmailAvisoProjetoSubmetido extends EnviadorEmailChain{
 		emailBuilder.appendLinkSistema();
 		
 		
-		List<Usuario> aluno = new ArrayList<>();
-		UsuarioBusiness ub = new UsuarioBusiness();
-		Usuario u = ub.getByMatricula("1010");
-		System.out.println(u.getEmail());
-		aluno.add(u);
-		inserirDestinatarios(aluno, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.addAll(ub.getSecretariasByCurso(tcc.getAluno().getCurso()));
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		
