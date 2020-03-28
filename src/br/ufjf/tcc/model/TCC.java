@@ -457,7 +457,7 @@ public class TCC implements Serializable,Comparable<TCC> {
 	
 	public boolean isProjeto() {
 		return projeto;
-		}
+	}
 
 	public void setProjeto(boolean projeto) {
 		this.projeto = projeto;

@@ -400,13 +400,13 @@ public class TCCBusiness {
 		case TCC.PR:
 			return "Projeto reprovado";
 		case TCC.PAA:
-			return "Projeto aguardando aprova��o";
+			return "Projeto aguardando aprovação";
 		case TCC.TI:
 			return "Trabalho incompleto";
 		case TCC.TR:
 			return "Trabalho reprovado";
 		case TCC.TAA:
-			return "Trabalho aguardando aprova��o";
+			return "Trabalho aguardando aprovação";
 		case TCC.APROVADO:
 			return "Aprovado";
 		default:

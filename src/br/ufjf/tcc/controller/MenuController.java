@@ -269,9 +269,7 @@ public class MenuController extends CommonsController {
 		if (index < users.size()) {
 			SessionManager.setAttribute("usuario", users.get(index));
 			getUsuario().getTipoUsuario().setPermissoes(
-					new PermissaoBusiness()
-							.getPermissaoByTipoUsuario(getUsuario()
-									.getTipoUsuario()));
+					new PermissaoBusiness().getPermissaoByTipoUsuario(getUsuario().getTipoUsuario()));
 
 			if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
 				TCCBusiness tccBusiness = new TCCBusiness();

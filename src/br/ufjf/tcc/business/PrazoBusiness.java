@@ -42,11 +42,11 @@ public class PrazoBusiness {
 		case Prazo.PRAZO_PROJETO:
 			return "Data limite para enviar o projeto";
 		case Prazo.ENTREGA_BANCA:
-			return "Data limite para entregar versão do trabalho para a banca e informar os dados da defesa";
+			return "Data limite para entregar versÃ£o do trabalho para a banca e informar os dados da defesa";
 		case Prazo.DEFESA:
 			return "Data limite para defesa";
 		case Prazo.ENTREGA_FINAL:
-			return "Data limite para submeter a versão final do trabalho e para entregar na coordenação as fichas de avaliação da banca e a ata de defesa";
+			return "Data limite para submeter a versÃ£o final do trabalho e para entregar na coordenaÃ§Ã£o as fichas de avaliaÃ§Ã£o da banca e a ata de defesa";
 		case Prazo.FIM_SEMESTRE:
 			return "Fim do semestre";
 		

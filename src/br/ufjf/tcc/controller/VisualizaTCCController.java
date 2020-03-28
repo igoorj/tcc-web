@@ -4,9 +4,7 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.zkoss.bind.annotation.BindingParam;
@@ -23,6 +21,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Iframe;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.ParticipacaoBusiness;
@@ -35,6 +34,10 @@ import br.ufjf.tcc.library.FileManager;
 import br.ufjf.tcc.library.SessionManager;
 import br.ufjf.tcc.mail.Email;
 import br.ufjf.tcc.mail.EmailBuilder;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoAprovado;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoReprovado;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovado;
+import br.ufjf.tcc.mail.EnviadorEmailChain;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Pergunta;
 import br.ufjf.tcc.model.Resposta;
@@ -406,6 +409,12 @@ public class VisualizaTCCController extends CommonsController {
 		return false;
 	}
 	
+	public boolean isOrientador() {
+		if(getUsuario() == tcc.getOrientador())
+			return true;
+		return false;
+	}
+	
 	public boolean isProjeto()
 	{
 		return tcc.isProjeto();
@@ -433,17 +442,11 @@ public class VisualizaTCCController extends CommonsController {
 			        	tcc.setArquivoExtraTCCBanca(null);
 			        	tcc.setArquivoTCCBanca(null);
 						new TCCBusiness().edit(tcc);
-						String nomeAluno = tcc.getAluno().getNomeUsuario();
-						EmailBuilder emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Projeto Aprovado - "+nomeAluno);
-						emailBuilder.appendMensagem("Prezado(a) "+tcc.getAluno().getNomeUsuario()).breakLine().breakLine();
-						emailBuilder.appendMensagem("O seu projeto de TCC foi aprovado pela Coordenação de Curso. ");
-						emailBuilder.appendMensagem("Atente-se ao calendário definido pela sua Coordenação como prazo máximo para envio dos dados da sua defesa e ");
-						emailBuilder.appendMensagem("envio da versão digital do seu trabalho. ");
 						
-						List<Usuario> alunos = new ArrayList<>();
-						alunos.add(tcc.getAluno());
-						inserirDestinatarios(alunos, emailBuilder);
-						enviarEmail(emailBuilder);
+						// Envio de email de aviso de projeto aprovado
+						EnviadorEmailChain email = new EnviadorEmailAvisoProjetoAprovado();
+						email.enviarEmail(tcc, null);
+						
 						SessionManager.setAttribute("trabalhos_semestre",true);
 						//Executions.sendRedirect("/pages/tccs-curso.zul");
 						
@@ -468,11 +471,23 @@ public class VisualizaTCCController extends CommonsController {
 	}
 	
 	@Command
-	public void reprovar(@BindingParam("window") Window window)
+	public void reprovar(@BindingParam("window") Window window, @BindingParam("justificativaReprovacao") Textbox justificativaReprovacao)
 	{
 		TCCBusiness tccBusiness = new TCCBusiness();
-		tccBusiness.edit(tcc);
-		window.setVisible(false);
+		String justificativa = justificativaReprovacao.getValue();
+		if(justificativa != "") {
+			tcc.setJustificativaReprovacao(justificativa);
+			tcc.setStatus(TCC.PR);
+			tccBusiness.edit(tcc);
+			// Envio de email avisando que projeto foi reprovado
+			EnviadorEmailChain emailPorjetoReprovado = new EnviadorEmailAvisoProjetoReprovado();
+			emailPorjetoReprovado.enviarEmail(tcc, null);
+			Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
+			window.setVisible(false);
+		}
+		else {
+			Messagebox.show("É necessário inserir uma justificativa.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+		}
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -495,21 +510,14 @@ public class VisualizaTCCController extends CommonsController {
 						new TCCBusiness().edit(tcc);
 						tcc.getAluno().setAtivo(false);
 						ub.editar(tcc.getAluno());
-						String nomeAluno = tcc.getAluno().getNomeUsuario();
-						EmailBuilder emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Aprovado - "+nomeAluno);
-						emailBuilder.appendMensagem("Prezado(a) "+tcc.getAluno().getNomeUsuario()).breakLine().breakLine();
-						emailBuilder.appendMensagem("Parabéns. O seu trabalho foi aprovado pela Coordenação de Curso e ");
-						emailBuilder.appendMensagem("está disponível para acesso público no repositório de trabalhos acadêmicos.");
 						
-						List<Usuario> alunos = new ArrayList<>();
-						alunos.add(tcc.getAluno());
-						inserirDestinatarios(alunos, emailBuilder);
-						enviarEmail(emailBuilder);
+						EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovado();
+						email.enviarEmail(tcc, null);
 						
 						
 						for(Participacao p : tcc.getParticipacoes()) {
 							String nomeMembro = p.getProfessor().getNomeUsuario();
-							emailBuilder = new EmailBuilder(true).comTitulo("[TCC_WEB] Carta de participação da banca");
+							EmailBuilder emailBuilder = new EmailBuilder(true).comTitulo("[TCC_WEB] Carta de participação da banca");
 							emailBuilder.appendMensagem("Prezado(a) " + nomeMembro + " ");
 							emailBuilder.appendMensagem(" Gostaríamos de agradecer, em nome do curso " + tcc.getAluno().getCurso().getNomeCurso() + " a sua participação como ");
 							emailBuilder.appendMensagem(" Membro em Banca Examinadora do Trabalho de Conclusão de Curso, conforme as especificações: ");
@@ -527,18 +535,11 @@ public class VisualizaTCCController extends CommonsController {
 							
 							CartaParticipacaoBanca cartaParticipacao = new CartaParticipacaoBanca();								
 							try {
-								
-								
-								
-								String CoOrientador = "";
-								
-								
-								
-								if(tcc.getCoOrientador() == null)
-									CoOrientador = " "; 
-								else
+								String CoOrientador = " ";
+								if(tcc.getCoOrientador() != null)
 									CoOrientador = tcc.getCoOrientador().getNomeUsuario();
-								cartaParticipacao.gerarCartaParticipacao(tcc.getAluno().getCurso().getNomeCurso(), nomeMembro, tcc.getAluno().getNomeUsuario(), tcc.getOrientador().getNomeUsuario(), tcc.getIdTCC(),
+								
+								cartaParticipacao.gerarCartaParticipacao( tcc.getAluno().getCurso().getNomeCurso(), nomeMembro, tcc.getAluno().getNomeUsuario(), tcc.getOrientador().getNomeUsuario(), tcc.getIdTCC(),
 										CoOrientador, tcc.getNomeTCC(), tcc.getDataApresentacao().toString(), tcc.getParticipacoes(), p.getProfessor().getMatricula(), tcc.getCertificadoDigital());
 								//emailBuilder.setFileName(cartaParticipacao.obterNomeArquivo());
 							 
@@ -571,6 +572,16 @@ public class VisualizaTCCController extends CommonsController {
 		    }
 		});
 
+	}
+	
+	
+	@Command
+	public void finalizaTCC(@BindingParam("window") final Window window) {
+		if(isProjeto())
+			finalizaProjeto(window);
+		else {
+			finalizaTrabalho(window);
+		}
 	}
 	
 	private void enviarEmail(EmailBuilder emailBuilder) {
@@ -622,7 +633,11 @@ public class VisualizaTCCController extends CommonsController {
 	{
 		if(tcc!=null)
 		{
-			if((new TCCBusiness()).isProjetoAguardandoAprovacao(tcc))
+			TCCBusiness tccBusiness = new TCCBusiness();
+			String status = tccBusiness.getStatusTCC(tcc);
+			if(status.equals("PAA") || status.equals("PR"))
+				return true;
+			if(tccBusiness.isProjetoAguardandoAprovacao(tcc))
 				return true;
 		}
 		return false;
@@ -632,6 +647,9 @@ public class VisualizaTCCController extends CommonsController {
 	{
 		if(tcc!=null)
 		{
+			String status = new TCCBusiness().getStatusTCC(tcc);
+			if(status.equals("TAA") || status.equals("TR"))
+				return true;
 			if((new TCCBusiness()).isTrabalhoAguardandoAprovacao(tcc))
 				return true;
 		}
@@ -640,15 +658,15 @@ public class VisualizaTCCController extends CommonsController {
 		
 	public boolean exibirBaixarProjeto(){		
 			
-				if(tcc.getArqProjFinal()==null){
-					if(tcc.getArquivoTCCBanca()==null)
-						return false;
-					else if(tcc.getArquivoTCCFinal()==null)
-						return true;
-					
-						return false;
-				}else
-					return true;				
+		if(tcc.getArqProjFinal()==null){
+			if(tcc.getArquivoTCCBanca()==null)
+				return false;
+			else if(tcc.getArquivoTCCFinal()==null)
+				return true;
+			
+			return false;
+		} else
+			return true;				
 		
 	}
 	public boolean exibirBaixarProjetoExtra(){		
@@ -725,6 +743,28 @@ public class VisualizaTCCController extends CommonsController {
 			return false;
 							
 
+	}
+	
+	
+	public boolean exibirAprovacao(@BindingParam("aprovar") Button aprovar, @BindingParam("reprovar") Button reprovar) {
+		System.out.println("teste");
+		// PAA - coordenador aprovar projeto
+		if(isProjetoAguardandoAprovacao() && isCoordenador()) {
+			aprovar.setLabel("Aprovar projeto");
+			reprovar.setLabel("Reprovar projeto");
+			
+			return true;
+		}
+		
+		// TAA - orientador aprovar trabalho
+		if(isTrabalhoAguardandoAprovacao() && isOrientador()) {
+			aprovar.setLabel("Aprovar trabalho");
+			reprovar.setLabel("Reprovar trabalho");
+			return true;
+		}
+		
+		// Trabalho aguardando aprovação de formatação
+		return false;
 	}
 
 	public boolean isExibirBaixarProjeto() {

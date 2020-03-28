@@ -26,7 +26,7 @@ public class Prazo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//Prazos do processo do TCC
-	public static final int ENTREGA_BANCA = 1, DEFESA = 2, ENTREGA_FINAL = 3, FIM_SEMESTRE = 4, PRAZO_PROJETO = 0;
+	public static final int PRAZO_PROJETO = 0, ENTREGA_BANCA = 1, DEFESA = 2, ENTREGA_FINAL = 3, FIM_SEMESTRE = 4;
 
 	/**
 	 * Campo com ID do Prazo. Relaciona com a coluna {@code idPrazo} do banco e

@@ -95,12 +95,12 @@
 							<button label="Editar Dados" width="100%"
 								height="30px" style="margin-top:10px"
 								visible="@load(vm.canEdit ? 'true' : 'false')"
-								onClick="@command('editTCC')" />			
-													
-							<div id="verifica" visible="@load(vm.coordenador and not vm.finalizado)">
-								<button image="/img/confirm.gif" label="Aprovar projeto" visible="@load(vm.projeto and vm.projetoAguardandoAprovacao)" onClick="@command('finalizaProjeto', window=windowTCC)"  width="100%"
+								onClick="@command('editTCC')" />
+
+							<div id="verifica" visible="@load(vm.exibirAprovacao(aprovar, reprovar))">
+								<button id="aprovar" image="/img/confirm.gif" visible="@load(vm.projeto and vm.projetoAguardandoAprovacao)" onClick="@command('finalizaTCC', window=windowTCC)"  width="100%"
 								height="30px" style="margin-top:10px"/>
-								<button image="/img/cancel.png" label="Reprovar projeto" visible="@load(vm.projeto and vm.projetoAguardandoAprovacao)" onClick="@command('abrirModalReprovacao', window=modalReprovacao)"  width="100%"
+								<button id="reprovar" image="/img/cancel.png" visible="@load(vm.projeto and vm.projetoAguardandoAprovacao)" onClick="@command('abrirModalReprovacao', window=modalReprovacao)"  width="100%"
 								height="30px" style="margin-top:10px"/>
 								
 								<div  align="center" style="position:relative;top:20px;text-align:center" >
@@ -164,11 +164,13 @@
 			position="center,center" closable="true"
 			onClose="self.setVisible(false); event.stopPropagation();">
 			<label value="Justificativa: " style="margin:5px;" />
-			<textbox value="@bind(vm.tcc.justificativaReprovacao)"
+			<textbox id="justificativaReprovacao" value=""
 				rows="12" width="98%" style="margin:5px;" />
 			<div align="center" style="margin:15px" >
 				<button label="Salvar"
-					onClick="@command('reprovar', window=modalReprovacao)" width="100%" height="30px"/>
+						onClick="@command('reprovar', window=modalReprovacao, justificativaReprovacao=justificativaReprovacao)"
+					 	width="100%" height="30px"
+				 />
 			</div>
 		</window>
 	</window>

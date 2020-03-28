@@ -82,6 +82,13 @@ public class Participacao implements Serializable {
 	
 	@Column(name = "suplente", length = 4)
 	private int suplente;
+	
+	/**
+	 * Campo preenchido pelo aluno para indicar se o membro estava presente
+	 * no dia da defesa do tcc
+	 */
+	@Column(name = "participou", nullable = false)
+	private boolean participou;
 
 	public int getIdParticipacao() {
 		return idParticipacao;
@@ -133,6 +140,14 @@ public class Participacao implements Serializable {
 	
 	public boolean isSuplente() {
 		return getSuplente()==1;
+	}
+
+	public boolean isParticipou() {
+		return participou;
+	}
+
+	public void setParticipou(boolean participou) {
+		this.participou = participou;
 	}
 
 }
