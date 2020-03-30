@@ -31,7 +31,6 @@ public class Email {
 		if(builder==null)
 			return;
 		try {
-			System.out.println("Entrou");
 			message.setFrom(new InternetAddress(ConfHandler.getConf("MAIL.FROM"))); // Remetente
 
 			Address[] toUser = InternetAddress.parse(builder.getDestinatarios()); // Destinatário(s)
@@ -39,11 +38,11 @@ public class Email {
 
 			message.setSubject(builder.getTitulo()); // Assunto
 			if(builder.isHtmlFormat())
-				message.setContent(builder.getMensagem(), "text/html");
+				message.setContent(builder.getMensagem(), "text/html; charset=UTF-8");
 			else
 				message.setText(builder.getMensagem());
 
-//			Transport.send(message); // Método para enviar a mensagem criada
+			Transport.send(message); // Método para enviar a mensagem criada
 			System.out.println("Email enviado com sucesso!!\n\n");
 
 		} catch (MessagingException e) {
