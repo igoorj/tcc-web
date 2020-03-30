@@ -37,6 +37,7 @@ import br.ufjf.tcc.mail.EmailBuilder;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoAprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoReprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovado;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalReprovado;
 import br.ufjf.tcc.mail.EnviadorEmailChain;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Pergunta;
@@ -458,7 +459,7 @@ public class VisualizaTCCController extends CommonsController {
 					}
 					else
 						Messagebox.show("O projeto não esta completo");
-		        } 
+		        }
 		    }
 		});
 
@@ -470,20 +471,36 @@ public class VisualizaTCCController extends CommonsController {
 		window.doModal();
 	}
 	
+	@SuppressWarnings({"unchecked","rawtypes"})
 	@Command
-	public void reprovar(@BindingParam("window") Window window, @BindingParam("justificativaReprovacao") Textbox justificativaReprovacao)
+	public void reprovar(@BindingParam("window") final Window window, @BindingParam("justificativaReprovacao") Textbox justificativaReprovacao)
 	{
-		TCCBusiness tccBusiness = new TCCBusiness();
-		String justificativa = justificativaReprovacao.getValue();
+		final String justificativa = justificativaReprovacao.getValue();
 		if(justificativa != "") {
-			tcc.setJustificativaReprovacao(justificativa);
-			tcc.setStatus(TCC.PR);
-			tccBusiness.edit(tcc);
-			// Envio de email avisando que projeto foi reprovado
-			EnviadorEmailChain emailPorjetoReprovado = new EnviadorEmailAvisoProjetoReprovado();
-			emailPorjetoReprovado.enviarEmail(tcc, null);
-			Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
-			window.setVisible(false);
+			Messagebox.show("Você tem certeza que deseja reprovar esse " + (tcc.isProjeto() ? "Projeto" : "Trabalho") + "?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+				public void onEvent(Event evt) throws InterruptedException {
+					if(evt.getName().equals("onYes")) {
+						tcc.setJustificativaReprovacao(justificativa);
+						tcc.setStatus(TCC.PR);
+						if (isProjeto()) {
+							tcc.setStatus(TCC.PR);
+							// Envio de email avisando que projeto foi reprovado
+							EnviadorEmailChain emailPorjetoReprovado = new EnviadorEmailAvisoProjetoReprovado();
+							emailPorjetoReprovado.enviarEmail(tcc, null);
+							
+						}
+						else {
+							tcc.setStatus(TCC.TR);
+							EnviadorEmailChain emailTrabalhoReprovado = new EnviadorEmailAvisoTrabalhoFinalReprovado();
+							emailTrabalhoReprovado.enviarEmail(tcc, null);
+						}
+						new TCCBusiness().edit(tcc);
+						Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
+						window.detach();
+						
+					}
+				}
+			});
 		}
 		else {
 			Messagebox.show("É necessário inserir uma justificativa.", "Aviso", Messagebox.OK, Messagebox.ERROR);
@@ -763,7 +780,9 @@ public class VisualizaTCCController extends CommonsController {
 			return true;
 		}
 		
+		// TODO
 		// Trabalho aguardando aprovação de formatação
+		
 		return false;
 	}
 
