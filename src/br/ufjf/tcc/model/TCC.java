@@ -29,8 +29,20 @@ public class TCC implements Serializable,Comparable<TCC> {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * PI	- Projeto Incompleto
+	 * PR	- Projeto Reprovado
+	 * PAA	- Projeto Aguardando Aprovação
+	 * TI	- Trabalho Incompleto
+	 * TRO	- Trabalho Reprovado
+	 * TAAO	- Trabalho Aguardando Aprovação de Orientador
+	 * TRO	- Trabalho Reprovado por Orientador
+	 * TAAC	- Trabaho Aguardadno Aprovação de Coordenador
+	 * TRC	- Trabalho Reprovado por Orientador
+	 * APROVADO - Trabalho aprovado
+	 */
 	public static final int PI = 0, PR = 1, PAA = 2, TI = 3,
-			TR = 4, TAA = 5, APROVADO = 6;
+			TRO = 4, TAAO = 5, TAAC = 6, TRC = 7,  APROVADO = 8;
 
 	/**
 	 * Campo com ID do TCC. Relaciona com a coluna {@code idTCC} do banco e é

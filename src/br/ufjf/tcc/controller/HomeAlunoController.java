@@ -100,7 +100,7 @@ public class HomeAlunoController extends CommonsController {
 				infos.add("Seu projeto foi reprovado, façaa as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
-			else if (tcc.getStatus() == TCC.TR) {
+			else if (tcc.getStatus() == TCC.TRO) {
 				infos.add("Seu trabalho foi reprovado, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}

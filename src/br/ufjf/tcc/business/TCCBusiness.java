@@ -365,10 +365,14 @@ public class TCCBusiness {
 				return "PAA";
 			case TCC.TI:
 				return "TI";
-			case TCC.TR:
-				return "TR";
-			case TCC.TAA:
-				return "TAA";
+			case TCC.TRO:
+				return "TRO";
+			case TCC.TAAO:
+				return "TAAO";
+			case TCC.TRC:
+				return "TRC";
+			case TCC.TAAC:
+				return "TAAC";
 			case TCC.APROVADO:
 				return "Aprovado";
 			default:
@@ -403,10 +407,14 @@ public class TCCBusiness {
 			return "Projeto aguardando aprovação";
 		case TCC.TI:
 			return "Trabalho incompleto";
-		case TCC.TR:
-			return "Trabalho reprovado";
-		case TCC.TAA:
-			return "Trabalho aguardando aprovação";
+		case TCC.TRO:
+			return "Trabalho reprovado por orientador";
+		case TCC.TAAO:
+			return "Trabalho aguardando aprovação de orientador";
+		case TCC.TAAC:
+			return "Trabalho aguardando aprovação de coordenador";
+		case TCC.TRC:
+			return "Trabalho reprovado por coordenador";
 		case TCC.APROVADO:
 			return "Aprovado";
 		default:
