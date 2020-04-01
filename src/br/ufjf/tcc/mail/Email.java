@@ -2,13 +2,20 @@ package br.ufjf.tcc.mail;
 
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Address;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import br.ufjf.tcc.library.ConfHandler;
 
@@ -16,6 +23,9 @@ public class Email {
 
 	private Session session;
 	private Message message;
+	private DataSource dataSource;
+	private BodyPart bodyPart;
+	private Multipart multipart;
 
 	public Email() {
 		if (session == null) {
@@ -24,7 +34,9 @@ public class Email {
 			session = Session.getInstance(propriedades, autenticacao);
 			session.setDebug(true);
 		}
-		message = new MimeMessage(session);
+		this.message = new MimeMessage(session);
+		this.bodyPart = new MimeBodyPart();
+		this.multipart = new MimeMultipart();
 	}
 
 	public void enviar(EmailBuilder builder) throws RuntimeException {
@@ -35,14 +47,30 @@ public class Email {
 
 			Address[] toUser = InternetAddress.parse(builder.getDestinatarios()); // Destinatário(s)
 			message.setRecipients(Message.RecipientType.TO, toUser);
-
+			
 			message.setSubject(builder.getTitulo()); // Assunto
-			if(builder.isHtmlFormat())
-				message.setContent(builder.getMensagem(), "text/html; charset=UTF-8");
-			else
-				message.setText(builder.getMensagem());
-
-			Transport.send(message); // Método para enviar a mensagem criada
+			
+			// Body do email
+			if(builder.isHtmlFormat()) {
+				bodyPart.setContent(builder.getMensagem(), "text/html; charset=UTF-8");
+			}
+			else {
+				bodyPart.setText(builder.getMensagem());
+			}
+			multipart.addBodyPart(bodyPart);
+			
+			
+			// Arquivo em anexo
+			if(builder.getCaminhoArquivo() != null) {
+				bodyPart = new MimeBodyPart();
+				this.dataSource = new FileDataSource(builder.getCaminhoArquivo());
+				bodyPart.setDataHandler(new DataHandler(this.dataSource));
+				bodyPart.setFileName("Carta de participacao");
+				multipart.addBodyPart(bodyPart);
+			}
+			
+			message.setContent(multipart);
+//			Transport.send(message); // Método para enviar a mensagem criada
 			System.out.println("Email enviado com sucesso!!\n\n");
 
 		} catch (MessagingException e) {

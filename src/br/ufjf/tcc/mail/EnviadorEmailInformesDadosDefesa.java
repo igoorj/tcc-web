@@ -61,7 +61,7 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 			emailBuilder.appendMensagem("Membro da banca: " + membro).breakLine();
 		}
 		for(String suplente : suplentes) {
-			emailBuilder.appendMensagem("Membro da banca: " + suplente).breakLine();
+			emailBuilder.appendMensagem("Suplente: " + suplente).breakLine();
 		}
 		emailBuilder.appendMensagem("A Coordenação do Curso " + curso.getNomeCurso() + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();

@@ -1,18 +1,23 @@
 package br.ufjf.tcc.mail;
 
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+
 public class EmailBuilder {
 
 	private StringBuilder mensagem;
 	private StringBuilder destinatarios;
 	private String titulo;
+	private String caminhoArquivo;
 	private boolean isHtmlFormat;
 	private static String VIRGULA_ESPACO = ", ";
 	private static String linkSistema = "http://www.monografias.ice.ufjf.br";
 
 	public EmailBuilder(boolean isHtmlFormat) {
-		mensagem = new StringBuilder();
-		destinatarios = new StringBuilder();
-		titulo = new String();
+		this.caminhoArquivo = null;
+		this.mensagem = new StringBuilder();
+		this.destinatarios = new StringBuilder();
+		this.titulo = new String();
 		this.isHtmlFormat = isHtmlFormat;
 	}
 	
@@ -38,6 +43,10 @@ public class EmailBuilder {
 		
 		mensagem.append(texto);
 		return this;
+	}
+	
+	public void appendArquivo(String caminhoArquivo) {
+		this.caminhoArquivo = caminhoArquivo;
 	}
 	
 	public EmailBuilder breakLine(){
@@ -79,6 +88,12 @@ public class EmailBuilder {
 	public String getTitulo() {
 		return titulo;
 	}
+	
+	public String getCaminhoArquivo() {
+		return this.caminhoArquivo;
+	}
+	
+	
 	
 
 }
