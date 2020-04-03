@@ -1,9 +1,9 @@
 package br.ufjf.tcc.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
@@ -13,6 +13,14 @@ import br.ufjf.tcc.pdfHandle.CartaParticipacaoBanca;
 //Email número 17 do drive
 public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	
+	private String nomeAluno;
+	private String nomeOrientador;
+	private String nomeCurso;
+	private String titulo;
+	private String dataDefesa;
+	private List<String> suplentes;
+	private List<String> membros;
+	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	
 	public EnviadorEmailCartaParticipacao() {
 		super(null);
@@ -21,32 +29,6 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	
 	protected EmailBuilder gerarEmail(TCC tcc, Participacao membro) {
 		EmailBuilder emailBuilder = null;
-		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-		
-		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
-		
-		String nomeAluno = tcc.getAluno().getNomeUsuario();
-		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
-		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
-		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
-		String titulo = tcc.getNomeTCC();
-		List<Participacao> participacoes = tcc.getParticipacoes();
-		List<String> suplentes = new ArrayList<String>();
-		List<String> membros = new ArrayList<String>();
-		
-		// Verifica quem prticipou e separa em suplentes e membros
-		for(Participacao p : participacoes) {
-			if(p.isParticipou()) {
-				if(p.isSuplente())
-					suplentes.add(p.getProfessor().getNomeUsuario());
-				else
-					membros.add(p.getProfessor().getNomeUsuario());
-			}
-			else
-				participacoes.remove(p);
-		}
-		
-		// Para cada membro, envia um e-mail
 		String nomeMembro = membro.getProfessor().getNomeUsuario();
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Carta de participação da banca - " + nomeAluno);
@@ -59,7 +41,7 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 		if(tcc.possuiCoorientador())
 			emailBuilder.appendMensagem("Co-orientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
 		emailBuilder.appendMensagem("Título: " + titulo).breakLine();
-		emailBuilder.appendMensagem("Data da Defesa: (data e hora).").breakLine();
+		emailBuilder.appendMensagem("Data da Defesa: " + dataDefesa).breakLine();
 		emailBuilder.appendMensagem("Banca Examinadora:").breakLine();
 		for(String m : membros) {
 			emailBuilder.appendMensagem("Membro da banca: " + m).breakLine();
@@ -70,23 +52,8 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("Atenciosamente,").breakLine();
 		emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
 		emailBuilder.appendMensagem("______________________________________").breakLine(); 
-//			emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenação do Curso " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
-		CartaParticipacaoBanca cartaParticipacao = new CartaParticipacaoBanca();								
-		try {
-			String CoOrientador = " ";
-			if(tcc.getCoOrientador() != null)
-				CoOrientador = tcc.getCoOrientador().getNomeUsuario();
-			
-			cartaParticipacao.gerarCartaParticipacao( tcc.getAluno().getCurso().getNomeCurso(), nomeMembro, tcc.getAluno().getNomeUsuario(), tcc.getOrientador().getNomeUsuario(), tcc.getIdTCC(),
-					CoOrientador, tcc.getNomeTCC(), tcc.getDataApresentacao().toString(), tcc.getParticipacoes(), membro.getProfessor().getMatricula(), tcc.getCertificadoDigital());
-			emailBuilder.appendArquivo(cartaParticipacao.getCaminhoArquivo());
-		 
-		} catch(Exception e) {
-			System.out.println("Exceção capturada ao gerar carta de participacao - EnviadorEmailCartaParticipacao");
-			e.printStackTrace();
-		}
 		
 		List<Usuario> destinatarios = new ArrayList<>();
 		destinatarios.add(membro.getProfessor());
@@ -99,18 +66,37 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	
 	public void enviarEmails(TCC tcc) {
 		List<Participacao> participacoes = tcc.getParticipacoes();
+		// Verifica quem prticipou e separa em suplentes e membros
+		for(Participacao p : participacoes) {
+			if(p.isParticipou()) {
+				if(p.isSuplente())
+					this.suplentes.add(p.getProfessor().getNomeUsuario());
+				else
+					this.membros.add(p.getProfessor().getNomeUsuario());
+			}
+			else
+				participacoes.remove(p);
+		}
+		this.nomeAluno = tcc.getAluno().getNomeUsuario();
+		this.nomeCurso = tcc.getAluno().getCursoOuDepartamento();
+		this.titulo = tcc.getNomeTCC();
+		this.nomeOrientador = tcc.getOrientador().getNomeUsuario();
+		this.dataDefesa = formatter.format(tcc.getDataApresentacao());
+		
 		for(Participacao p : participacoes) {
 			EmailBuilder builder = gerarEmail(tcc, p);
 			CartaParticipacaoBanca cartaParticipacao = new CartaParticipacaoBanca();
+			// Adicionar arquivo de carta de participação
 			try {
 				String CoOrientador = " ";
-				if(tcc.getCoOrientador() != null)
+				if(tcc.possuiCoorientador())
 					CoOrientador = tcc.getCoOrientador().getNomeUsuario();
 				
-				cartaParticipacao.gerarCartaParticipacao( tcc.getAluno().getCurso().getNomeCurso(), p.getProfessor().getNomeUsuario(), tcc.getAluno().getNomeUsuario(), tcc.getOrientador().getNomeUsuario(), tcc.getIdTCC(),
-						CoOrientador, tcc.getNomeTCC(), tcc.getDataApresentacao().toString(), tcc.getParticipacoes(), p.getProfessor().getMatricula(), tcc.getCertificadoDigital());
+				cartaParticipacao.gerarCartaParticipacao( nomeCurso, p.getProfessor().getNomeUsuario(), nomeAluno, nomeOrientador, tcc.getIdTCC(),
+						CoOrientador, titulo, dataDefesa, participacoes, p.getProfessor().getMatricula(), tcc.getCertificadoDigital());
+				
 				builder.appendArquivo(cartaParticipacao.getCaminhoArquivo());
-			 
+				
 			} catch(Exception e) {
 				System.out.println("Exceção capturada ao gerar carta de participacao - EnviadorEmailCartaParticipacao");
 				e.printStackTrace();
