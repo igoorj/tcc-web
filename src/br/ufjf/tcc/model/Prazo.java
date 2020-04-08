@@ -25,7 +25,12 @@ public class Prazo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	//Prazos do processo do TCC
+	/**
+	 * PRAZ0_PROJETO: prazo para submeter projeto
+	 * ENTREGA_BANCA: prazo para informar dados de defesa e entregar trabalho para banca examinadora
+	 * DEFESA: prazo para defender o trabalho
+	 * ENTREGA_FINAL: prazo para entregar fichas de avaliação e submeter versão final do trabalho
+	 */
 	public static final int PRAZO_PROJETO = 0, ENTREGA_BANCA = 1, DEFESA = 2, ENTREGA_FINAL = 3, FIM_SEMESTRE = 4;
 
 	/**

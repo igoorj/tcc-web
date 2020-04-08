@@ -240,7 +240,7 @@
 						</combobox>
 					</row>
 
-					<row>
+					<row visible="false">
 						<label value="Orientador:" />
 						<combobox id="comboOrientador" width="100%"
 							readonly="true" model="@load(vm.allByDepartamento)"

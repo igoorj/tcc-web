@@ -30,11 +30,17 @@ import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.CursoBusiness;
 import br.ufjf.tcc.business.DepartamentoBusiness;
+import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.business.TipoUsuarioBusiness;
 import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.library.SessionManager;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoUsuarioAtivo;
+import br.ufjf.tcc.mail.EnviadorEmailChain;
+import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioAluno;
+import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioOrientador;
 import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Departamento;
+import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.TipoUsuario;
 import br.ufjf.tcc.model.Usuario;
 
@@ -377,9 +383,8 @@ public class GerenciamentoUsuarioController extends CommonsController {
 									newUsuario.setSenha(usuarioBusiness.encripta(newPassword));
 								}
 								
-								
-								
 								newUsuario.setAtivo(true);
+								
 								if (usuarioBusiness.salvar(newUsuario)) {
 									/*
 									 * if (!new SendMail().onSubmitUser(
@@ -391,6 +396,23 @@ public class GerenciamentoUsuarioController extends CommonsController {
 									 * usuarioBusiness.exclui(newUsuario);
 									 * return; }
 									 */
+									
+									// Se novo usuário for aluno
+									if(newUsuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
+										// Criar tcc
+										TCC tcc = new TCC();
+										tcc.setAluno(newUsuario);
+										tcc.setCalendarioSemestre(getCurrentCalendar(newUsuario.getCurso()));
+										tcc.setProjeto(true);
+										tcc.setOrientador(newUsuario.getOrientador());
+										
+										
+										// Envio de email para aluno e orientado
+										EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+										email.enviarEmail(tcc, null);
+										email = new EnviadorEmailDatasCalendarioOrientador();
+										email.enviarEmail(tcc, null);
+									}
 
 									allUsuarios.add(newUsuario);
 									filterUsuarios = allUsuarios;
@@ -804,8 +826,20 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
 					usuario.setAtivo(check.isChecked());
-					usuarioBusiness.editar(usuario);
-					System.out.println("Aluno foi ativado");
+					if(usuarioBusiness.editar(usuario)) {
+						// Se o usuário foi ativado e é aluno
+						if(usuario.isAtivo() && usuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
+							// Envio de email para aluno e seu orientador
+							TCC tcc = new TCCBusiness().getCurrentNotFinishedTCCByAuthor(usuario, getCurrentCalendar());
+							if(tcc !=null) {
+								EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+								email.enviarEmail(tcc, null);
+								email = new EnviadorEmailDatasCalendarioOrientador();
+								email.enviarEmail(tcc, null);
+							}
+						}
+						System.out.println("Aluno foi " + (usuario.isAtivo() ? "ativado" : "desativado"));
+					}
 		        } 
 		        else
 		        	check.setChecked(usuario.isAtivo());

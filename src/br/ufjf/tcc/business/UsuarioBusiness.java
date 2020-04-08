@@ -34,7 +34,7 @@ public class UsuarioBusiness {
 	public boolean validate(Usuario usuario, String oldMatricula,
 			boolean validateTipo) {
 		errors.clear();
-
+		
 		validarMatricula(usuario.getMatricula(), oldMatricula);
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
@@ -85,6 +85,8 @@ public class UsuarioBusiness {
 					errors.add("Um aluno deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
 					errors.add("Um aluno não pode pertencer a um departamento.\n");
+				if(usuario.getOrientador() == null)
+					errors.add("É necessário informar o orientador do aluno.\n");
 				break;
 			case Usuario.PROFESSOR:
 				if (usuario.getCurso() != null)

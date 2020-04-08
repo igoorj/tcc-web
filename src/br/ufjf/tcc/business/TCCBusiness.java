@@ -286,6 +286,8 @@ public class TCCBusiness {
 	}
 
 	public boolean isProjetoIncompleto(TCC tcc) {
+		if(tcc.isProjeto() && tcc.getStatus() == TCC.PI)
+			return true;
 		if (tcc.isProjeto() && !isProjetoAguardandoAprovacao(tcc))
 			return true;
 		return false;
