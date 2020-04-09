@@ -45,12 +45,14 @@ public class EnviadorEmailDatasCalendarioAluno extends  EnviadorEmailChain{
 		emailBuilder.appendMensagem(" você foi matriculado na disciplina de Trabalho de Conclusão de Curso (TCC), ");
 		emailBuilder.appendMensagem("tendo como orientador(a) "+ nomeOrientador + ". ").breakLine(); 
 		emailBuilder.appendMensagem("Segue abaixo os prazos limites das atividades desta disciplina:").breakLine(); 
+		
 		emailBuilder.appendMensagem(dataLimiteSubmissaoProjeto + " Data limite para submissão do Projeto de TCC no Sistema de Monografias.").breakLine(); 
-		emailBuilder.appendMensagem(dataLimiteEntregaBanca + " Data limite para informar os dados da Defesa do TCC.").breakLine();
-		emailBuilder.appendMensagem(dataLimiteEntregaBanca + " Data limite para submissão do TCC no Sistema de Monografias e entrega do trabalho para a Banca Examinadora.").breakLine(); 
+		emailBuilder.appendMensagem(dataLimiteEntregaBanca + " Data limite para informar no sistema os dados da Defesa do TCC, fazer a submissão ").breakLine();
+		emailBuilder.appendMensagem("do mesmo e entregar o TCC para a Banca Examinadora.").breakLine();
 		emailBuilder.appendMensagem(dataLimiteDefesa + " Data limite para a Defesa do TCC.").breakLine();
-		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para entrega na Coordenação das Fichas de Avaliação da Banca Examinadora da Ata de Defesa.").breakLine();
-		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para submissão da Versão Final do TCC no Sistema de Monografias.").breakLine().breakLine();
+		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para entrega na Coordenação das Fichas de Avaliação da Banca Examinadora e da Ata de Defesa e, ").breakLine(); 
+		emailBuilder.appendMensagem("fazer a submissão da Versão Final do TCC no Sistema de Monografias.").breakLine();
+		
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
