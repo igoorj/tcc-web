@@ -190,7 +190,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			@BindingParam("label") Label labelLogin,
 			@BindingParam("senha") Textbox textSenha,
 			@BindingParam("comorient") Combobox orientador) {
-
+		
 		switch (newUsuario.getTipoUsuario().getIdTipoUsuario()) {
 		case Usuario.ALUNO:
 			newUsuario.setTitulacao(null);
@@ -397,7 +397,10 @@ public class GerenciamentoUsuarioController extends CommonsController {
 									 * return; }
 									 */
 									
-									// Se novo usuário for aluno
+									/**
+									 * Se novo usuário for aluno, cria um tcc vazio e envia
+									 * e-mail para ele e seu orientador com os prazos
+									 */
 									if(newUsuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
 										// Criar tcc
 										TCC tcc = new TCC();
@@ -405,13 +408,13 @@ public class GerenciamentoUsuarioController extends CommonsController {
 										tcc.setCalendarioSemestre(getCurrentCalendar(newUsuario.getCurso()));
 										tcc.setProjeto(true);
 										tcc.setOrientador(newUsuario.getOrientador());
-										
-										
-										// Envio de email para aluno e orientado
-										EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
-										email.enviarEmail(tcc, null);
-										email = new EnviadorEmailDatasCalendarioOrientador();
-										email.enviarEmail(tcc, null);
+										if(new TCCBusiness().save(tcc)) {
+											// Envio de email para aluno e orientador
+											EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+											email.enviarEmail(tcc, null);
+											email = new EnviadorEmailDatasCalendarioOrientador();
+											email.enviarEmail(tcc, null);
+										}
 									}
 
 									allUsuarios.add(newUsuario);
@@ -817,10 +820,11 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	public void mudarAtivo(@BindingParam("check") final Checkbox check,@BindingParam("usuario") final Usuario usuario)
 	{
 		String mensagem;
-		if(usuario.isAtivo())
-			mensagem = "Tem certeza que deseja desativar o usuário?";
-		else
+		
+		if(check.isChecked())
 			mensagem = "Tem certeza que deseja ativar o usuário?";
+		else
+			mensagem = "Tem certeza que deseja desativar o usuário?";
 			
 		Messagebox.show(mensagem, "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			    public void onEvent(Event evt) throws InterruptedException {
@@ -829,13 +833,22 @@ public class GerenciamentoUsuarioController extends CommonsController {
 					if(usuarioBusiness.editar(usuario)) {
 						// Se o usuário foi ativado e é aluno
 						if(usuario.isAtivo() && usuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
-							// Envio de email para aluno e seu orientador
-							TCC tcc = new TCCBusiness().getCurrentNotFinishedTCCByAuthor(usuario, getCurrentCalendar());
-							if(tcc !=null) {
-								EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
-								email.enviarEmail(tcc, null);
-								email = new EnviadorEmailDatasCalendarioOrientador();
-								email.enviarEmail(tcc, null);
+							TCCBusiness tccB = new TCCBusiness();
+							TCC tcc = tccB.getCurrentNotFinishedTCCByAuthor(usuario, getCurrentCalendar());
+							// Se aluno não tiver tcc no calendário atual,
+							// cria um novo e envia emails com os prazos
+							if(tcc == null) {
+								tcc = new TCC();
+								tcc.setAluno(usuario);
+								tcc.setCalendarioSemestre(getCurrentCalendar(usuario.getCurso()));
+								tcc.setProjeto(true);
+								tcc.setOrientador(usuario.getOrientador());
+								if(tccB.save(tcc)){
+									EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+									email.enviarEmail(tcc, null);
+									email = new EnviadorEmailDatasCalendarioOrientador();
+									email.enviarEmail(tcc, null);
+								}
 							}
 						}
 						System.out.println("Aluno foi " + (usuario.isAtivo() ? "ativado" : "desativado"));
