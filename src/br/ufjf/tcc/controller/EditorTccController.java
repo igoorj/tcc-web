@@ -653,12 +653,8 @@ public class EditorTccController extends CommonsController {
 	}
 	
 	@Command
-	public void onCheckBanca(@BindingParam("suplente") Participacao p){
-		
-		for(int i=0;i<tcc.getParticipacoes().size();i++){
-			tcc.getParticipacoes().get(i).setSuplente(0);
-		}
-		p.setSuplente(1);
+	public void onCheckBanca(@BindingParam("suplente") Participacao p, @BindingParam("checked") boolean checked){
+		p.setSuplente(checked);
 	}
 
 	public boolean isAlunoVerified() {
