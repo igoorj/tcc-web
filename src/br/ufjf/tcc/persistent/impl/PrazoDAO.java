@@ -16,10 +16,11 @@ public class PrazoDAO extends GenericoDAO {
 		List<Prazo> prazos = null;
 		try {
 			Query query = getSession()
-					.createQuery(
-							"SELECT p FROM Prazo AS p WHERE p.calendarioSemestre = :calendarioSemestre ORDER BY p.dataFinal");
+					.createQuery( " SELECT p FROM Prazo AS p "
+								+ " WHERE p.calendarioSemestre = :calendarioSemestre"
+								+ " ORDER BY p.dataFinal");
+			
 			query.setParameter("calendarioSemestre", calendarioSemestre);
-
 			prazos = query.list();
 
 			getSession().close();
@@ -30,5 +31,28 @@ public class PrazoDAO extends GenericoDAO {
 
 		return prazos;
 	}
+	
+	public Prazo getPrazoDataDefesaByCalendario(CalendarioSemestre calendario) {
+		Prazo prazo = null;
+		try {
+			Query query = getSession()
+					.createQuery( " SELECT p FROM Prazo AS p"
+								+ " WHERE p.calendarioSemestre = :calendarioSemestre "
+								+ " AND p.tipo = :prazoDataDefesa"
+								+ " ORDER BY p.dataFinal");
+			
+			query.setParameter("calendarioSemestre", calendario);
+			query.setParameter("prazoDataDefesa", Prazo.DEFESA);
+			prazo = (Prazo) query.uniqueResult();
+
+			getSession().close();
+			return prazo;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return prazo;
+	}
+	
 
 }
