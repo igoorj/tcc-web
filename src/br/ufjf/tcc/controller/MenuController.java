@@ -77,7 +77,7 @@ public class MenuController extends CommonsController {
 	
 	public boolean possuiSuplente(List<Participacao> participacoes){
 		for(Participacao p:participacoes ){
-			if(p.getSuplente()==1)
+			if(p.getSuplente())
 				return true;
 		}
 		

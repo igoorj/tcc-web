@@ -88,7 +88,7 @@ public abstract class Ata {
 		}
 		
 		for (Participacao p : tcc.getParticipacoes()) {
-			if (p.getSuplente() != 1) {
+			if (!p.getSuplente()) {
 				part.add(p);
 			}
 		}
