@@ -31,8 +31,7 @@ public class UsuarioBusiness {
 	}
 
 	// validação dos formulários
-	public boolean validate(Usuario usuario, String oldMatricula,
-			boolean validateTipo) {
+	public boolean validate(Usuario usuario, String oldMatricula, boolean validateTipo) {
 		errors.clear();
 		
 		validarMatricula(usuario.getMatricula(), oldMatricula);
@@ -40,7 +39,7 @@ public class UsuarioBusiness {
 		validateEmail(usuario.getEmail(), null);
 		if (validateTipo)
 			validateTipo(usuario);
-
+		removerCamposDesnecessarios(usuario);
 		return errors.size() == 0;
 	}
 
@@ -87,6 +86,8 @@ public class UsuarioBusiness {
 					errors.add("Um aluno não pode pertencer a um departamento.\n");
 				if(usuario.getOrientador() == null)
 					errors.add("É necessário informar o orientador do aluno.\n");
+				if(usuario.getTitulacao() != null)
+					usuario.setTitulacao(null);
 				break;
 			case Usuario.PROFESSOR:
 				if (usuario.getCurso() != null)
@@ -111,6 +112,29 @@ public class UsuarioBusiness {
 					errors.add("Um(a) secretário(a) deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
 					errors.add("Um(a) secretário(a) não pode pertencer a um departamento.\n");
+				break;
+			default:
+				errors.add("Tipo inválido de usuário.\n");
+			}
+		} else
+			errors.add("Selecione o Tipo de Usuário.\n");
+	}
+	
+	// TODO Remover campos desnecessários de cada tipo de usuário
+	public void removerCamposDesnecessarios(Usuario usuario) {
+		if (usuario.getTipoUsuario() != null) {
+			switch (usuario.getTipoUsuario().getIdTipoUsuario()) {
+			case Usuario.ALUNO:
+				usuario.setTitulacao(null);
+				usuario.setDepartamento(null);
+				break;
+			case Usuario.PROFESSOR:
+				break;
+			case Usuario.COORDENADOR:
+				break;
+			case Usuario.ADMINISTRADOR:
+				break;
+			case Usuario.SECRETARIA:
 				break;
 			default:
 				errors.add("Tipo inválido de usuário.\n");

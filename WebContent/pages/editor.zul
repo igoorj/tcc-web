@@ -126,7 +126,7 @@
 										<div align="center"
 											width="100%">
 											<button
-												label="Adicionar à Banca" onClick="@command('addToBanca')" />
+												label="Adicionar à Banca" onClick="addToBanca" />
 										</div>
 									</vlayout>
 								</auxheader>
@@ -137,6 +137,7 @@
 								<column label="Nome do examinador" />
 								<column label="Ação" width="60px" />
 								<column label="Suplente" width="60px" />
+								<column label="Participou?" width="80px" if="${'getCanChangeParticipacao()'}" />
 								
 							</columns>
 							
@@ -147,14 +148,16 @@
 									<button image="/img/delete.png"
 										onClick="@command('removeFromBanca', participacao=each)" />
 									<checkbox style="padding:10px"  checked="@load(each.isSuplente())"
-									 id="@load(each.professor.idUsuario)" value="@load(each)" 
-									 onCheck="@command('onCheckBanca', suplente=self.value, checked=self.checked)" />
+									  value="@load(each)" 
+									 onCheck="@command('onCheckSuplente', membro=self.value, checked=self.checked)" />
+									<checkbox style="padding:10px"  checked="@load(each.isParticipou())"
+									value="@load(each)" if="${'getCanChangeParticipacao()'}"
+									onCheck="@command('onCheckParticipou', membro=self.value, checked=self.checked)" />
 								</row>
 							</template>
 						</grid>
 					</vlayout>
 				</groupbox>
-
 				<groupbox id="tccForm" mold="3d" width="100%"
 					closable="@load(vm.userSecretaria)">
 					<caption label="Trabalho" />
@@ -234,10 +237,16 @@
 						</hlayout>
 					</vlayout>
 				</groupbox>
-				<div align="center" style="margin:15px" >
-					<button label="Atualizar"
-						onClick="@command('submit')" width="100%" height="30px"/>
-				</div>
+				<hlayout style="margin:5px;line-height:20px;">
+					<div hflex="1" align="center" style="margin:15px" >
+						<button label="Atualizar"
+							onClick="@command('updateTCC')" width="100%" height="30px"/>
+					</div>
+					<div hflex="1" align="center" style="margin:15px" >
+						<button label="Submeter"
+							onClick="@command('submit')" width="100%" height="30px"/>
+					</div>
+				</hlayout>
 
 			</div>
 			<div style="float: left;width: 65%; height: 100%;">

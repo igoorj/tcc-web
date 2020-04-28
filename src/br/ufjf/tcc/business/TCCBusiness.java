@@ -37,7 +37,7 @@ public class TCCBusiness {
 		validateOrientador(tcc.getOrientador());
 		validateName(tcc.getNomeTCC());
 		validateResumo(tcc.getResumoTCC());
-		validateData(tcc.getDataApresentacao(), tcc);
+//		validateData(tcc.getDataApresentacao(), tcc);
 		validateSala(tcc.getSalaDefesa(), tcc);
 		validateBanca(tcc.getParticipacoes(), tcc);
 		validateSuplente(tcc.getParticipacoes(), tcc);
@@ -62,6 +62,16 @@ public class TCCBusiness {
 
 		return errors.size() == 0 ? true : false;
 	}
+	public boolean validateTCC(TCC tcc, int status) {
+		errors.clear();
+		
+		validateName(tcc.getNomeTCC());
+		if (errors.size() < 1)
+			tcc.setNomeTCC(tcc.getNomeTCC().toUpperCase());
+		validateOrientador(tcc.getOrientador());
+		
+		return errors.size() == 0 ? true : false;
+	}
 
 	public void validateName(String nomeTCC) {
 		if (nomeTCC == null || nomeTCC.trim().length() == 0)
@@ -77,10 +87,23 @@ public class TCCBusiness {
 		if (resumo == null || resumo.trim().length() == 0)
 			errors.add("É necessário informar o resumo do TCC\n");
 	}
-
-	public void validateData(Timestamp timestamp, TCC tcc) {
+	
+	public void validateDataApresentacao(TCC tcc) {
+		if(tcc != null) {
+			Prazo prazoDefesa = new PrazoBusiness().getPrazoDataDefesaByCalendario(tcc.getCalendarioSemestre());
+			if(prazoDefesa != null) {
+				// 0 se for igual, negativo se for antes
+//				int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
+//				if(comparacao > 0)
+//					errors.add("A data da sua aprensentação está fora dos limites de prazo");
+			} else {
+				System.out.println("teste null");
+			}
+				
+			
+		}
 		if (tcc != null)
-			if (timestamp == null && !tcc.isProjeto())
+			if (!tcc.isProjeto())
 				errors.add("É necessário informar a data de apresentação\n");
 	}
 
@@ -269,7 +292,7 @@ public class TCCBusiness {
 
 	public boolean possuiSuplente(List<Participacao> participacoes) {
 		for (Participacao p : participacoes) {
-			if (p.getSuplente() == 1)
+			if (p.getSuplente())
 				return true;
 		}
 

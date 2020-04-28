@@ -45,7 +45,6 @@ import br.ufjf.tcc.model.Pergunta;
 import br.ufjf.tcc.model.Resposta;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
-import br.ufjf.tcc.pdfHandle.CartaParticipacaoBanca;
 
 public class VisualizaTCCController extends CommonsController {
 	private TCC tcc = null;
@@ -431,18 +430,19 @@ public class VisualizaTCCController extends CommonsController {
 	
 	@SuppressWarnings({"unchecked","rawtypes"})
 	@Command
-	public void finalizaProjeto(@BindingParam("window") final Window window)
+	public void aprovarProjeto(@BindingParam("window") final Window window)
 	{
 		Messagebox.show("Você tem certeza que deseja validar esse projeto?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
-					if(new TCCBusiness().isProjetoAguardandoAprovacao(tcc))
+					if(isProjetoAguardandoAprovacao())
 					{
+						tcc.setStatus(TCC.TI);
 			        	tcc.setProjeto(false);
-			        	tcc.setArqExtraProjFinal(tcc.getArquivoExtraTCCBanca());
-			        	tcc.setArqProjFinal(tcc.getArquivoTCCBanca());
-			        	tcc.setArquivoExtraTCCBanca(null);
-			        	tcc.setArquivoTCCBanca(null);
+//			        	tcc.setArqExtraProjFinal(tcc.getArquivoExtraTCCBanca());
+//			        	tcc.setArqProjFinal(tcc.getArquivoTCCBanca());
+//			        	tcc.setArquivoExtraTCCBanca(null);
+//			        	tcc.setArquivoTCCBanca(null);
 						new TCCBusiness().edit(tcc);
 						
 						// Envio de email de aviso de projeto aprovado
@@ -514,7 +514,7 @@ public class VisualizaTCCController extends CommonsController {
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Command
-	public void finalizaTrabalho(@BindingParam("window") final Window window)
+	public void aprovarTrabalho(@BindingParam("window") final Window window)
 	{
 		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
@@ -523,10 +523,10 @@ public class VisualizaTCCController extends CommonsController {
 		        	{
 			        	java.util.Date date= new java.util.Date();
 			        	tcc.setDataEnvioFinal(new Timestamp(date.getTime()));
-			        	tcc.setArquivoTCCFinal(tcc.getArquivoTCCBanca());
-			        	tcc.setArquivoExtraTCCFinal(tcc.getArquivoExtraTCCBanca());
-			        	tcc.setArquivoTCCBanca(null);
-			        	tcc.setArquivoExtraTCCBanca(null);
+//			        	tcc.setArquivoTCCFinal(tcc.getArquivoTCCBanca());
+//			        	tcc.setArquivoExtraTCCFinal(tcc.getArquivoExtraTCCBanca());
+//			        	tcc.setArquivoTCCBanca(null);
+//			        	tcc.setArquivoExtraTCCBanca(null);
 			        	tcc.setCertificadoDigital(gerarCertificadoDigital());
 			        	UsuarioBusiness ub = new UsuarioBusiness();
 						new TCCBusiness().edit(tcc);
@@ -560,11 +560,11 @@ public class VisualizaTCCController extends CommonsController {
 	
 	
 	@Command
-	public void finalizaTCC(@BindingParam("window") final Window window) {
+	public void aprovarTCC(@BindingParam("window") final Window window) {
 		if(isProjeto())
-			finalizaProjeto(window);
+			aprovarProjeto(window);
 		else {
-			finalizaTrabalho(window);
+			aprovarTrabalho(window);
 		}
 	}
 	
@@ -618,13 +618,22 @@ public class VisualizaTCCController extends CommonsController {
 		if(tcc!=null)
 		{
 			TCCBusiness tccBusiness = new TCCBusiness();
-			String status = tccBusiness.getStatusTCC(tcc);
-			if(status.equals("PAA") || status.equals("PR"))
+			System.out.println(tcc.getStatus());
+			if(tcc.getStatus() == TCC.PAA)
+			{
+				
 				return true;
+				
+			}
 			if(tccBusiness.isProjetoAguardandoAprovacao(tcc))
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean isTrabalhoAguardandoAprovacao() {
+		int statusTcc = tcc.getStatus();
+		return statusTcc == TCC.TAAC || statusTcc == TCC.TAAO;
 	}
 	
 	public boolean isTrabalhoAguardandoAprovacaoOrientador()

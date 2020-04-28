@@ -1,6 +1,6 @@
 package br.ufjf.tcc.mail;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +18,11 @@ import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
-import br.ufjf.tcc.persistent.impl.TCCDAO;
 
 @Startup
 @Singleton
 public class EmailListener {
 	TCCBusiness tccBusiness;
-	TCCDAO tccDAO;
 	CalendarioSemestreBusiness calendarioBusiness;
 	PrazoBusiness prazoBusiness;
 	Calendar calendar;
@@ -32,7 +30,6 @@ public class EmailListener {
 	public EmailListener() {
 		this.calendar = null;
 		this.tccBusiness = new TCCBusiness();
-		this.tccDAO = new TCCDAO();
 		this.calendarioBusiness = new CalendarioSemestreBusiness();
 		this.prazoBusiness = new PrazoBusiness();
 	}
@@ -41,16 +38,18 @@ public class EmailListener {
 	
 	@Schedule(hour="*", minute="*", second="*/10", persistent = true)
 	@Lock(LockType.READ)
-	public void listener() {
+	public void listener() throws IOException {
 		if (alreadyRunning.getAndSet(true)) return;
 		
 		try
         {
+			System.out.println("teste listener teste");
+//			TCC tcc = this.tccBusiness.getTCCById(438);
+//			EnviadorEmailCartaParticipacao email = new EnviadorEmailCartaParticipacao();
+//			email.enviarEmails(tcc);
 			List<CalendarioSemestre> calendarios = (List<CalendarioSemestre>) this.calendarioBusiness.getCurrentCalendars();
 			this.calendar = Calendar.getInstance();
 			for(CalendarioSemestre calendario : calendarios) {
-				
-				List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
 				this.verificarPrazos(calendario, 2);
 			}
 			
@@ -66,10 +65,24 @@ public class EmailListener {
 		Calendar dataOffset = (Calendar) this.calendar.clone();
 		dataOffset.add(Calendar.DATE, diasParaAlerta);							// Adiciona dias ao dia de hoje
 		
-		this.verificarProjetoJaCriado(calendario, dataOffset, prazos.get(0));
-		this.verificarDadosDeDefesa(calendario, dataOffset, prazos.get(1));
-		this.verificarSubmissaoTCC(calendario, dataOffset, prazos.get(2));
-		this.verificarSubmissaoTCCfinal(calendario, dataOffset, prazos.get(3));
+		for (Prazo prazo : prazos) {
+			switch (prazo.getTipo()){
+				case Prazo.PRAZO_PROJETO:
+					this.verificarPrazoProjetoSubmetido(calendario, dataOffset, prazo);
+					break;
+				case Prazo.ENTREGA_BANCA:
+					this.verificarPrazoDadosDeDefesa(calendario, dataOffset, prazo);
+					break;
+				case Prazo.DEFESA:
+					this.verificarPrazoSubmissaoTCC(calendario, dataOffset, prazo);
+					break;
+				case Prazo.ENTREGA_FINAL:
+					this.verificarPrazoSubmissaoTCCfinal(calendario, dataOffset, prazo);
+					break;
+				default:
+					break;	
+			}
+		}
 	}
 	
 	/**
@@ -77,7 +90,7 @@ public class EmailListener {
 	 * que ainda não concluiram o projeto, x dias antes da data limite (por parâmetro) 
 	 */
 	@Lock(LockType.READ)
-	public void verificarProjetoJaCriado(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
+	public void verificarPrazoProjetoSubmetido(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
 		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
 		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
 		if(!datasIguais)
@@ -86,26 +99,26 @@ public class EmailListener {
 		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
 		if(projetos == null)
 			return;
-		
+		System.out.println("Teste");
 		for(TCC projeto : projetos) {
-			if(!projeto.isEmailAlertaPrazoProjetoSubmetidoEnviado()) {
+			if(tccBusiness.isProjetoIncompleto(projeto) && !projeto.isEmailAlertaPrazoProjetoSubmetidoEnviado()) {
 				System.out.println(projeto.getNomeTCC());
 				System.out.println(projeto.getIdTCC());
-//					EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoProjeto();
-//					email.enviarEmail(projeto, null);
-//					projeto.setEmailAlertaEnviado(1);
-//					this.tccDAO.salvar(projeto);
+				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoProjeto();
+				email.enviarEmail(projeto, null);
+				projeto.setEmailAlertaEnviado(1);
+				this.tccBusiness.edit(projeto);
 			}
 		}
 	}
 	
 	
-	public void verificarDadosDeDefesa(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
+	public void verificarPrazoDadosDeDefesa(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
 		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
 		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
 		if(!datasIguais)
 			return;
-		
+//		System.out.println(dataOffset.getTime() + "  " + dataFinalPrazo.getTime());
 		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
 		if(projetos == null)
 			return;
@@ -114,16 +127,16 @@ public class EmailListener {
 			if(!projeto.isEmailAlertaPrazoDadosDefesaEnviado()) {
 				System.out.println(projeto.getNomeTCC());
 				System.out.println(projeto.getIdTCC());
-//					EnviadorEmailChain email = new EnviadorEmailAlertaDadosDeDefesa();
-//					email.enviarEmail(projeto, null);
-//					projeto.setEmailAlertaEnviado(2);
-//					this.tccDAO.salvar(projeto);
+				EnviadorEmailChain email = new EnviadorEmailAlertaDadosDeDefesa();
+				email.enviarEmail(projeto, null);
+				projeto.setEmailAlertaEnviado(2);
+				this.tccBusiness.edit(projeto);
 			}
 		}
 	}
 	
 	
-	public void verificarSubmissaoTCC(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
+	public void verificarPrazoSubmissaoTCC(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
 		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
 		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
 		if(!datasIguais)
@@ -137,16 +150,16 @@ public class EmailListener {
 			if(!projeto.isEmailAlertaPrazoTrabalhoEnviado()) {
 				System.out.println(projeto.getNomeTCC());
 				System.out.println(projeto.getIdTCC());
-//					EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
-//					email.enviarEmail(projeto, null);
-//					projeto.setEmailAlertaEnviado(3);
-//					this.tccDAO.salvar(projeto);
+				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
+				email.enviarEmail(projeto, null);
+				projeto.setEmailAlertaEnviado(3);
+				this.tccBusiness.edit(projeto);
 			}
 		}
 	}
 	
 	
-	public void verificarSubmissaoTCCfinal(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
+	public void verificarPrazoSubmissaoTCCfinal(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
 		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
 		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
 		if(!datasIguais)
@@ -160,10 +173,10 @@ public class EmailListener {
 			if(!projeto.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
 				System.out.println(projeto.getNomeTCC());
 				System.out.println(projeto.getIdTCC());
-//					EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalhoFinal();
-//					email.enviarEmail(projeto, null);
-//					projeto.setEmailAlertaEnviado(4);
-//					this.tccDAO.salvar(projeto);
+				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalhoFinal();
+				email.enviarEmail(projeto, null);
+				projeto.setEmailAlertaEnviado(4);
+				this.tccBusiness.edit(projeto);
 			}
 		}
 	}

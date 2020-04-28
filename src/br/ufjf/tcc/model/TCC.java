@@ -29,11 +29,12 @@ public class TCC implements Serializable,Comparable<TCC> {
 
 	private static final long serialVersionUID = 1L;
 	
-	/**
+	/*
 	 * PI	- Projeto Incompleto
 	 * PR	- Projeto Reprovado
 	 * PAA	- Projeto Aguardando Aprovação
 	 * TI	- Trabalho Incompleto
+	 * TEPB	- Trabalho Enviado Para Banca
 	 * TRO	- Trabalho Reprovado
 	 * TAAO	- Trabalho Aguardando Aprovação de Orientador
 	 * TRO	- Trabalho Reprovado por Orientador
@@ -41,8 +42,8 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * TRC	- Trabalho Reprovado por Orientador
 	 * APROVADO - Trabalho aprovado
 	 */
-	public static final int PI = 0, PR = 1, PAA = 2, TI = 3,
-			TRO = 4, TAAO = 5, TAAC = 6, TRC = 7,  APROVADO = 8;
+	public static final int PI = 0, PR = 1, PAA = 2, TI = 3, TEPB = 4,
+			TRO = 5, TAAO = 6, TRC = 7, TAAC = 8,  APROVADO = 9;
 
 	/**
 	 * Campo com ID do TCC. Relaciona com a coluna {@code idTCC} do banco e é
@@ -191,9 +192,9 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * Compo que indica se os e-mails de alerta já foram enviados
 	 * # 0 => nenhum e-mail de aviso enviado
 	 * # 1 => e-mail de aviso de prazo para finalização do projeto enviado
-	 * # 2 => e-mail de aviso de prazo para informar dados de defesa.
-	 * # 3 => e-mail de aviso de prazo para colocar trabalho para banca no sistema
-	 * # 4 => e-mail de aviso de prazo para colocar versão final do trabalho no sistema
+	 * # 2 => e-mail de aviso de prazo para informar dados de defesa enviado
+	 * # 3 => e-mail de aviso de prazo para colocar trabalho para banca no sistema enviado
+	 * # 4 => e-mail de aviso de prazo para colocar versão final do trabalho no sistema enviado
 	 */
 	@Column(name = "emailsAlertaEnviados")
 	private int emailsAlertaEnviados;

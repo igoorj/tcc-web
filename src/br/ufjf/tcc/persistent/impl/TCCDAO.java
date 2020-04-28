@@ -49,10 +49,16 @@ public class TCCDAO extends GenericoDAO {
 
 	public List<TCC> getTCCsByCurso(Curso curso) {
 		try {
-			Query query = getSession()
-					.createQuery(
-							"SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE (a.curso = :curso OR :curso = null) ORDER BY t.dataEnvioFinal DESC");
-			query.setParameter("curso", curso);
+			Query query = getSession().createQuery(
+							"FROM tcc");
+//			Query query = getSession().createQuery(
+//					"SELECT t FROM TCC AS t " +
+//							"JOIN FETCH t.aluno AS a " +
+//							"JOIN FETCH t.orientador " +
+//							"LEFT JOIN FETCH t.coOrientador " +
+//							"WHERE (a.curso = :curso OR :curso = null) " +
+//					"ORDER BY t.dataEnvioFinal DESC");
+//			query.setParameter("curso", curso);
 
 			List<TCC> resultados = query.list();
 

@@ -46,7 +46,7 @@ public class PrazoBusiness {
 		case Prazo.DEFESA:
 			return "Data limite para defesa";
 		case Prazo.ENTREGA_FINAL:
-			return "Data limite para submeter a versão final do trabalho e para entregar na coordenação as fichas de avaliação da banca e a ata de defesa";
+			return "Data limite para submeter a versão final do trabalho e entregar na coordenação as fichas de avaliação da banca e a ata de defesa";
 		case Prazo.FIM_SEMESTRE:
 			return "Fim do semestre";
 		
@@ -59,6 +59,10 @@ public class PrazoBusiness {
 	public List<Prazo> getPrazosByCalendario(
 			CalendarioSemestre calendarioSemestre) {
 		return prazoDAO.getPrazosByCalendario(calendarioSemestre);
+	}
+	
+	public Prazo getPrazoDataDefesaByCalendario(CalendarioSemestre calendario) {
+		return prazoDAO.getPrazoDataDefesaByCalendario(calendario);
 	}
 
 	public boolean save(Prazo p) {

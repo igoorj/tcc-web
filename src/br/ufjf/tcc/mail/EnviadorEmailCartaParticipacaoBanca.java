@@ -6,7 +6,7 @@ import java.util.List;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Usuario;
-
+// TODO remover classe
 public class EnviadorEmailCartaParticipacaoBanca extends EnviadorEmailChain {
 	
 	public EnviadorEmailCartaParticipacaoBanca() {
@@ -23,8 +23,6 @@ public class EnviadorEmailCartaParticipacaoBanca extends EnviadorEmailChain {
 				emailBuilder = new EmailBuilder(true).comTitulo("[TCC_WEB] Carta de participação da banca - " + nomeAluno);
 				emailBuilder.appendMensagem("Prezado(a) " + nomeMembro);
 				emailBuilder.appendMensagem("");
-				
-				// TODO: Anexar pdf ao email ou definir modelo da carta de participacao no corpo do email
 				
 				List<Usuario> destinatarios = new ArrayList<>();
 				destinatarios.add(p.getProfessor());				
