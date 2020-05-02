@@ -1,0 +1,41 @@
+﻿# Arquivo de Configuração
+
+#GENERAL.URL = http://monografias.ice.ufjf.br/tcc-web
+
+GENERAL.URL = localhost:8080/tccwebteste
+
+
+
+# Hibernate
+HIBERNATE.DRIVE = com.mysql.jdbc.Driver
+
+HIBERNATE.DIALECT = org.hibernate.dialect.MySQLDialect
+
+
+HIBERNATE.DB = jdbc:mysql://localhost/tcc_web_test?dontTrackOpenResources=true
+
+HIBERNATE.USER = caio
+
+HIBERNATE.PASS = admin
+
+
+
+# Integra
+
+INTEGRA.APPTOKEN = 83c603028e89e447dadf439c5bbb2b778af0980d
+
+
+
+# File Manager
+
+FILE.PATH = /home/caio/workspaces/eclipse-workspace/tcc-web/
+
+
+
+# Mail
+
+MAIL.USERNAME = 27d9480699f724
+
+MAIL.PASS = cfd953f37d988e
+
+MAIL.FROM = reisdima@hotmail.com

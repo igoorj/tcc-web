@@ -137,7 +137,7 @@
 								<column label="Nome do examinador" />
 								<column label="Ação" width="60px" />
 								<column label="Suplente" width="60px" />
-								<column label="Participou?" width="80px" if="${'getCanChangeParticipacao()'}" />
+								<column label="Participou?" width="80px" if="${vm.canChangeParticipacao}"/>
 								
 							</columns>
 							
@@ -151,7 +151,7 @@
 									  value="@load(each)" 
 									 onCheck="@command('onCheckSuplente', membro=self.value, checked=self.checked)" />
 									<checkbox style="padding:10px"  checked="@load(each.isParticipou())"
-									value="@load(each)" if="${'getCanChangeParticipacao()'}"
+									value="@load(each)" if="${vm.canChangeParticipacao}"
 									onCheck="@command('onCheckParticipou', membro=self.value, checked=self.checked)" />
 								</row>
 							</template>

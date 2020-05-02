@@ -94,7 +94,7 @@ public class EditorTccController extends CommonsController {
 				}
 			}
 			canChangeOrientacao = false;
-//				funcaoTeste();
+			verificarCanChangeParticipacao();
 
 			break;
 
@@ -142,7 +142,11 @@ public class EditorTccController extends CommonsController {
 	public boolean isCanChangeOrientacao() {
 		return canChangeOrientacao;
 	}
-
+	
+	public boolean isCanChangeParticipacao() {
+		return canChangeParticipacao;
+	}
+	
 	public TCC getTcc() {
 		return tcc;
 	}
@@ -209,10 +213,6 @@ public class EditorTccController extends CommonsController {
 
 	public void setTempUser(Usuario tempUser) {
 		this.tempUser = tempUser;
-	}
-
-	public boolean getCanChangeParticipacao() {
-		return canChangeParticipacao;
 	}
 
 	@NotifyChange({ "tcc", "alunoEditBlock" })
@@ -774,7 +774,7 @@ public class EditorTccController extends CommonsController {
 //		return false;
 	}
 
-	public void funcaoTeste() {
+	public void verificarCanChangeParticipacao() {
 		Timestamp dataApresentacao = tcc.getDataApresentacao();
 		if (dataApresentacao != null) {
 			// 0 se for igual, negativo se for antes
