@@ -65,11 +65,11 @@
 							<textbox
 								value="@load(vm.tcc.orientador.nomeUsuario)" hflex="1"
 								readonly="true" />
-							<button id="butOrientador" label="Alterar" visible="@load(vm.canChangeOrientacao)"
+							<button id="butOrientador" label="Alterar" if="${vm.canChangeOrientacao}"
 								onClick="@command('changeOrientador', window=changeOrientacao)" />
 						</hlayout>
 						
-						<div visible="@load(vm.canChangeOrientacao)"
+						<div if="${vm.canChangeOrientacao}"
 							style="text-align:center;margin-left:20px">
 							<label
 								value="@load(not vm.hasCoOrientador ? 'adicionar co-orientador' : 'remover co-orientador')"
@@ -85,7 +85,7 @@
 								value="@load(vm.tcc.coOrientador.nomeUsuario)" hflex="1"
 								readonly="true" />
 							<button id="butCoOrientador" label="Alterar"
-								onClick="@command('changeCoOrientador', window=changeOrientacao)" visible="@load(vm.canChangeOrientacao)" />
+								onClick="@command('changeCoOrientador', window=changeOrientacao)" if="${vm.canChangeOrientacao}" />
 						</hlayout>
 					</vlayout>
 				</groupbox>
@@ -237,7 +237,7 @@
 						</hlayout>
 					</vlayout>
 				</groupbox>
-				<hlayout style="margin:5px;line-height:20px;">
+				<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitTCC}">
 					<div hflex="1" align="center" style="margin:15px" >
 						<button label="Atualizar"
 							onClick="@command('updateTCC')" width="100%" height="30px"/>
@@ -246,6 +246,9 @@
 						<button label="Submeter"
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
+				</hlayout>
+				<hlayout style="margin:5px;line-height:20px;" unless="${vm.canSubmitTCC}">
+					<label value="@load(vm.getMensagem())" />
 				</hlayout>
 
 			</div>

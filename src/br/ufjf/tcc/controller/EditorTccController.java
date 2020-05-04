@@ -57,7 +57,8 @@ public class EditorTccController extends CommonsController {
 	private List<Usuario> orientadores = new ArrayList<Usuario>();
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, hasSubtitulo = false,
-			canChangeParticipacao = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false;
+			canChangeParticipacao = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
+			canSubmitTCC = true;
 	private EnviadorEmailChain enviadorEmail = new EnviadorEmailProjetoCriado();
 
 	@Init
@@ -95,6 +96,7 @@ public class EditorTccController extends CommonsController {
 			}
 			canChangeOrientacao = false;
 			verificarCanChangeParticipacao();
+			verificarCanSubmitTCC();
 
 			break;
 
@@ -145,6 +147,14 @@ public class EditorTccController extends CommonsController {
 	
 	public boolean isCanChangeParticipacao() {
 		return canChangeParticipacao;
+	}
+	
+	public boolean isCanSubmitTCC() {
+		return canSubmitTCC;
+	}
+	
+	public String getMensagem() {
+		return "esta é a mensagem";
 	}
 	
 	public TCC getTcc() {
@@ -785,6 +795,12 @@ public class EditorTccController extends CommonsController {
 			}
 		}
 		canChangeParticipacao = false;
+	}
+	
+	public void verificarCanSubmitTCC() {
+		int status = tcc.getStatus();
+		if(status == TCC.PAA || status == TCC.TAAC || status == TCC.TAAO)
+			canSubmitTCC = false;
 	}
 
 	public boolean isProject() {
