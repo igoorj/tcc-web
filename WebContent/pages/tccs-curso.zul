@@ -133,7 +133,7 @@
 					<label value="@load(each.salaDefesa)" />
 					<label value="@load(each.aluno.nomeUsuario)" />
 					<label value="@load(each.orientador.nomeUsuario)" />
-					<label value="@load(each.dataEnvioFinal eq null? vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
+					<label value="@load(each.dataEnvioFinal eq null ? (each.dataEnvioBanca eq null ? '' : vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16)) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
 					<label value="@load(each.statusTCC)" />
 					<div align="center" >
 					<checkbox disabled="@load(each.statusTCC eq 'Aprovado'? 'true' : 'false')" style="center" checked="@load(each.entregouDoc)" onCheck="@command('checkEnviouDoc',tcc=each)" />

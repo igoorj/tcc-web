@@ -34,7 +34,6 @@ import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.business.TipoUsuarioBusiness;
 import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.library.SessionManager;
-import br.ufjf.tcc.mail.EnviadorEmailAvisoUsuarioAtivo;
 import br.ufjf.tcc.mail.EnviadorEmailChain;
 import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioAluno;
 import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioOrientador;

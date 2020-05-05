@@ -25,7 +25,7 @@ public class Prazo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	/**
+	/*
 	 * PRAZ0_PROJETO: Data limite para enviar o projeto
 	 * ENTREGA_BANCA: Data limite para entregar versão do trabalho para a banca e informar os dados da defesa
 	 * DEFESA: Data limite para defesa do trabalho
