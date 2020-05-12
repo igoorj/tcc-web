@@ -36,7 +36,7 @@
 									</template>
 								</combobox>
 								
-								<label value="Tipos: " visible="true" />
+								<label style="margin-top:6px" value="Tipos: " visible="true" />
 																
 								<div visible="true">
 									<combobox value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
@@ -45,8 +45,12 @@
 									    <comboitem label="Trabalhos"/>
 									    <comboitem label="Projetos incompletos"/>
 									    <comboitem label="Projetos aguardando aprovação"/>
+									    <comboitem label="Projetos reprovados"/>
 									    <comboitem label="Trabalhos incompletos"/>
-									    <comboitem label="Trabalhos aguardando aprovação"/>
+									    <comboitem label="Trabalhos enviados para banca"/>
+									    <comboitem label="Trabalhos aguardando aprovação de orientador"/>
+									    <comboitem label="Trabalhos aguardando aprovação de coordenador"/>
+									    <comboitem label="Trabalhos reprovados"/>
 									    <comboitem label="Trabalhos Finalizados"/>									   
 									    
 									</combobox>
@@ -151,7 +155,8 @@
 	<popup id="filterHelp">
 		<html>
 			<![CDATA[ Permite filtrar a lista de Trabalhos  com os seguintes filtros:
-			<ul><li>Semestre atual ou todos os semstres;</li> <li>Estados (PI,PAA,TI,TAA);</li>
+			<ul><li>Semestre atual ou todos os semstres;</li> 
+			<li>Estados (PI, PAA, PR, TI, TEPB, TAAO, TAAC, TR, APROVADO);</li>
 			<ul>]]>
 		</html>
 	</popup>

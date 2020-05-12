@@ -49,8 +49,6 @@ public class TCCDAO extends GenericoDAO {
 
 	public List<TCC> getTCCsByCurso(Curso curso) {
 		try {
-//			Query query = getSession().createQuery(
-//							"FROM tcc");
 			Query query = getSession().createQuery(
 					"SELECT t FROM TCC AS t " +
 							"JOIN FETCH t.aluno AS a " +
@@ -412,17 +410,25 @@ public class TCCDAO extends GenericoDAO {
 	    return null;
 	}
 
-	public List<TCC> getProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
+	public List<TCC> getProjetosByCalendar(CalendarioSemestre currentCalendar) {
 	    try {
+//	        Query query = getSession()
+//	                .createQuery(
+//	                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
 	        Query query = getSession()
 	                .createQuery(
-	                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
-	        query.setParameter("curso", curso);
+	                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+	                        + "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+	                        + "WHERE t.calendarioSemestre = :currentCalendar "
+	                        + "ORDER BY t.dataEnvioFinal DESC");
+//	        query.setParameter("curso", curso);
 	        query.setParameter("currentCalendar", currentCalendar);
-	        query.setParameter("projeto", true);
+//	        query.setParameter("projeto", true);
 
 	        List<TCC> resultados = query.list();
-
+	        for(TCC tcc : resultados) {
+	        	System.out.println(tcc.getIdTCC());
+	        }
 	        getSession().close();
 
 	        if (resultados != null)
@@ -435,12 +441,19 @@ public class TCCDAO extends GenericoDAO {
 	    return null;
 	}
 	
-	public List<TCC> getTrabalhosByCursoAndCalendar(Curso curso,CalendarioSemestre currentCalendar){
+	public List<TCC> getTrabalhosByCalendar(CalendarioSemestre currentCalendar){
 		 try {
+//		        Query query = getSession()
+//		                .createQuery(
+//		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
 		        Query query = getSession()
 		                .createQuery(
-		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
-		        query.setParameter("curso", curso);
+		                        "SELECT DISTINCT t FROM TCC AS t "
+		                        + "JOIN FETCH t.aluno AS a JOIN FETCH t.orientador "
+		                        + "LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes "
+		                        + "WHERE t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto "
+		                        + "ORDER BY t.dataEnvioFinal DESC");
+//		        query.setParameter("curso", curso);
 		        query.setParameter("currentCalendar", currentCalendar);
 		        query.setParameter("projeto", false);
 
@@ -545,9 +558,16 @@ public class TCCDAO extends GenericoDAO {
 	
 	public List<TCC> getAllTrabalhosByCurso(Curso curso){
 		 try {
-		        Query query = getSession()
+//		        Query query = getSession()
+//		                .createQuery(
+//		                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
+			 Query query = getSession()
 		                .createQuery(
-		                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
+		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+		                        + "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+		                        + "JOIN FETCH t.participacoes "
+		                        + "WHERE a.curso = :curso AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
+			 
 		        query.setParameter("curso", curso);
 		        query.setParameter("projeto", false);
 
@@ -569,8 +589,9 @@ public class TCCDAO extends GenericoDAO {
 	public List<TCC> getAllProjetosByCurso(Curso curso){
 		 try {
 		        Query query = getSession()
-		                .createQuery(
-		                        "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.projeto = :projeto");
+		                .createQuery("SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+			                		+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+		        					+ "WHERE a.curso = :curso AND t.projeto = :projeto");
 		        query.setParameter("curso", curso);
 		        query.setParameter("projeto", true);
 
@@ -633,12 +654,18 @@ public class TCCDAO extends GenericoDAO {
 		
 	}
 	
-	public List<TCC> getTrabalhosAndProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
+	public List<TCC> getTrabalhosAndProjetosByCalendar(CalendarioSemestre currentCalendar) {
 		   try {
+//		        Query query = getSession()
+//		                .createQuery(
+//		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar ORDER BY t.dataEnvioFinal DESC");
 		        Query query = getSession()
-		                .createQuery(
-		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes WHERE a.curso = :curso AND t.calendarioSemestre = :currentCalendar ORDER BY t.dataEnvioFinal DESC");
-		        query.setParameter("curso", curso);
+		        		.createQuery(
+	        					"SELECT DISTINCT t FROM TCC AS t "
+		        				+ "JOIN FETCH t.aluno AS a JOIN FETCH t.orientador "
+		        				+ "LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes "
+		        				+ "WHERE t.calendarioSemestre = :currentCalendar ORDER BY t.dataEnvioFinal DESC");
+//		        query.setParameter("curso", curso);
 		        query.setParameter("currentCalendar", currentCalendar);
 
 		        List<TCC> resultados = query.list();

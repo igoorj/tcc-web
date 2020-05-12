@@ -235,9 +235,9 @@ public class TCCBusiness {
 			return null;
 	}
 
-	public List<TCC> getProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
+	public List<TCC> getProjetosByCalendar(CalendarioSemestre currentCalendar) {
 		if (currentCalendar != null)
-			return tccDao.getProjetosByCursoAndCalendar(curso, currentCalendar);
+			return tccDao.getProjetosByCalendar(currentCalendar);
 		else
 			return null;
 	}
@@ -266,16 +266,23 @@ public class TCCBusiness {
 		return tccDao.getAllProjetosByCurso(curso);
 	}
 
+	// TODO
 	public List<TCC> getAllProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
-		return tccDao.getProjetosByCursoAndCalendar(curso, currentCalendar);
+//		return tccDao.getProjetosByCursoAndCalendar(curso, currentCalendar);
+		return null;
 	}
+	
+	public List<TCC> getProjetoAguardandoAprovacaoByCalendar(CalendarioSemestre currentCalendar) {
+		return tccDao.getProjetoAguardandoAprovacaoByCalendar(currentCalendar);
+	}
+	
 
 	public List<TCC> getAllTrabalhosByCurso(Curso curso) {
 		return tccDao.getAllTrabalhosByCurso(curso);
 	}
 
-	public List<TCC> getTrabalhosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
-		return tccDao.getTrabalhosByCursoAndCalendar(curso, currentCalendar);
+	public List<TCC> getTrabalhosByCalendar(CalendarioSemestre currentCalendar) {
+		return tccDao.getTrabalhosByCalendar(currentCalendar);
 	}
 
 	public List<TCC> getAllTrabalhosAndProjetosByCurso(Curso curso) {
@@ -286,8 +293,8 @@ public class TCCBusiness {
 		return tccDao.getAllTrabalhosBancaMarcada(curso, currentCalendar);
 	}
 
-	public List<TCC> getTrabalhosAndProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
-		return tccDao.getTrabalhosAndProjetosByCursoAndCalendar(curso, currentCalendar);
+	public List<TCC> getTrabalhosAndProjetosByCalendar(CalendarioSemestre currentCalendar) {
+		return tccDao.getTrabalhosAndProjetosByCalendar(currentCalendar);
 	}
 
 	public boolean possuiSuplente(List<Participacao> participacoes) {
@@ -298,8 +305,13 @@ public class TCCBusiness {
 
 		return false;
 	}
+	
+	
 
 	public boolean isProjetoAguardandoAprovacao(TCC tcc) {
+		if(tcc.isProjeto() && tcc.getStatus() == TCC.PAA)
+			return true;
+		
 		if (tcc.isProjeto() && !(tcc.getPalavrasChave() == null || tcc.getPalavrasChave().trim().length() == 0)
 				&& tcc.getArquivoTCCBanca() != null
 				&& !(tcc.getResumoTCC() == null || tcc.getResumoTCC().trim().length() == 0)
@@ -312,6 +324,36 @@ public class TCCBusiness {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PI)
 			return true;
 		if (tcc.isProjeto() && !isProjetoAguardandoAprovacao(tcc))
+			return true;
+		return false;
+	}
+	
+	public boolean isProjetoReprovado(TCC tcc) {
+		if(tcc.isProjeto() && tcc.getStatus() == TCC.PR)
+			return true;
+		return false;
+	}
+	
+	public boolean isTrabalhoEnviadoParaBanca(TCC tcc) {
+		if(!tcc.isProjeto() && tcc.getStatus() == TCC.TEPB)
+			return true;
+		return false;
+	}
+	
+	public boolean isTrabalhoAguardandoAprovacaoDeOrientador(TCC tcc) {
+		if(!tcc.isProjeto() && tcc.getStatus() == TCC.TAAO)
+			return true;
+		return false;
+	}
+	
+	public boolean isTrabalhoAguardandoAprovacaoDeCoordenador(TCC tcc) {
+		if(tcc.isProjeto() && tcc.getStatus() == TCC.TAAC)
+			return true;
+		return false;
+	}
+	
+	public boolean isTrabalhoReprovado(TCC tcc) {
+		if(tcc.isProjeto() && (tcc.getStatus() == TCC.TRC || tcc.getStatus() == TCC.TRO) )
 			return true;
 		return false;
 	}
@@ -330,35 +372,92 @@ public class TCCBusiness {
 	}
 
 	public boolean isTrabalhoIncompleto(TCC tcc) {
-		if (!tcc.isProjeto() && !isTrabalhoAguardandoAprovacao(tcc) && tcc.getArquivoTCCFinal() == null)
+//		if (!tcc.isProjeto() && !isTrabalhoAguardandoAprovacao(tcc) && tcc.getArquivoTCCFinal() == null)
+		if (!tcc.isProjeto() && tcc.getStatus() == TCC.TI)
 			return true;
 		return false;
 	}
 
 	public List<TCC> filtraProjetosIncompletos(List<TCC> projetos) {
-		for (int i = 0; i < projetos.size(); i++)
-			if (!isProjetoIncompleto(projetos.get(i))) {
-				projetos.remove(i);
-				i--;
-			}
+		// iteração para remover elementos ao mesmo tempo que le o array
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isProjetoIncompleto(tcc))
+				i.remove();
+		}
+//		for (int i = 0; i < projetos.size(); i++)
+//			if (!isProjetoIncompleto(projetos.get(i))) {
+//				projetos.remove(i);
+//				i--;
+//			}
 		return projetos;
 	}
 
 	public List<TCC> filtraProjetosAguardandoAprovacao(List<TCC> projetos) {
-		for (int i = 0; i < projetos.size(); i++)
-			if (!isProjetoAguardandoAprovacao(projetos.get(i))) {
-				projetos.remove(i);
-				i--;
-			}
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isProjetoAguardandoAprovacao(tcc))
+				i.remove();
+		}
+//		for (int i = 0; i < projetos.size(); i++)
+//			if (!isProjetoAguardandoAprovacao(projetos.get(i))) {
+//				projetos.remove(i);
+//				i--;
+//			}
+		return projetos;
+	}
+	
+	public List<TCC> filtraProjetosReprovados(List<TCC> projetos) {
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isProjetoReprovado(tcc))
+				i.remove();
+		}
+		return projetos;
+	}
+	
+	public List<TCC> filtraTrabalhosEnviadosParaBanca(List<TCC> projetos) {
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoEnviadoParaBanca(tcc))
+				i.remove();
+		}
+		return projetos;
+	}
+	
+	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeOrientador(List<TCC> projetos) {
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoAguardandoAprovacaoDeOrientador(tcc))
+				i.remove();
+		}
+		return projetos;
+	}
+	
+	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeCoordenador(List<TCC> projetos) {
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoAguardandoAprovacaoDeCoordenador(tcc))
+				i.remove();
+		}
+		return projetos;
+	}
+	
+	public List<TCC> filtraTrabalhosReprovados(List<TCC> projetos) {
+		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoReprovado(tcc))
+				i.remove();
+		}
 		return projetos;
 	}
 
 	public List<TCC> filtraTrabalhosIncompletos(List<TCC> trabalhos) {
-		for (int i = 0; i < trabalhos.size(); i++)
-			if (!isTrabalhoIncompleto(trabalhos.get(i))) {
-				trabalhos.remove(i);
-				i--;
-			}
+		for(Iterator<TCC> i = trabalhos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoIncompleto(tcc))
+				i.remove();
+		}
 		return trabalhos;
 	}
 
