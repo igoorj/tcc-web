@@ -43,7 +43,7 @@ public class EmailListener {
 		
 		try
         {
-			System.out.println("teste listener teste");
+			System.out.println("teste listeneeer");
 //			TCC tcc = this.tccBusiness.getTCCById(438);
 //			EnviadorEmailCartaParticipacao email = new EnviadorEmailCartaParticipacao();
 //			email.enviarEmails(tcc);
@@ -96,14 +96,16 @@ public class EmailListener {
 		if(!datasIguais)
 			return;
 		
-		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
+		List<TCC> projetos = this.tccBusiness.getProjetosByCalendar(calendario);
+		projetos = this.tccBusiness.filtraProjetosIncompletos(projetos);
 		if(projetos == null)
 			return;
-		System.out.println("Teste");
 		for(TCC projeto : projetos) {
 			if(tccBusiness.isProjetoIncompleto(projeto) && !projeto.isEmailAlertaPrazoProjetoSubmetidoEnviado()) {
-				System.out.println(projeto.getNomeTCC());
-				System.out.println(projeto.getIdTCC());
+				System.out.println("Enviando e-mail de alerta para submeter projeto");
+				System.out.println("Nome:" + projeto.getNomeTCC());
+				System.out.println("Id: " + projeto.getIdTCC());
+				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoProjeto();
 				email.enviarEmail(projeto, null);
 				projeto.setEmailAlertaEnviado(1);
@@ -119,18 +121,24 @@ public class EmailListener {
 		if(!datasIguais)
 			return;
 //		System.out.println(dataOffset.getTime() + "  " + dataFinalPrazo.getTime());
-		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
-		if(projetos == null)
+		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
+		trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(trabalhos);
+		System.out.println("teste 1");
+		if(trabalhos == null)
 			return;
 		
-		for(TCC projeto : projetos) {
-			if(!projeto.isEmailAlertaPrazoDadosDefesaEnviado()) {
-				System.out.println(projeto.getNomeTCC());
-				System.out.println(projeto.getIdTCC());
+		for(TCC trabalho : trabalhos) {
+			System.out.println(trabalho.getIdTCC());
+			System.out.println(trabalho.getEmailsAlertaEnviados());
+			if(tccBusiness.isTrabalhoIncompleto(trabalho) && !trabalho.isEmailAlertaPrazoDadosDefesaEnviado()) {
+				System.out.println("Enviando e-mail de alerta para submeter dados de defesa");
+				System.out.println("Nome:" + trabalho.getNomeTCC());
+				System.out.println("Id: " + trabalho.getIdTCC());
+				
 				EnviadorEmailChain email = new EnviadorEmailAlertaDadosDeDefesa();
-				email.enviarEmail(projeto, null);
-				projeto.setEmailAlertaEnviado(2);
-				this.tccBusiness.edit(projeto);
+				email.enviarEmail(trabalho, null);
+				trabalho.setEmailAlertaEnviado(2);
+				this.tccBusiness.edit(trabalho);
 			}
 		}
 	}
@@ -142,18 +150,22 @@ public class EmailListener {
 		if(!datasIguais)
 			return;
 		
-		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
-		if(projetos == null)
+		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
+		trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(trabalhos);
+		
+		if(trabalhos == null)
 			return;
 		
-		for(TCC projeto : projetos) {
-			if(!projeto.isEmailAlertaPrazoTrabalhoEnviado()) {
-				System.out.println(projeto.getNomeTCC());
-				System.out.println(projeto.getIdTCC());
+		for(TCC trabalho : trabalhos) {
+			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
+				System.out.println("Enviando e-mail de alerta para submeter trabalho");
+				System.out.println("Nome:" + trabalho.getNomeTCC());
+				System.out.println("Id: " + trabalho.getIdTCC());
+				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
-				email.enviarEmail(projeto, null);
-				projeto.setEmailAlertaEnviado(3);
-				this.tccBusiness.edit(projeto);
+				email.enviarEmail(trabalho, null);
+				trabalho.setEmailAlertaEnviado(3);
+				this.tccBusiness.edit(trabalho);
 			}
 		}
 	}
@@ -165,18 +177,21 @@ public class EmailListener {
 		if(!datasIguais)
 			return;
 		
-		List<TCC> projetos = this.tccBusiness.getNotFinishedProjectsByCalendar(calendario);
-		if(projetos == null)
+		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
+		trabalhos = this.tccBusiness.filtraTrabalhosEnviadosParaBanca(trabalhos);
+		if(trabalhos == null)
 			return;
 		
-		for(TCC projeto : projetos) {
-			if(!projeto.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
-				System.out.println(projeto.getNomeTCC());
-				System.out.println(projeto.getIdTCC());
+		for(TCC trabalho : trabalhos) {
+			if(tccBusiness.isTrabalhoEnviadoParaBanca(trabalho) && !trabalho.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
+				System.out.println("Enviando e-mail de alerta para submeter trabalho final");
+				System.out.println("Nome:" + trabalho.getNomeTCC());
+				System.out.println("Id: " + trabalho.getIdTCC());
+				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalhoFinal();
-				email.enviarEmail(projeto, null);
-				projeto.setEmailAlertaEnviado(4);
-				this.tccBusiness.edit(projeto);
+				email.enviarEmail(trabalho, null);
+				trabalho.setEmailAlertaEnviado(4);
+				this.tccBusiness.edit(trabalho);
 			}
 		}
 	}
