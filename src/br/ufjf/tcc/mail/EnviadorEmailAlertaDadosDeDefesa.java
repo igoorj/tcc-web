@@ -41,15 +41,14 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("no Sistema de Monografias os dados da Defesa do Trabalho de Conclusão ");
 		emailBuilder.appendMensagem("de Curso (TCC). É preciso informar: data, hora, local e ");
 		emailBuilder.appendMensagem(" nome dos membros que farão parte da Banca Examinadora do TCC: ").breakLine(); 
-		emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine();
-		if(tcc.possuiCoorientador())
-			emailBuilder.appendMensagem("Co-orientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
-		for(String membro : membros) {
-			emailBuilder.appendMensagem("Membro da banca: " + membro).breakLine();
-		}
-		for(String suplente : suplentes) {
-			emailBuilder.appendMensagem("Membro da banca: " + suplente).breakLine();
-		}
+		
+		emailBuilder.appendMensagem("<li>Orientador(a)</li>");
+		emailBuilder.appendMensagem("<li>Coorientador(a) (se houver)</li>");
+		emailBuilder.appendMensagem("<li>Membro 1</li>");
+		emailBuilder.appendMensagem("<li>Membro 2</li>");
+		emailBuilder.appendMensagem("<li>Suplente</li>");
+		emailBuilder.appendMensagem("</ol>");
+		
 		emailBuilder.appendMensagem("É preciso preencher todas as informações no sistema ");
 		emailBuilder.appendMensagem("para esta atividade se tornar completa, pois ainda ");
 		emailBuilder.appendMensagem("não consta que o(a) discente realizou esta atividade completamente.").breakLine(); 

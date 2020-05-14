@@ -83,7 +83,7 @@ public class MenuController extends CommonsController {
 		
 		return false;
 	}
-	
+	// TODO refatorar
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Command
 	public void gerarAta(){
@@ -97,6 +97,7 @@ public class MenuController extends CommonsController {
 					if (getUsuario().getTcc().get(0).getParticipacoes().size() > 2
 							&& getUsuario().getTcc().get(0).getParticipacoes()
 									.size() < 6) {
+//					if (getUsuario().getTcc().get(0).getParticipacoes().size() > 2) {
 						
 						TCC tcc = getUsuario().getTcc().get(0);
 						

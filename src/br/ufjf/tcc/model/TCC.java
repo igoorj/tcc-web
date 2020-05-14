@@ -328,6 +328,14 @@ public class TCC implements Serializable,Comparable<TCC> {
 		return arquivoTCCBanca;
 	}
 
+	public int getEmailsAlertaEnviados() {
+		return emailsAlertaEnviados;
+	}
+
+	public void setEmailsAlertaEnviados(int emailsAlertaEnviados) {
+		this.emailsAlertaEnviados = emailsAlertaEnviados;
+	}
+
 	public void setArquivoTCCBanca(String arquivoTCCBanca) {
 		this.arquivoTCCBanca = arquivoTCCBanca;
 	}
