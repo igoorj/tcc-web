@@ -201,6 +201,7 @@
 							<label value="Data de Apresentação: "
 								style="margin-top:5px" />
 							<datebox
+								onChange="@command('validarDataApresentacao', datebox=self)"
 								value="@bind(vm.tcc.dataApresentacao)" format="dd/MM/yyyy HH:mm"
 								hflex="1" />
 						</hlayout>

@@ -783,6 +783,15 @@ public class EditorTccController extends CommonsController {
 //		System.out.println("teste 3");
 //		return false;
 	}
+	
+	@Command
+	public void validarDataApresentacao(@BindingParam("datebox")  Datebox datebox ) {
+		if(!tccBusiness.validateDataApresentacao(tcc)) {
+			Messagebox.show("A data informada está fora do prazo de apresentação", "Data inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			tcc.setDataApresentacao(null);
+		}
+	}
 
 	public void verificarCanChangeParticipacao() {
 		Timestamp dataApresentacao = tcc.getDataApresentacao();
