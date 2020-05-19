@@ -372,8 +372,13 @@ public class TCCBusiness {
 	}
 
 	public boolean isTrabalhoIncompleto(TCC tcc) {
-//		if (!tcc.isProjeto() && !isTrabalhoAguardandoAprovacao(tcc) && tcc.getArquivoTCCFinal() == null)
 		if (!tcc.isProjeto() && tcc.getStatus() == TCC.TI)
+			return true;
+		return false;
+	}
+	
+	public boolean isTrabalhoAprovado(TCC tcc) {
+		if (!tcc.isProjeto() && tcc.getStatus() == TCC.APROVADO)
 			return true;
 		return false;
 	}
@@ -471,11 +476,11 @@ public class TCCBusiness {
 	}
 
 	public List<TCC> filtraTrabalhosFinalizados(List<TCC> trabalhos) {
-		for (int i = 0; i < trabalhos.size(); i++)
-			if (getStatusTCC(trabalhos.get(i)) != "Aprovado") {
-				trabalhos.remove(i);
-				i--;
-			}
+		for(Iterator<TCC> i = trabalhos.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(!isTrabalhoAprovado(tcc))
+				i.remove();
+		}
 		return trabalhos;
 	}
 

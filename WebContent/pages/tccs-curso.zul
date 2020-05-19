@@ -165,9 +165,15 @@
 		<html>
 			<![CDATA[ Status:
 			<ul><li>PI - Projeto incompleto</li>
-			<li>TI - Trabalho incompleto</li>
 			<li>PAA - Projeto aguardando aprovação</li>
-			<li>TAA - Trabalho aguardando aprovação</li>
+			<li>PR - Projeto reprovado</li>
+			<li>TI - Trabalho incompleto</li>
+			<li>TEPB - Trabalho enviado para banca</li>
+			<li>TAAO - Trabalho aguardando aprovação de orientador</li>
+			<li>TAAC - Trabalho aguardando aprovação de coordenador</li>
+			<li>TRO - Trabalho reprovado por orientador</li>
+			<li>TRC - Trabalho reprovado por coordenador</li>
+			<li>Aprovado - Trabalhos finalizados</li>
 			<ul>]]>
 		</html>
 	</popup>
