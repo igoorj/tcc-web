@@ -1,6 +1,7 @@
 package br.ufjf.tcc.business;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import br.ufjf.tcc.model.CalendarioSemestre;
@@ -33,7 +34,6 @@ public class PrazoBusiness {
 							+ j + "º.");
 				}
 			}
-
 		return errors.size() == 0;
 	}
 
@@ -61,8 +61,8 @@ public class PrazoBusiness {
 		return prazoDAO.getPrazosByCalendario(calendarioSemestre);
 	}
 	
-	public Prazo getPrazoDataDefesaByCalendario(CalendarioSemestre calendario) {
-		return prazoDAO.getPrazoDataDefesaByCalendario(calendario);
+	public Prazo getPrazoByTipoAndCalendario(int tipo, CalendarioSemestre calendario) {
+		return prazoDAO.getPrazoByTipoAndCalendario(tipo, calendario);
 	}
 
 	public boolean save(Prazo p) {

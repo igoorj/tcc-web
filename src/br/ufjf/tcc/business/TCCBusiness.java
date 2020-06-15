@@ -1,9 +1,9 @@
 package br.ufjf.tcc.business;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -31,19 +31,19 @@ public class TCCBusiness {
 		return errors;
 	}
 
+	
 	public boolean getMissing(TCC tcc, boolean checkFile) {
 		errors.clear();
 
 		validateOrientador(tcc.getOrientador());
-		validateName(tcc.getNomeTCC());
+		validateName(tcc);
 		validateResumo(tcc.getResumoTCC());
-//		validateData(tcc.getDataApresentacao(), tcc);
+//		validateDataApresentacao(tcc);
 		validateSala(tcc.getSalaDefesa(), tcc);
-		validateBanca(tcc.getParticipacoes(), tcc);
-		validateSuplente(tcc.getParticipacoes(), tcc);
+		validateBanca(tcc.getParticipacoes());
 		validatePalavraChave(tcc.getPalavrasChave());
 		if (checkFile)
-			validateArquivoBanca(tcc.getArquivoTCCBanca());
+			validateArquivo(tcc.getArquivoTCC());
 
 		return errors.size() == 0 ? false : true;
 	}
@@ -55,7 +55,7 @@ public class TCCBusiness {
 	public boolean validate(TCC tcc) {
 		errors.clear();
 
-		validateName(tcc.getNomeTCC());
+		validateName(tcc);
 		if (errors.size() < 1)
 			tcc.setNomeTCC(tcc.getNomeTCC().toUpperCase());
 		validateOrientador(tcc.getOrientador());
@@ -64,18 +64,71 @@ public class TCCBusiness {
 	}
 	public boolean validateTCC(TCC tcc, int status) {
 		errors.clear();
-		
-		validateName(tcc.getNomeTCC());
-		if (errors.size() < 1)
-			tcc.setNomeTCC(tcc.getNomeTCC().toUpperCase());
+		switch (status) {
+		case TCC.PI:
+			validateProjeto(tcc);
+			break;
+		case TCC.PAA:
+			break;
+		case TCC.PR:
+			break;
+		case TCC.TI:
+			validateDadosDeDefesa(tcc);
+			break;
+		case TCC.TEPB:
+			validateTrabalho(tcc);
+			break;
+		case TCC.TAAO:
+			break;
+		case TCC.TRO:
+			tcc.setStatus(TCC.TAAO);
+			break;
+		case TCC.TAAC:
+			break;
+		case TCC.TRC:
+			break;
+		case TCC.APROVADO:
+			break;
+		default:
+			break;
+		}
+		return errors.size() == 0;
+	}
+	
+	public void validateProjeto(TCC tcc) {
+		validateName(tcc);
+		validateResumo(tcc.getResumoTCC());
+		validatePalavraChave(tcc.getPalavrasChave());
 		validateOrientador(tcc.getOrientador());
-		
-		return errors.size() == 0 ? true : false;
+		validateArquivo(tcc.getArquivoTCC());
+	}
+	
+	public void validateDadosDeDefesa(TCC tcc) {
+		validateProjeto(tcc);
+		validateDataApresentacao(tcc);
+		validateBanca(tcc.getParticipacoes());
+		validateSala(tcc.getSalaDefesa(), tcc);
+	}
+	
+	/*
+	 * Valida os campos necessários do trabalho
+	 */
+	public void validateTrabalho(TCC tcc) {
+		// Necessita dos mesmo campos de projeto
+		validateProjeto(tcc);
+		validateArquivoDocumentacao(tcc.getArquivoDocumentacao());
+		validateParticipacao(tcc.getParticipacoes());
 	}
 
-	public void validateName(String nomeTCC) {
-		if (nomeTCC == null || nomeTCC.trim().length() == 0)
-			errors.add("É necessário informar o nome do seu Trabalho\n");
+	public void validateName(TCC tcc) {
+		String nome = tcc.getNomeTCC();
+		if(nome != null) {
+			nome = nome.trim().toUpperCase();
+			if(nome.length() == 0)
+				errors.add("É necessário informar o nome do seu Trabalho\n");
+			return;
+		}
+		errors.add("É necessário informar o nome do seu Trabalho\n");
 	}
 
 	public void validateOrientador(Usuario orientador) {
@@ -88,46 +141,75 @@ public class TCCBusiness {
 			errors.add("É necessário informar o resumo do TCC\n");
 	}
 	
-	public void validateDataApresentacao(TCC tcc) {
+	/*
+	 * Verifica se a data de apresentação está dentro do prazo da defesa
+	 */
+	public boolean validateDataApresentacao(TCC tcc) {
 		if(tcc != null) {
-			Prazo prazoDefesa = new PrazoBusiness().getPrazoDataDefesaByCalendario(tcc.getCalendarioSemestre());
-			if(prazoDefesa != null) {
-				// 0 se for igual, negativo se for antes
-//				int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
-//				if(comparacao > 0)
-//					errors.add("A data da sua aprensentação está fora dos limites de prazo");
-			} else {
-				System.out.println("teste null");
+			if(tcc.getDataApresentacao() == null) {
+				errors.add("É necessário informar a data de aprensetação\n");
+				return false;
 			}
-				
-			
+			Prazo prazoDefesa = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.DEFESA, tcc.getCalendarioSemestre());
+			if(prazoDefesa == null) {
+				System.out.println("Não existe prazo pra defesa\n");
+				return false;
+			}
+			// 0 se for igual, negativo se for antes
+			int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
+			if(comparacao > 0) {
+				errors.add("A data da sua aprensentação está fora dos limites de prazo\n");
+				return false;
+			}
+			return true;
 		}
-		if (tcc != null)
-			if (!tcc.isProjeto())
-				errors.add("É necessário informar a data de apresentação\n");
+		errors.add("É necessário informar o tcc.\n");
+		return false;
 	}
 
 	public void validateSala(String sala, TCC tcc) {
 		if (tcc != null)
-			if ((sala == null || sala.trim().length() == 0) && !tcc.isProjeto())
+			if ((sala == null || sala.trim().length() == 0))
 				errors.add("É necessário informar a sala de apresentação\n");
 	}
 
-	public void validateBanca(List<Participacao> list, TCC tcc) {
-		if (tcc != null)
-			if ((list == null || list.size() < 3) && !tcc.isProjeto())
-				errors.add("É necessário informar a banca. Mínimo de 3 participantes.\n");
+	public void validateBanca(List<Participacao> list) {
+		if ((list == null || list.size() < 3)) {
+			errors.add("É necessário informar a banca. Mínimo de 3 participantes.\n");
+			return;
+		}
+		validateSuplente(list);
 	}
 
-	public void validateSuplente(List<Participacao> list, TCC tcc) {
-		if (tcc != null)
-			if ((list == null || list.size() == 0 || !possuiSuplente(list)) && !tcc.isProjeto())
-				errors.add("É necessário informar o suplente da banca.\n");
+	public void validateSuplente(List<Participacao> list) {
+		if (!possuiSuplente(list))
+			errors.add("É necessário informar o suplente da banca.\n");
 	}
-
-	public void validateArquivoBanca(String arquivo) {
+	
+	
+	public void validateArquivo(String arquivo) {
 		if (arquivo == null || arquivo.trim().length() == 0)
 			errors.add("É necessário fazer o upload do seu trabalho\n");
+	}
+	
+	public void validateArquivoDocumentacao(String arquivo) {
+		if (arquivo == null || arquivo.trim().length() == 0)
+			errors.add("É necessário fazer o upload da documentação\n");
+	}
+	
+	public void validateParticipacao(List<Participacao> participacoes) {
+		if(participacoes != null) {
+			boolean alguemParticipou = false;
+			for(Participacao participacao : participacoes) {
+				if(participacao.isParticipou()) {
+					alguemParticipou = true;
+					return;
+				}
+			}
+			if(!alguemParticipou) {
+				errors.add("É necessário informar quais professores participaram da defesa\n");
+			}
+		}
 	}
 
 	public void validatePalavraChave(String palavraschave) {
@@ -161,10 +243,6 @@ public class TCCBusiness {
 
 	public List<TCC> getTCCsByCurso(Curso curso) {
 		return tccDao.getTCCsByCurso(curso);
-	}
-	
-	public List<TCC> getNotFinishedProjectsByCalendar(CalendarioSemestre currentCalendar){
-		return tccDao.getNotFinishedProjectsByCalendar(currentCalendar);
 	}
 	
 	public TCC getCurrentTCCByAuthor(Usuario user, CalendarioSemestre currentCalendar) {
@@ -266,16 +344,6 @@ public class TCCBusiness {
 		return tccDao.getAllProjetosByCurso(curso);
 	}
 
-	// TODO
-	public List<TCC> getAllProjetosByCursoAndCalendar(Curso curso, CalendarioSemestre currentCalendar) {
-//		return tccDao.getProjetosByCursoAndCalendar(curso, currentCalendar);
-		return null;
-	}
-	
-	public List<TCC> getProjetoAguardandoAprovacaoByCalendar(CalendarioSemestre currentCalendar) {
-		return tccDao.getProjetoAguardandoAprovacaoByCalendar(currentCalendar);
-	}
-	
 
 	public List<TCC> getAllTrabalhosByCurso(Curso curso) {
 		return tccDao.getAllTrabalhosByCurso(curso);
@@ -311,19 +379,11 @@ public class TCCBusiness {
 	public boolean isProjetoAguardandoAprovacao(TCC tcc) {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PAA)
 			return true;
-		
-		if (tcc.isProjeto() && !(tcc.getPalavrasChave() == null || tcc.getPalavrasChave().trim().length() == 0)
-				&& tcc.getArquivoTCCBanca() != null
-				&& !(tcc.getResumoTCC() == null || tcc.getResumoTCC().trim().length() == 0)
-				&& tcc.getOrientador() != null && tcc.getNomeTCC() != null)
-			return true;
 		return false;
 	}
 
 	public boolean isProjetoIncompleto(TCC tcc) {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PI)
-			return true;
-		if (tcc.isProjeto() && !isProjetoAguardandoAprovacao(tcc))
 			return true;
 		return false;
 	}
@@ -347,7 +407,7 @@ public class TCCBusiness {
 	}
 	
 	public boolean isTrabalhoAguardandoAprovacaoDeCoordenador(TCC tcc) {
-		if(tcc.isProjeto() && tcc.getStatus() == TCC.TAAC)
+		if(!tcc.isProjeto() && tcc.getStatus() == TCC.TAAC)
 			return true;
 		return false;
 	}
@@ -358,15 +418,10 @@ public class TCCBusiness {
 		return false;
 	}
 
+	// TODO remover
 	public boolean isTrabalhoAguardandoAprovacao(TCC tcc) {
-
-		if (!tcc.isProjeto() && !(tcc.getPalavrasChave() == null || tcc.getPalavrasChave().trim().length() == 0)
-				&& tcc.getArquivoTCCBanca() != null
-				&& !(tcc.getResumoTCC() == null || tcc.getResumoTCC().trim().length() == 0)
-				&& tcc.getOrientador() != null && tcc.getNomeTCC() != null
-				&& !(tcc.getSalaDefesa() == null || tcc.getSalaDefesa().trim().length() == 0)
-				&& tcc.getDataApresentacao() != null && tcc.getParticipacoes() != null
-				&& tcc.isQuantidadeParticipacoesValidas() && possuiSuplente(tcc.getParticipacoes()))
+		int status = tcc.getStatus();
+		if(status == TCC.TEPB || status == TCC.TAAC || status == TCC.TAAO || status == TCC.TRC || status == TCC.TRO)
 			return true;
 		return false;
 	}
@@ -390,11 +445,6 @@ public class TCCBusiness {
 			if(!isProjetoIncompleto(tcc))
 				i.remove();
 		}
-//		for (int i = 0; i < projetos.size(); i++)
-//			if (!isProjetoIncompleto(projetos.get(i))) {
-//				projetos.remove(i);
-//				i--;
-//			}
 		return projetos;
 	}
 
@@ -404,11 +454,6 @@ public class TCCBusiness {
 			if(!isProjetoAguardandoAprovacao(tcc))
 				i.remove();
 		}
-//		for (int i = 0; i < projetos.size(); i++)
-//			if (!isProjetoAguardandoAprovacao(projetos.get(i))) {
-//				projetos.remove(i);
-//				i--;
-//			}
 		return projetos;
 	}
 	
@@ -466,14 +511,6 @@ public class TCCBusiness {
 		return trabalhos;
 	}
 
-	public List<TCC> filtraTrabalhosAguardandoAprovacao(List<TCC> trabalhos) {
-		for (int i = 0; i < trabalhos.size(); i++)
-			if (!isTrabalhoAguardandoAprovacao(trabalhos.get(i))) {
-				trabalhos.remove(i);
-				i--;
-			}
-		return trabalhos;
-	}
 
 	public List<TCC> filtraTrabalhosFinalizados(List<TCC> trabalhos) {
 		for(Iterator<TCC> i = trabalhos.iterator(); i.hasNext();) {
@@ -494,6 +531,8 @@ public class TCCBusiness {
 				return "PAA";
 			case TCC.TI:
 				return "TI";
+			case TCC.TEPB:
+				return "TEPB";
 			case TCC.TRO:
 				return "TRO";
 			case TCC.TAAO:
@@ -509,23 +548,6 @@ public class TCCBusiness {
 		}
 	}
 	
-/*	public String getStatusTCC(TCC tcc)
-	{
-		if(isProjetoAguardandoAprovacao(tcc))
-			return "PAA";
-		else
-		if(isProjetoIncompleto(tcc))
-			return "PI";
-		else
-		if(isTrabalhoAguardandoAprovacao(tcc))
-			return "TAA";
-		else
-		if(isTrabalhoIncompleto(tcc))
-			return "TI";
-		else
-			return "Aprovado";
-	}*/
-
 	public String getStatusCorridoTCC(TCC tcc) {
 		switch (tcc.getStatus()) {
 		case TCC.PI:
@@ -536,6 +558,8 @@ public class TCCBusiness {
 			return "Projeto aguardando aprovação";
 		case TCC.TI:
 			return "Trabalho incompleto";
+		case TCC.TEPB:
+			return "Trabalho enviado para banca";
 		case TCC.TRO:
 			return "Trabalho reprovado por orientador";
 		case TCC.TAAO:
@@ -551,41 +575,33 @@ public class TCCBusiness {
 		}
 	}
 
-	public boolean excluitTCC(TCC tcc) {
+	public boolean excluirTCC(TCC tcc) {
 		ParticipacaoBusiness PB = new ParticipacaoBusiness();
 		PB.excluiLista(PB.getParticipacoesByTCC(tcc));
+		Usuario aluno = tcc.getAluno();
+		if(aluno.isAtivo()) {
+			UsuarioBusiness ub = new UsuarioBusiness();
+			aluno.setAtivo(false);
+			ub.editar(aluno);
+		}
 
 		File f;
-		if (tcc.getArquivoTCCFinal() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoTCCFinal());
+		if (tcc.getArquivoTCC() != null) {
+			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoTCC());
 			if (f != null)
 				f.delete();
 		}
-		if (tcc.getArquivoExtraTCCFinal() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoExtraTCCFinal());
+		if (tcc.getArquivoExtraTCC() != null) {
+			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoExtraTCC());
 			if (f != null)
 				f.delete();
 		}
-		if (tcc.getArquivoExtraTCCBanca() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoExtraTCCBanca());
+		if (tcc.getArquivoDocumentacao() != null) {
+			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoDocumentacao());
 			if (f != null)
 				f.delete();
 		}
-		if (tcc.getArquivoTCCBanca() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArquivoTCCBanca());
-			if (f != null)
-				f.delete();
-		}
-		if (tcc.getArqExtraProjFinal() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArqExtraProjFinal());
-			if (f != null)
-				f.delete();
-		}
-		if (tcc.getArqProjFinal() != null) {
-			f = new File(ConfHandler.getConf("FILE.PATH") + tcc.getArqProjFinal());
-			if (f != null)
-				f.delete();
-		}
+		
 
 		if ((new TCCDAO()).exclui(tcc))
 			return true;

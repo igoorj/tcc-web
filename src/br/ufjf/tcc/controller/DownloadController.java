@@ -36,8 +36,7 @@ public class DownloadController extends CommonsController {
 
 	@Command
 	public void downloadPDF2() {
-		InputStream is = FileManager
-				.getFileInputSream(tcc.getArquivoTCCFinal());
+		InputStream is = FileManager.getFileInputSream(tcc.getArquivoTCC());
 
 		if (is != null) {
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC());
@@ -49,10 +48,9 @@ public class DownloadController extends CommonsController {
 
 	@Command
 	public void downloadExtra() {
-		if (tcc.getArquivoExtraTCCFinal() != null
-				&& tcc.getArquivoExtraTCCFinal() != "") {
+		if (tcc.getArquivoExtraTCC() != null && tcc.getArquivoExtraTCC() != "") {
 			InputStream is = FileManager.getFileInputSream(tcc
-					.getArquivoExtraTCCFinal());
+					.getArquivoExtraTCC());
 			if (is != null) {
 				Filedownload.save(is, "application/x-rar-compressed",
 						tcc.getNomeTCC() + ".rar");

@@ -32,17 +32,17 @@ public class PrazoDAO extends GenericoDAO {
 		return prazos;
 	}
 	
-	public Prazo getPrazoDataDefesaByCalendario(CalendarioSemestre calendario) {
+	public Prazo getPrazoByTipoAndCalendario(int tipo, CalendarioSemestre calendario) {
 		Prazo prazo = null;
 		try {
 			Query query = getSession()
 					.createQuery( " SELECT p FROM Prazo AS p"
 								+ " WHERE p.calendarioSemestre = :calendarioSemestre "
-								+ " AND p.tipo = :prazoDataDefesa"
+								+ " AND p.tipo = :tipo"
 								+ " ORDER BY p.dataFinal");
 			
 			query.setParameter("calendarioSemestre", calendario);
-			query.setParameter("prazoDataDefesa", Prazo.DEFESA);
+			query.setParameter("tipo", tipo);
 			prazo = (Prazo) query.uniqueResult();
 
 			getSession().close();

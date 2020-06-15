@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Schedule;
@@ -33,17 +34,27 @@ public class EmailListener {
 		this.calendarioBusiness = new CalendarioSemestreBusiness();
 		this.prazoBusiness = new PrazoBusiness();
 	}
+	
+	
+	@PostConstruct
+    public void onStartup() {
+        try {
+			listener();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 		
 	private final AtomicBoolean alreadyRunning = new AtomicBoolean(false);
 	
-	@Schedule(hour="*", minute="*", second="*/10", persistent = true)
+	@Schedule(hour="*/1", persistent = false)
 	@Lock(LockType.READ)
 	public void listener() throws IOException {
 		if (alreadyRunning.getAndSet(true)) return;
 		
 		try
         {
-			System.out.println("teste listeneeer");
+			System.out.println("teste listner");
 //			TCC tcc = this.tccBusiness.getTCCById(438);
 //			EnviadorEmailCartaParticipacao email = new EnviadorEmailCartaParticipacao();
 //			email.enviarEmails(tcc);
@@ -85,7 +96,7 @@ public class EmailListener {
 		}
 	}
 	
-	/**
+	/*
 	 * Para cada calendário atual, notifica os alunos 
 	 * que ainda não concluiram o projeto, x dias antes da data limite (por parâmetro) 
 	 */
@@ -157,7 +168,7 @@ public class EmailListener {
 			return;
 		
 		for(TCC trabalho : trabalhos) {
-			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
+			if(tccBusiness.isTrabalhoIncompleto(trabalho) && !trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
 				System.out.println("Enviando e-mail de alerta para submeter trabalho");
 				System.out.println("Nome:" + trabalho.getNomeTCC());
 				System.out.println("Id: " + trabalho.getIdTCC());
@@ -205,8 +216,8 @@ public class EmailListener {
 	
 	/**
 	 * Compara dois calendários e retorna verdadeiro se forem iguais.
-	 *  O parâmetro compareHour indica se a hora será levada em 
-	 *  consideração na comparação.
+	 * O parâmetro compareHour indica se a hora será levada em 
+	 * consideração na comparação.
 	 */
 	private boolean compareCalendars(Calendar cal1, Calendar cal2, boolean compareHour) {
 		if(!compareHour) {

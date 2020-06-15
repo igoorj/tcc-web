@@ -38,33 +38,23 @@ public class ExibirBancasController extends CommonsController {
 	private Ata ata;
 	
 	@Init
-	public void init() {		
-				
-		switch (getUsuario().getTipoUsuario().getIdTipoUsuario()) {
-		case Usuario.COORDENADOR:
-
-			tccs = new TCCBusiness().getNotFinishedTCCsByCursoAndCalendar(getUsuario().getCurso(),getCurrentCalendar(getUsuario().getCurso()));
-			
-			break;
-		case Usuario.SECRETARIA:
-
-			tccs = new TCCBusiness().getNotFinishedTCCsByCursoAndCalendar(getUsuario().getCurso(),getCurrentCalendar(getUsuario().getCurso()));
-
-			break;
-		default:
+	public void init() {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		
+		if(tipoUsuario != Usuario.COORDENADOR && tipoUsuario != Usuario.SECRETARIA) {
 			redirectHome();
 			return;
 		}
+		tccs = new TCCBusiness().getNotFinishedTCCsByCursoAndCalendar(getUsuario().getCurso(),getCurrentCalendar(getUsuario().getCurso()));
 		
 		trabalhosMarcados = new ArrayList<TCC>();
-
 		
 		TCCBusiness tccbusiness = new TCCBusiness();
 		
 		filterTccs = new ArrayList<TCC>();
 		
-		if(tccs!=null){
-			for(TCC tcc:tccs){
+		if (tccs != null) {
+			for (TCC tcc:tccs) {
 				if(tccbusiness.isTrabalhoAguardandoAprovacao(tcc)){
 					filterTccs.add(tcc);
 				}
@@ -186,21 +176,19 @@ public class ExibirBancasController extends CommonsController {
 
 	@Command
 	public void downloadPDF(@BindingParam("tcc") TCC tcc) {
-		InputStream is = FileManager
-				.getFileInputSream(tcc.getArquivoTCCFinal());
+		InputStream is = FileManager.getFileInputSream(tcc.getArquivoTCC());
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		else
 			Messagebox.show("O PDF não foi encontrado!", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 	}
+	
 
 	@Command
 	public void downloadExtra(@BindingParam("tcc") TCC tcc) {
-		if (tcc.getArquivoExtraTCCFinal() != null
-				&& tcc.getArquivoExtraTCCFinal() != "") {
-			InputStream is = FileManager.getFileInputSream(tcc
-					.getArquivoExtraTCCFinal());
+		if (tcc.getArquivoExtraTCC() != null && tcc.getArquivoExtraTCC() != "") {
+			InputStream is = FileManager.getFileInputSream(tcc.getArquivoExtraTCC());
 			if (is != null)
 				Filedownload.save(is, "application/x-rar-compressed",
 						tcc.getNomeTCC() + ".rar");

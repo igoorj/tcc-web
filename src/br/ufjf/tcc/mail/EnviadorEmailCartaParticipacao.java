@@ -2,6 +2,7 @@ package br.ufjf.tcc.mail;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import br.ufjf.tcc.model.Participacao;
@@ -18,8 +19,8 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	private String nomeCurso;
 	private String titulo;
 	private String dataDefesa;
-	private List<String> suplentes;
-	private List<String> membros;
+	private List<String> suplentes = new ArrayList<String>();
+	private List<String> membros = new ArrayList<String>();
 	private SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	
 	public EnviadorEmailCartaParticipacao() {
@@ -67,7 +68,9 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	public void enviarEmails(TCC tcc) {
 		List<Participacao> participacoes = tcc.getParticipacoes();
 		// Verifica quem prticipou e separa em suplentes e membros
-		for(Participacao p : participacoes) {
+		
+		for(Iterator<Participacao> i = participacoes.iterator(); i.hasNext();) {
+			Participacao p = i.next();
 			if(p.isParticipou()) {
 				if(p.isSuplente())
 					this.suplentes.add(p.getProfessor().getNomeUsuario());
@@ -75,10 +78,11 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 					this.membros.add(p.getProfessor().getNomeUsuario());
 			}
 			else
-				participacoes.remove(p);
+				i.remove();
 		}
+		
 		this.nomeAluno = tcc.getAluno().getNomeUsuario();
-		this.nomeCurso = tcc.getAluno().getCursoOuDepartamento();
+		this.nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		this.titulo = tcc.getNomeTCC();
 		this.nomeOrientador = tcc.getOrientador().getNomeUsuario();
 		this.dataDefesa = formatter.format(tcc.getDataApresentacao());
@@ -91,10 +95,8 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 				String CoOrientador = " ";
 				if(tcc.possuiCoorientador())
 					CoOrientador = tcc.getCoOrientador().getNomeUsuario();
-				
 				cartaParticipacao.gerarCartaParticipacao( nomeCurso, p.getProfessor().getNomeUsuario(), nomeAluno, nomeOrientador, tcc.getIdTCC(),
 						CoOrientador, titulo, dataDefesa, participacoes, p.getProfessor().getMatricula(), tcc.getCertificadoDigital());
-				
 				builder.appendArquivo(cartaParticipacao.getCaminhoArquivo());
 				
 			} catch(Exception e) {

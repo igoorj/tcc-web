@@ -30,7 +30,7 @@ public class ExibiPdfServlet extends HttpServlet {
 			tcc = tccBusiness.getTCCById(Integer.parseInt(tccId));
 			
 			if (tcc != null) {
-				File file = FileManager.getFile(tcc.getArquivoTCCFinal());
+				File file = FileManager.getFile(tcc.getArquivoTCC());
 				
 				if (file != null) {
 					res.setHeader("Content-Disposition", "inline; filename="+tcc.getNomeTCC());

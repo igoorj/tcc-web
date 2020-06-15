@@ -52,7 +52,6 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			if(currentCalendars != null)
 				return currentCalendars;
 		} catch(Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

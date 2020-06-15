@@ -91,6 +91,15 @@
 									<image src="/img/rar.png" />
 								</div>
 							</div>
+
+							<div if="${vm.exibirBaixarDocumentacao()}">
+								<label value="Arquivo de documentação" style="font-size: 14px; font-weight: bold; margin-top: 10px" />
+								<div
+									style="cursor: pointer;display:inline;position:relative"
+									onClick="@command('downloadDocumentacao')">
+									<image src="/img/rar.png" />
+								</div>
+							</div>
 													
 							<button label="Editar Dados" width="100%"
 								height="30px" style="margin-top:10px"
@@ -102,15 +111,6 @@
 								height="30px" style="margin-top:10px"/>
 								<button id="reprovar" image="/img/cancel.png" onClick="@command('abrirModalReprovacao', window=modalReprovacao)"  width="100%"
 								height="30px" style="margin-top:10px"/>
-								
-
-								// TODO remover
-								<div  align="center" style="position:relative;top:20px;text-align:center" >
-									<label  style="padding:1px;color:red" value="Documentos ainda não foram entregues" visible="@load(!vm.tcc.entregouDoc and !vm.tcc.projeto and vm.tcc.statusTCC eq 'TAA')" />
-									<label style="padding:1px;color:red" value="Trabalho final ainda não enviado" visible="@load(!vm.tcc.trabFinal and !vm.tcc.projeto and vm.tcc.statusTCC eq 'TAA')" />
-									<button disabled="@load(!(vm.tcc.entregouDoc and vm.tcc.trabFinal))" image="/img/confirm.gif" label="Aprovar trabalho" visible="@load(not vm.projeto and vm.trabalhoAguardandoAprovacao)" onClick="@command('finalizaTrabalho', window=windowTCC)"  width="100%"
-								height="30px"  style="margin-top:10px;"/>
-								</div>								
 							</div>				
 						</tabpanel>
 						<tabpanel

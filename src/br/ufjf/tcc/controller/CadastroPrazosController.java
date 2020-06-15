@@ -181,14 +181,7 @@ public class CadastroPrazosController extends CommonsController {
 					Messagebox.OK, Messagebox.INFORMATION, new EventListener() {
 						public void onEvent(Event evt)
 								throws InterruptedException {
-							UsuarioBusiness ub = new UsuarioBusiness();
-							List<Usuario> usuariosCurso = ub.getAllByCurso(getUsuario().getCurso());
-							for(int i=0;i<usuariosCurso.size();i++)
-								if(usuariosCurso.get(i).getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO)
-								{
-									usuariosCurso.get(i).setAtivo(false);
-									ub.editar(usuariosCurso.get(i));
-								}
+							desativarAlunos();
 							Executions.sendRedirect("/pages/home-professor.zul");
 						}
 					});
@@ -205,6 +198,17 @@ public class CadastroPrazosController extends CommonsController {
 	public void getDescription(@BindingParam("label") Label label,
 			@BindingParam("type") int type) {
 		label.setValue(new PrazoBusiness().getDescription(type));
+	}
+	
+	
+	private void desativarAlunos() {
+		UsuarioBusiness ub = new UsuarioBusiness();
+		List<Usuario> usuariosCurso = ub.getAllByCurso(getUsuario().getCurso());
+		for(Usuario usuario : usuariosCurso)
+			if(usuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
+				usuario.setAtivo(false);
+				ub.editar(usuario);
+			}
 	}
 
 }

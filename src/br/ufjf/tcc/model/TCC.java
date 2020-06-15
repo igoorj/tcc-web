@@ -28,7 +28,6 @@ import br.ufjf.tcc.business.TCCBusiness;
 public class TCC implements Serializable,Comparable<TCC> {
 
 	private static final long serialVersionUID = 1L;
-	
 	/*
 	 * PI	- Projeto Incompleto
 	 * PR	- Projeto Reprovado
@@ -95,16 +94,18 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code arquivoTCCBanca} do banco através da anotação
 	 * {@code @Column(name = "arquivoTCCBanca", length = 255, nullable = true)}.
 	 */
-	@Column(name = "arquivoTCCBanca", length = 255, nullable = true)
-	private String arquivoTCCBanca;
+//	@Column(name = "arquivoTCCBanca", length = 255, nullable = true)
+//	private String arquivoTCCBanca;
 
 	/**
 	 * Campo com o arquivo final do TCC. Relaciona com a coluna
 	 * {@code arquivoTCCFinal} do banco através da anotação
 	 * {@code @Column(name = "arquivoTCCFinal", length = 255, nullable = true)}.
 	 */
-	@Column(name = "arquivoTCCFinal", length = 255, nullable = true)
-	private String arquivoTCCFinal;
+	@Column(name = "arquivoTCC", length = 255, nullable = true)
+	private String arquivoTCC;
+//	@Column(name = "arquivoTCCFinal", length = 255, nullable = true)
+//	private String arquivoTCCFinal;
 
 	/**
 	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
@@ -112,8 +113,8 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code @Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)}
 	 * .
 	 */
-	@Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)
-	private String arquivoExtraTCCBanca;
+//	@Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)
+//	private String arquivoExtraTCCBanca;
 
 	/**
 	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
@@ -121,8 +122,19 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code @Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)}
 	 * .
 	 */
-	@Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)
-	private String arquivoExtraTCCFinal;
+	@Column(name = "arquivoExtraTCC", length = 255, nullable = true)
+	private String arquivoExtraTCC;
+//	@Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)
+//	private String arquivoExtraTCCFinal;
+	
+	/**
+	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
+	 * {@code arquivoDocumentacao} do banco através da anotação
+	 * {@code @Column(name = "arquivoDocumentacao", length = 255, nullable = true)}
+	 * .
+	 */
+	@Column(name = "arquivoDocumentacao", length = 255, nullable = true)
+	private String arquivoDocumentacao;
 
 	/**
 	 * Campo com a sala de defesa. Relaciona com a coluna {@code salaDefesa} do
@@ -205,11 +217,11 @@ public class TCC implements Serializable,Comparable<TCC> {
 	@Column(name = "trabFinal", nullable = false) 
 	private boolean trabFinal;
 	
-	@Column(name = "arqProjFinal", length = 255, nullable = true)
-	private String arqProjFinal;
-	
-	@Column(name = "arqExtraProjFinal", length = 255, nullable = true)
-	private String arqExtraProjFinal;
+//	@Column(name = "arqProjFinal", length = 255, nullable = true)
+//	private String arqProjFinal;
+//	
+//	@Column(name = "arqExtraProjFinal", length = 255, nullable = true)
+//	private String arqExtraProjFinal;
 
 	/**
 	 * Relacionamento N para 1 entre TCC e Usuario. Mapeando {@link Usuario} na
@@ -293,8 +305,10 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.subNomeTCC = subNomeTCC;
 		this.resumoTCC = resumoTCC;
 		this.palavrasChave = palavrasChave;
-		this.arquivoTCCFinal = arquivoTCCFinal;
-		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+//		this.arquivoTCCFinal = arquivoTCCFinal;
+//		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+		this.arquivoTCC = arquivoExtraTCCFinal;
+		this.arquivoExtraTCC = arquivoExtraTCCFinal;
 		this.dataEnvioFinal = dataEnvioFinal;
 		this.aluno = aluno;
 		this.orientador = orientador;
@@ -324,9 +338,9 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.subNomeTCC = subNomeTCC;
 	}
 
-	public String getArquivoTCCBanca() {
-		return arquivoTCCBanca;
-	}
+//	public String getArquivoTCCBanca() {
+//		return arquivoTCCBanca;
+//	}
 
 	public int getEmailsAlertaEnviados() {
 		return emailsAlertaEnviados;
@@ -336,33 +350,55 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.emailsAlertaEnviados = emailsAlertaEnviados;
 	}
 
-	public void setArquivoTCCBanca(String arquivoTCCBanca) {
-		this.arquivoTCCBanca = arquivoTCCBanca;
+//	public void setArquivoTCCBanca(String arquivoTCCBanca) {
+//		this.arquivoTCCBanca = arquivoTCCBanca;
+//	}
+//
+//	public String getArquivoTCCFinal() {
+//		return arquivoTCCFinal;
+//	}
+//
+//	public void setArquivoTCCFinal(String arquivoTCCFinal) {
+//		this.arquivoTCCFinal = arquivoTCCFinal;
+//	}
+//
+//	public String getArquivoExtraTCCBanca() {
+//		return arquivoExtraTCCBanca;
+//	}
+//
+//	public void setArquivoExtraTCCBanca(String arquivoExtraTCCBanca) {
+//		this.arquivoExtraTCCBanca = arquivoExtraTCCBanca;
+//	}
+//
+//	public String getArquivoExtraTCCFinal() {
+//		return arquivoExtraTCCFinal;
+//	}
+	public void setArquivoExtraTCC(String arquivoExtraTCC) {
+		this.arquivoExtraTCC= arquivoExtraTCC;
 	}
 
-	public String getArquivoTCCFinal() {
-		return arquivoTCCFinal;
+	public String getArquivoExtraTCC() {
+		return arquivoExtraTCC;
+	}
+	public void setArquivoTCC(String arquivoTCC) {
+		this.arquivoTCC= arquivoTCC;
+	}
+	
+	public String getArquivoTCC() {
+		return arquivoTCC;
 	}
 
-	public void setArquivoTCCFinal(String arquivoTCCFinal) {
-		this.arquivoTCCFinal = arquivoTCCFinal;
+	public String getArquivoDocumentacao() {
+		return arquivoDocumentacao;
 	}
 
-	public String getArquivoExtraTCCBanca() {
-		return arquivoExtraTCCBanca;
+	public void setArquivoDocumentacao(String arquivoDocumentacao) {
+		this.arquivoDocumentacao = arquivoDocumentacao;
 	}
 
-	public void setArquivoExtraTCCBanca(String arquivoExtraTCCBanca) {
-		this.arquivoExtraTCCBanca = arquivoExtraTCCBanca;
-	}
-
-	public String getArquivoExtraTCCFinal() {
-		return arquivoExtraTCCFinal;
-	}
-
-	public void setArquivoExtraTCCFinal(String arquivoExtraTCCFinal) {
-		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
-	}
+//	public void setArquivoExtraTCCFinal(String arquivoExtraTCCFinal) {
+//		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+//	}
 
 	public String getSalaDefesa() {
 		return salaDefesa;
@@ -527,21 +563,21 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.entregouDoc = entregouDoc;
 	}
 
-	public String getArqProjFinal() {
-		return arqProjFinal;
-	}
-
-	public void setArqProjFinal(String arqProjFinal) {
-		this.arqProjFinal = arqProjFinal;
-	}
-
-	public String getArqExtraProjFinal() {
-		return arqExtraProjFinal;
-	}
-
-	public void setArqExtraProjFinal(String arqExtraProjFinal) {
-		this.arqExtraProjFinal = arqExtraProjFinal;
-	}
+//	public String getArqProjFinal() {
+//		return arqProjFinal;
+//	}
+//
+//	public void setArqProjFinal(String arqProjFinal) {
+//		this.arqProjFinal = arqProjFinal;
+//	}
+//
+//	public String getArqExtraProjFinal() {
+//		return arqExtraProjFinal;
+//	}
+//
+//	public void setArqExtraProjFinal(String arqExtraProjFinal) {
+//		this.arqExtraProjFinal = arqExtraProjFinal;
+//	}
 
 	public boolean isTrabFinal() {
 		return trabFinal;

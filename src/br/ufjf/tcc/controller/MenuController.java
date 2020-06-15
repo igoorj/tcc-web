@@ -50,28 +50,27 @@ public class MenuController extends CommonsController {
 				&& getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
 			if (getCurrentCalendar() != null) {
 				TCC tccUsuario = (new TCCBusiness()).getCurrentTCCByAuthor(
-						getUsuario(), getCurrentCalendar(getUsuario()
-								.getCurso()));
-				if (tccUsuario == null)
-					tccUsuario = new TCC();
-				if (getUsuario().isAtivo()
-						&& tccUsuario.getArquivoTCCFinal() == null
-						&& tccUsuario.getDataEnvioFinal() == null){
-					if(tccUsuario.isTrabFinal())
+						getUsuario(), getCurrentCalendar());
+				if(getUsuario().isAtivo()) {
+					if(tccUsuario != null && tccUsuario.getStatus() == TCC.APROVADO) {
 						Messagebox.show("Você já enviou a versão final de seu trabalho, portanto não pode modifica-lo.",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
-					else
-						Executions.sendRedirect("/pages/editor.zul");
-				
-				}else
+						return;
+					}
+				}
+				else {
 					Messagebox
-							.show("Você não pode iniciar ou modificar um projeto.\n Entre em contato com o coordenador do curso.",
-									"Erro", Messagebox.OK, Messagebox.ERROR);
+					.show("Você não pode iniciar ou modificar um projeto.\n Entre em contato com o coordenador do curso.",
+							"Erro", Messagebox.OK, Messagebox.ERROR);
+					return;
+				}
 			} else {
 				Messagebox.show(
 						"Não há nenhum Calendário cadastrado no Sistema!",
 						"Erro", Messagebox.OK, Messagebox.ERROR);
+				return;
 			}
+			Executions.sendRedirect("/pages/editor.zul");
 		}
 	}
 	
@@ -83,48 +82,23 @@ public class MenuController extends CommonsController {
 		
 		return false;
 	}
-	// TODO refatorar
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Command
 	public void gerarAta(){
-		if (getUsuario() != null
-				&& getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
-			if (getUsuario().getTcc() != null
-					&& getUsuario().getTcc().size() != 0) {
+		if (getUsuario() != null && getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
+			if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0) {
 				TCCBusiness tccBusiness = new TCCBusiness();
-				if (!tccBusiness.getMissing(getUsuario().getTcc().get(0), true)) {
-
-					if (getUsuario().getTcc().get(0).getParticipacoes().size() > 2
-							&& getUsuario().getTcc().get(0).getParticipacoes()
-									.size() < 6) {
-//					if (getUsuario().getTcc().get(0).getParticipacoes().size() > 2) {
-						
-						TCC tcc = getUsuario().getTcc().get(0);
-						
-						if(possuiSuplente(tcc.getParticipacoes())){
-								String mensagem = "A ata será gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
-								Messagebox.show(mensagem, "Confirmação", Messagebox.OK, Messagebox.INFORMATION , new org.zkoss.zk.ui.event.EventListener() {
-								    public void onEvent(Event evt) throws InterruptedException {
-							        if (evt.getName().equals("onOK")) {
-										generate();
-										
-							        } 
-							        
-							        	
-							    }
-							});
-						}else{
-							Messagebox
-							.show("Para gerar a Ata a banca deve conter um suplente.\n",
-									"Aviso", Messagebox.OK, Messagebox.EXCLAMATION);							
-						}		
-						
-
-					} else
-						Messagebox
-								.show("Para gerar a Ata a banca deve conter no mínimo 3 examinadores e no máximo 5, sendo 1 o suplente.\n",
-										"Aviso", Messagebox.OK, Messagebox.EXCLAMATION);
-
+				TCC tcc = getUsuario().getTcc().get(0);
+				if (!tccBusiness.getMissing(tcc, true)) {
+							String mensagem = "A ata será gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
+							
+							Messagebox.show(mensagem, "Confirmação", Messagebox.OK, Messagebox.INFORMATION , new org.zkoss.zk.ui.event.EventListener() {
+							    public void onEvent(Event evt) throws InterruptedException {
+						        if (evt.getName().equals("onOK")) {
+									generate();
+						        } 
+						    }
+						});
 				} else
 					Messagebox
 							.show("Para gerar a Ata você deve preencher todas informações do seu Trabalho.\n",
@@ -337,8 +311,7 @@ public class MenuController extends CommonsController {
 							// um trabalho ou projeto atualmente
 	{
 		TCCBusiness tccBusiness = new TCCBusiness();
-		TCC tcc = tccBusiness.getCurrentTCCByAuthor(getUsuario(),
-				getCurrentCalendar(getUsuario().getCurso()));
+		TCC tcc = tccBusiness.getCurrentTCCByAuthor(getUsuario(), getCurrentCalendar());
 		if (tcc != null)
 			if (tcc.isProjeto())
 				return "Meu Projeto";

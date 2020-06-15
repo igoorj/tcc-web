@@ -33,7 +33,7 @@ public class DownloadPDFServlet extends HttpServlet {
 				tcc.setQtDownloads(tcc.getQtDownloads()+1);
 				tccBusiness.edit(tcc);
 				
-				File file = FileManager.getFile(tcc.getArquivoTCCFinal());
+				File file = FileManager.getFile(tcc.getArquivoTCC());
 				
 				if(file != null) {
 					byte[] bytes = null;

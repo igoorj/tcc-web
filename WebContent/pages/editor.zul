@@ -91,7 +91,7 @@
 				</groupbox>
 
 				<groupbox id="bancaForm" mold="3d" width="100%"
-					visible="@load(not vm.userSecretaria and not vm.project)" open="false">
+					if="${not vm.userSecretaria and not vm.project}" open="false">
 					<caption label="Banca Examinadora" />
 					<vlayout hflex="1" style="margin:15px">
 					
@@ -126,7 +126,7 @@
 										<div align="center"
 											width="100%">
 											<button
-												label="Adicionar à Banca" onClick="addToBanca" />
+												label="Adicionar à Banca" onClick="@command('addToBanca')" />
 										</div>
 									</vlayout>
 								</auxheader>
@@ -236,6 +236,11 @@
 								visible="@load(not vm.project)"
 								onUpload="@command('extraUpload', button=self, evt=event)" />
 						</hlayout>
+						<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitDocs()}">
+							<button hflex="1"
+								label="Selecionar arquivo de documentação..." upload="true,maxsize=204800"
+								onUpload="@command('uploadDocumentacao', button=self, evt=event)" />
+						</hlayout>
 					</vlayout>
 				</groupbox>
 				<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitTCC}">
@@ -251,6 +256,15 @@
 				<hlayout style="margin:5px;line-height:20px;" unless="${vm.canSubmitTCC}">
 					<label value="@load(vm.getMensagem())" />
 				</hlayout>
+				
+				<div if="${vm.exibirBaixarDocumentacao()}">
+					<label value="Arquivo de documentação" style="font-size: 14px; font-weight: bold; margin-top: 10px" />
+					<div
+						style="cursor: pointer;display:inline;position:relative"
+						onClick="@command('downloadDocumentacao')">
+						<image src="/img/rar.png" />
+					</div>
+				</div>
 
 			</div>
 			<div style="float: left;width: 65%; height: 100%;">

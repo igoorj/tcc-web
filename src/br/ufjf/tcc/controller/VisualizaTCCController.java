@@ -34,9 +34,11 @@ import br.ufjf.tcc.library.FileManager;
 import br.ufjf.tcc.library.SessionManager;
 import br.ufjf.tcc.mail.Email;
 import br.ufjf.tcc.mail.EmailBuilder;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoFormatacaoTrabalhoFinalReprovada;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoAprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoReprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovado;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalReprovado;
 import br.ufjf.tcc.mail.EnviadorEmailCartaParticipacao;
 import br.ufjf.tcc.mail.EnviadorEmailChain;
@@ -53,10 +55,6 @@ public class VisualizaTCCController extends CommonsController {
 			canEdit = false;
 	private List<Resposta> answers = new ArrayList<Resposta>();
 	private Div informacoes, ficha;
-	private boolean exibirBaixarProjeto ;
-	private boolean exibirTrabalhoBanca ;
-	private boolean exibirBaixarTrabalhoBanca;
-	private boolean exibeBaixarProjExtra;
 	private boolean exibeBaixarTrabExtra;
 	private boolean possuiBanca ;
 	private boolean exibirChave ;
@@ -85,10 +83,6 @@ public class VisualizaTCCController extends CommonsController {
 		else
 			possuiBanca=true;
 		
-		this.exibirBaixarProjeto = exibirBaixarProjeto();
-		this.exibirTrabalhoBanca = exibirTrabalho();
-		this.exibirBaixarTrabalhoBanca = exibirBaixarTrabalhoBanca();
-		this.exibeBaixarProjExtra = exibirBaixarProjetoExtra();
 		this.exibeBaixarTrabExtra = exibirBaixarTrabalhoExtra();
 		this.exibirChave = exibirChave();
 		
@@ -154,7 +148,7 @@ public class VisualizaTCCController extends CommonsController {
 			}
 		}
 
-		return (tcc.getDataEnvioFinal() != null && tcc.getArquivoTCCFinal() != null);
+		return (tcc.getStatus() == TCC.APROVADO && tcc.getArquivoTCC() != null);
 	}
 
 
@@ -221,37 +215,18 @@ public class VisualizaTCCController extends CommonsController {
 		
 		InputStream is = null;
 		
-		if (tcc.getArquivoTCCFinal() != null)
-			is = FileManager.getFileInputSream(tcc.getArquivoTCCFinal());
-		else if (tcc.getArquivoTCCBanca() != null)
-			is = FileManager.getFileInputSream(tcc.getArquivoTCCBanca());
+		if (tcc.getArquivoTCC() != null)
+			is = FileManager.getFileInputSream(tcc.getArquivoTCC());
 		
 		if (is == null)
 			is = FileManager.getFileInputSream("modelo.pdf");
-
-		final AMedia amedia = new AMedia(tcc.getNomeTCC() + ".pdf", "pdf",
-				"application/pdf", is);
-		report.setContent(amedia);
+		if(is != null) {
+			final AMedia amedia = new AMedia(tcc.getNomeTCC() + ".pdf", "pdf",
+					"application/pdf", is);
+			report.setContent(amedia);
+		}
 	}
 	
-	@Command
-	public void showProjeto(@BindingParam("iframe") Iframe report,@BindingParam("button") Button thisBtn,@BindingParam("button2") Button otherBtn) {
-		
-		otherBtn.setStyle("background:white;color:black");
-		thisBtn.setStyle("background: -webkit-linear-gradient(#08c, #2E2EFE);background: -o-linear-gradient(#08c, #2E2EFE);background: -moz-linear-gradient(#08c, #2E2EFE);background: linear-gradient(#08c, #2E2EFE);color:white");
-		
-		InputStream is;
-		if (tcc.getArqProjFinal() != null)
-			is = FileManager.getFileInputSream(tcc.getArqProjFinal());
-		else if (tcc.getArquivoTCCBanca() != null)
-			is = FileManager.getFileInputSream(tcc.getArquivoTCCBanca());
-		else
-			is = FileManager.getFileInputSream("modelo.pdf");
-
-		final AMedia amedia = new AMedia(tcc.getNomeTCC() + ".pdf", "pdf",
-				"application/pdf", is);
-		report.setContent(amedia);
-	}
 	
 	@Command
 	public void showTCC2(@BindingParam("iframe") Iframe report) {
@@ -264,10 +239,8 @@ public class VisualizaTCCController extends CommonsController {
 		}
 		
 		InputStream is;
-		if (tcc2.getArquivoTCCFinal() != null)
-			is = FileManager.getFileInputSream(tcc2.getArquivoTCCFinal());
-		else if (tcc.getArquivoTCCBanca() != null)
-			is = FileManager.getFileInputSream(tcc2.getArquivoTCCBanca());
+		if (tcc2.getArquivoTCC() != null)
+			is = FileManager.getFileInputSream(tcc2.getArquivoTCC());
 		else
 			is = FileManager.getFileInputSream("modelo.pdf");
 
@@ -286,59 +259,12 @@ public class VisualizaTCCController extends CommonsController {
 			lbl.setValue("Não finalizada");
 	}
 	
-	@Command
-	public void downloadExtraProjeto() {
-		InputStream is = null;
-		
-		if (tcc.getArqExtraProjFinal() != null) 
-			is = FileManager.getFileInputSream(tcc.getArqExtraProjFinal());
-		else if(tcc.getArquivoExtraTCCBanca()!=null)
-			is = FileManager.getFileInputSream(tcc.getArquivoExtraTCCBanca());
-			
-			if (is != null)
-				Filedownload.save(is, "application/x-rar-compressed",
-						tcc.getNomeTCC() + "_complemento_projeto.rar");
-			else
-				Messagebox.show("O RAR não foi encontrado!", "Erro",
-						Messagebox.OK, Messagebox.ERROR);
-		
-	}
-	
-	@Command
-	public void downloadPDFProjeto() {
-		InputStream is = null;
-		
-		if (tcc.getArqProjFinal() != null) 
-			is = FileManager.getFileInputSream(tcc.getArqProjFinal());
-		else if(tcc.getArquivoTCCBanca()!=null)
-			is = FileManager.getFileInputSream(tcc.getArquivoTCCBanca());
-			
-			if (is != null)
-				Filedownload.save(is, "application/pdf",
-						tcc.getNomeTCC() + "_projeto.pdf");
-			else
-				Messagebox.show("O RAR não foi encontrado!", "Erro",
-						Messagebox.OK, Messagebox.ERROR);
-		
-	}
-
-	@Command
-	public void downloadPDFBanca() {
-		if (canDownloadFileBanca) {
-			InputStream is = FileManager.getFileInputSream(tcc
-					.getArquivoTCCBanca());
-			if (is != null)
-				Filedownload.save(is, "application/pdf", tcc.getNomeTCC()+ ".pdf");
-			else
-				Messagebox.show("O PDF não foi encontrado!", "Erro",
-						Messagebox.OK, Messagebox.ERROR);
-		}
-	}
 
 	@Command
 	public void downloadPDF() {
 		InputStream is = FileManager
-				.getFileInputSream(tcc.getArquivoTCCFinal());
+				.getFileInputSream(tcc.getArquivoTCC());
+//		.getFileInputSream(tcc.getArquivoTCCFinal());
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		else
@@ -350,18 +276,30 @@ public class VisualizaTCCController extends CommonsController {
 	public void downloadExtra() {
 		InputStream is = null;
 		
-		if (tcc.getArquivoExtraTCCFinal() != null) 
-			is = FileManager.getFileInputSream(tcc.getArquivoExtraTCCFinal());
-		else if(tcc.getArquivoExtraTCCBanca()!=null)
-			is = FileManager.getFileInputSream(tcc.getArquivoExtraTCCBanca());
+		if (tcc.getArquivoExtraTCC() != null) 
+			is = FileManager.getFileInputSream(tcc.getArquivoExtraTCC());
 			
-			if (is != null)
-				Filedownload.save(is, "application/x-rar-compressed",
-						tcc.getNomeTCC() + "_complemento.rar");
-			else
-				Messagebox.show("O RAR não foi encontrado!", "Erro",
-						Messagebox.OK, Messagebox.ERROR);
+		if (is != null)
+			Filedownload.save(is, "application/x-rar-compressed",
+					tcc.getNomeTCC() + "_complemento.pdf");
+		else
+			Messagebox.show("O RAR não foi encontrado!", "Erro",
+					Messagebox.OK, Messagebox.ERROR);
+	}
+	
+	@Command
+	public void downloadDocumentacao() {
+		InputStream is = null;
 		
+		if (tcc.getArquivoDocumentacao() != null) 
+			is = FileManager.getFileInputSream(tcc.getArquivoDocumentacao());
+		
+		if (is != null)
+			Filedownload.save(is, "application/x-rar-compressed",
+					tcc.getNomeTCC() + "_documentacao.pdf");
+		else
+			Messagebox.show("O PDF não foi encontrado!", "Erro",
+					Messagebox.OK, Messagebox.ERROR);
 	}
 
 	@Command
@@ -439,10 +377,7 @@ public class VisualizaTCCController extends CommonsController {
 					{
 						tcc.setStatus(TCC.TI);
 			        	tcc.setProjeto(false);
-//			        	tcc.setArqExtraProjFinal(tcc.getArquivoExtraTCCBanca());
-//			        	tcc.setArqProjFinal(tcc.getArquivoTCCBanca());
-//			        	tcc.setArquivoExtraTCCBanca(null);
-//			        	tcc.setArquivoTCCBanca(null);
+			        	tcc.setJustificativaReprovacao(null);
 						new TCCBusiness().edit(tcc);
 						
 						// Envio de email de aviso de projeto aprovado
@@ -486,22 +421,26 @@ public class VisualizaTCCController extends CommonsController {
 				public void onEvent(Event evt) throws InterruptedException {
 					if(evt.getName().equals("onYes")) {
 						tcc.setJustificativaReprovacao(justificativa);
-						tcc.setStatus(TCC.PR);
-						if (isProjeto()) {
+						int status = tcc.getStatus();
+						if (status == TCC.PAA) {
 							tcc.setStatus(TCC.PR);
 							// Envio de email avisando que projeto foi reprovado
 							EnviadorEmailChain emailPorjetoReprovado = new EnviadorEmailAvisoProjetoReprovado();
 							emailPorjetoReprovado.enviarEmail(tcc, null);
-							
 						}
-						else {
+						else if(status == TCC.TAAO){
 							tcc.setStatus(TCC.TRO);
 							EnviadorEmailChain emailTrabalhoReprovado = new EnviadorEmailAvisoTrabalhoFinalReprovado();
 							emailTrabalhoReprovado.enviarEmail(tcc, null);
 						}
+						else if(status == TCC.TAAC){
+							tcc.setStatus(TCC.TRC);
+							EnviadorEmailChain emailTrabalhoReprovado = new EnviadorEmailAvisoFormatacaoTrabalhoFinalReprovada();
+							emailTrabalhoReprovado.enviarEmail(tcc, null);
+						}
 						new TCCBusiness().edit(tcc);
 						Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
-						window.detach();
+						window.getParent().detach();;
 						
 					}
 				}
@@ -513,59 +452,117 @@ public class VisualizaTCCController extends CommonsController {
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	@Command
-	public void aprovarTrabalho(@BindingParam("window") final Window window)
+	public void aprovarTrabalhoOrientador(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja aprovar esse Trabalho?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
-		        	if(new TCCBusiness().isTrabalhoAguardandoAprovacao(tcc))
+		        	if(new TCCBusiness().isTrabalhoAguardandoAprovacaoDeOrientador(tcc))
 		        	{
-			        	java.util.Date date= new java.util.Date();
-			        	tcc.setDataEnvioFinal(new Timestamp(date.getTime()));
-//			        	tcc.setArquivoTCCFinal(tcc.getArquivoTCCBanca());
-//			        	tcc.setArquivoExtraTCCFinal(tcc.getArquivoExtraTCCBanca());
-//			        	tcc.setArquivoTCCBanca(null);
-//			        	tcc.setArquivoExtraTCCBanca(null);
-			        	tcc.setCertificadoDigital(gerarCertificadoDigital());
-			        	UsuarioBusiness ub = new UsuarioBusiness();
-						new TCCBusiness().edit(tcc);
-						tcc.getAluno().setAtivo(false);
-						ub.editar(tcc.getAluno());
-						
+		        		tcc.setStatus(TCC.TAAC);
+		        		tcc.setJustificativaReprovacao(null);
+		        		new TCCBusiness().edit(tcc);
+		        		
 						// Email de notificação ao aluno que seu trabalho final foi aprovado
-						EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovado();
+						EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador();
 						email.enviarEmail(tcc, null);
 						
-						// Email de carta para membros da banca
-						EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
-						emailCarta.enviarEmails(tcc);
-						
-						SessionManager.setAttribute("trabalhos_semestre",true);
-						//Executions.sendRedirect("/pages/tccs-curso.zul");
-						
-						if (btnAtualizarTCC != null)
-							Events.sendEvent(new Event("onClick", btnAtualizarTCC));
 						
 						if (window != null)
 							window.detach();
 		        	}
 		        	else
-						Messagebox.show("O projeto não está completo");
+						Messagebox.show("O trabalho não está completo");
 		        } 
 		    }
 		});
-
+	}
+	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void aprovarTrabalhoCoordenador(@BindingParam("window") final Window window)
+	{
+		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if (evt.getName().equals("onYes")) {
+					java.util.Date date= new java.util.Date();
+					tcc.setDataEnvioFinal(new Timestamp(date.getTime()));
+					tcc.setStatus(TCC.APROVADO);
+					tcc.setJustificativaReprovacao(null);
+					tcc.setCertificadoDigital(gerarCertificadoDigital());
+					new TCCBusiness().edit(tcc);
+					
+					tcc.getAluno().setAtivo(false);
+					(new UsuarioBusiness()).editar(tcc.getAluno());
+						
+					// Email de notificação ao aluno que seu trabalho final foi aprovado
+					EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovado();
+					email.enviarEmail(tcc, null);
+					
+					// Email de carta para membros da banca
+					EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
+					emailCarta.enviarEmails(tcc);
+					
+					SessionManager.setAttribute("trabalhos_semestre",true);
+					//Executions.sendRedirect("/pages/tccs-curso.zul");
+					
+					if (btnAtualizarTCC != null)
+						Events.sendEvent(new Event("onClick", btnAtualizarTCC));
+					
+					if (window != null)
+						window.detach();
+				} 
+			}
+		});
+		
+	}
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void aprovarTrabalho(@BindingParam("window") final Window window)
+	{
+		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if (evt.getName().equals("onYes")) {
+					java.util.Date date= new java.util.Date();
+					tcc.setDataEnvioFinal(new Timestamp(date.getTime()));
+					tcc.setCertificadoDigital(gerarCertificadoDigital());
+					UsuarioBusiness ub = new UsuarioBusiness();
+					new TCCBusiness().edit(tcc);
+					tcc.getAluno().setAtivo(false);
+					ub.editar(tcc.getAluno());
+					
+					// Email de notificação ao aluno que seu trabalho final foi aprovado
+					EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovado();
+					email.enviarEmail(tcc, null);
+					
+					// Email de carta para membros da banca
+					EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
+					emailCarta.enviarEmails(tcc);
+					
+					SessionManager.setAttribute("trabalhos_semestre",true);
+					//Executions.sendRedirect("/pages/tccs-curso.zul");
+					
+					if (btnAtualizarTCC != null)
+						Events.sendEvent(new Event("onClick", btnAtualizarTCC));
+					
+					if (window != null)
+						window.detach();
+				} 
+			}
+		});
+		
 	}
 	
 	
 	@Command
 	public void aprovarTCC(@BindingParam("window") final Window window) {
-		if(isProjeto())
+		int status = tcc.getStatus();
+		if(status == TCC.PAA)
 			aprovarProjeto(window);
-		else {
-			aprovarTrabalho(window);
-		}
+		else if (status == TCC.TAAO)
+			aprovarTrabalhoOrientador(window);
+		else if (status == TCC.TAAC)
+			aprovarTrabalhoCoordenador(window);
+		else 
+			System.out.println("Não deveria deixar aprovar");
 	}
 	
 	private void enviarEmail(EmailBuilder emailBuilder) {
@@ -597,14 +594,6 @@ public class VisualizaTCCController extends CommonsController {
 		return certificado.toString();
 	}
 	
-	private void inserirDestinatarios(List<Usuario> usuarios, EmailBuilder builder) {
-		for (Usuario usuario : usuarios) {
-			if(usuario.isEmailValido()) {
-				builder.appendDestinatario(usuario.getEmail());
-			}
-		}
-	}
-	
 	public boolean isSecretaria()
 	{
 		if(getUsuario()!=null)
@@ -618,7 +607,6 @@ public class VisualizaTCCController extends CommonsController {
 		if(tcc!=null)
 		{
 			TCCBusiness tccBusiness = new TCCBusiness();
-			System.out.println(tcc.getStatus());
 			if(tcc.getStatus() == TCC.PAA)
 			{
 				
@@ -631,133 +619,48 @@ public class VisualizaTCCController extends CommonsController {
 		return false;
 	}
 	
-	public boolean isTrabalhoAguardandoAprovacao() {
-		int statusTcc = tcc.getStatus();
-		return statusTcc == TCC.TAAC || statusTcc == TCC.TAAO;
-	}
 	
-	public boolean isTrabalhoAguardandoAprovacaoOrientador()
-	{
-		if(tcc!=null)
-		{
-			String status = new TCCBusiness().getStatusTCC(tcc);
-			if(status.equals("TAAO") || status.equals("TRO")) {
-				return true;
-			}
-			if((new TCCBusiness()).isTrabalhoAguardandoAprovacao(tcc))
-				return true;
-		}
-		return false;
-	}
-	public boolean isTrabalhoAguardandoAprovacaoCoordenador()
-	{
-		if(tcc!=null)
-		{
-			String status = new TCCBusiness().getStatusTCC(tcc);
-			if(status.equals("TAAC") || status.equals("TRC")) {
-				return true;
-			}
-			if((new TCCBusiness()).isTrabalhoAguardandoAprovacao(tcc))
-				return true;
-		}
-		return false;
-	}
-		
-	public boolean exibirBaixarProjeto(){		
-			
-		if(tcc.getArqProjFinal()==null){
-			if(tcc.getArquivoTCCBanca()==null)
-				return false;
-			else if(tcc.getArquivoTCCFinal()==null)
-				return true;
-			
-			return false;
-		} else
-			return true;				
-		
-	}
-	public boolean exibirBaixarProjetoExtra(){		
-		
-		if(tcc.getArqExtraProjFinal()==null){
-			if(tcc.getArquivoExtraTCCBanca()==null)
-				return false;
-			else if(tcc.getArquivoExtraTCCFinal()==null)
-				return true;
-			
-				return false;
-		}else
-			return true;				
-
-	}
-	
+	// TODO perguntar
 	public boolean exibirChave(){
-		if(tcc.getArqProjFinal()!=null){
-			if(tcc.getArquivoTCCBanca()!=null || tcc.getArquivoTCCFinal()!=null)
-				return true;
-		}
+//		if(tcc.getArqProjFinal()!=null){
+//			if(tcc.getArquivoTCCBanca()!=null || tcc.getArquivoTCCFinal()!=null)
+//				return true;
+//		}
 		
 		return false;
 	}
 	
-	public boolean exibirBaixarTrabalhoBanca(){
-		if(tcc.getArqProjFinal()!=null){
-			if(tcc.getArquivoTCCBanca()!=null)
-				return true;
-			else if(tcc.getArquivoTCCFinal()!=null)
-				return false;
-			
-				return false;			
-				
-		}else if(tcc.getArquivoTCCFinal()!=null)
-			return false;
-		else
-			return false;
 	
-	
-							
+	public boolean exibirBaixarTrabalhoExtra(){
+		return tcc.getArquivoExtraTCC() != null;
 		
 	}
-	public boolean exibirBaixarTrabalhoExtra(){
-		
-		if(tcc.getArquivoExtraTCCFinal()==null){
-			if(tcc.getArquivoExtraTCCBanca()==null)
-				return false;
-			else if(!tcc.isProjeto())			
-				return true;
-			else return false;
-				
-		}else
-			return true;
-		
-		
-							
-		
+	
+	public boolean exibirBaixarDocumentacao() {
+		if(tcc != null) {
+			if(tcc.getArquivoDocumentacao() != null) {
+				int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+				if(tipoUsuario == Usuario.COORDENADOR || tipoUsuario == Usuario.SECRETARIA)
+					return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean exibirTrabalho(){		
-		
-		if(tcc.getArqProjFinal()!=null){
-			if(tcc.getArquivoTCCBanca()!=null)
-				return true;
-			else if(tcc.getArquivoTCCFinal()!=null)
-				return true;
-			else
-				return false;			
-				
-		}else if(tcc.getArquivoTCCFinal()!=null)
+		if(tcc.getArquivoTCC()!=null){
 			return true;
+		}
 		else
 			return false;
-							
-
 	}
 	
 	
 	public boolean exibirAprovacao(@BindingParam("aprovar") Button aprovar, @BindingParam("reprovar") Button reprovar) {
-		// TODO Substituir verificações de campos para status
+		int status = tcc.getStatus();
 		
 		// PAA - coordenador aprovar projeto
-		if(isProjetoAguardandoAprovacao() && isCoordenador()) {
+		if(status == TCC.PAA && isCoordenador()) {
 			aprovar.setLabel("Aprovar projeto");
 			reprovar.setLabel("Reprovar projeto");
 			
@@ -765,14 +668,14 @@ public class VisualizaTCCController extends CommonsController {
 		}
 		
 		// TAAO - orientador aprovar trabalho
-		if(isTrabalhoAguardandoAprovacaoOrientador() && isOrientador()) {
+		if(status == TCC.TAAO && isOrientador()) {
 			aprovar.setLabel("Aprovar trabalho");
 			reprovar.setLabel("Reprovar trabalho");
 			return true;
 		}
 		
 		// TAAC - coordenação aprovar trabalho (formatação)
-		if(isTrabalhoAguardandoAprovacaoCoordenador() && isCoordenador()) {
+		if(status == TCC.TAAC && isCoordenador()) {
 			aprovar.setLabel("Aprovar trabalho");
 			reprovar.setLabel("Reprovar trabalho");
 			return true;
@@ -781,37 +684,6 @@ public class VisualizaTCCController extends CommonsController {
 		return false;
 	}
 
-	public boolean isExibirBaixarProjeto() {
-		return exibirBaixarProjeto;
-	}
-
-	public void setExibirBaixarProjeto(boolean exibirBaixarProjeto) {
-		this.exibirBaixarProjeto = exibirBaixarProjeto;
-	}
-
-	public boolean isExibirBaixarTrabalhoBanca() {
-		return exibirBaixarTrabalhoBanca;
-	}
-
-	public void setExibirBaixarTrabalhoBanca(boolean exibirBaixarTrabalhoBanca) {
-		this.exibirBaixarTrabalhoBanca = exibirBaixarTrabalhoBanca;
-	}
-
-	public boolean isExibirTrabalhoBanca() {
-		return exibirTrabalhoBanca;
-	}
-
-	public void setExibirTrabalhoBanca(boolean exibirTrabalhoBanca) {
-		this.exibirTrabalhoBanca = exibirTrabalhoBanca;
-	}
-
-	public boolean isExibeBaixarProjExtra() {
-		return exibeBaixarProjExtra;
-	}
-
-	public void setExibeBaixarProjExtra(boolean exibeBaixarProjExtra) {
-		this.exibeBaixarProjExtra = exibeBaixarProjExtra;
-	}
 
 	public boolean isExibeBaixarTrabExtra() {
 		return exibeBaixarTrabExtra;

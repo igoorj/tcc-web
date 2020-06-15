@@ -14,7 +14,7 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 	@Override
 	protected EmailBuilder gerarEmail(TCC tcc, String statusInicial) {
 		EmailBuilder emailBuilder = null;
-		if(statusFoiAlteradoPara(tcc, statusInicial, "TAA")){
+//		if(statusFoiAlteradoPara(tcc, statusInicial, "TAA")){
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
 			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho com defesa agendada - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) professor(a), ").breakLine().breakLine();
@@ -44,7 +44,7 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			
 			emailBuilder.appendMensagem("<b> * Funcionalidade disponível somente para usuários do SIGA-UFJF. </b>").breakLine();
 			inserirDestinatarios(tcc.getProfessoresParticipacoes(), emailBuilder);
-		}
+//	}
 		return emailBuilder;
 	}
 

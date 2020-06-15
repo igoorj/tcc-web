@@ -101,7 +101,11 @@ public class HomeAlunoController extends CommonsController {
 						+ tcc.getJustificativaReprovacao());
 			}
 			else if (tcc.getStatus() == TCC.TRO) {
-				infos.add("Seu trabalho foi reprovado, faça as respectivas correções conforme a justificativa: "
+				infos.add("Seu trabalho foi reprovado pelo orientador, faça as respectivas correções conforme a justificativa: "
+						+ tcc.getJustificativaReprovacao());
+			}
+			else if (tcc.getStatus() == TCC.TRC) {
+				infos.add("Seu trabalho foi reprovado pelo coordenador de curso, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
 		}
@@ -112,7 +116,7 @@ public class HomeAlunoController extends CommonsController {
 
 		TCCBusiness tccBusiness = new TCCBusiness();
 		if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0
-				&& tccBusiness.getMissing(getUsuario().getTcc().get(0), true)) {
+				&& !tccBusiness.validateTCC(tcc, tcc.getStatus())) {
 			infos.addAll(tccBusiness.getErrors());
 		}
 		

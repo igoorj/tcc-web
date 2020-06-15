@@ -39,7 +39,7 @@
 								<label style="margin-top:6px" value="Tipos: " visible="true" />
 																
 								<div visible="true">
-									<combobox value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
+									<combobox id="status" value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
 									    <comboitem label="Todos" />
 									    <comboitem label="Projetos"/>
 									    <comboitem label="Trabalhos"/>
@@ -63,7 +63,7 @@
 									spacing="3px" />
 								
 								<button label="Filtrar" width="60px"
-									onClick="@command('filtra')" />
+									onClick="@command('filtraProjeto', item=status.selectedIndex)" />
 								<image src="/img/help.gif"
 									tooltip="filterHelp" style="cursor: help" />
 							</hlayout>
@@ -75,7 +75,7 @@
 			</auxhead>
 			<columns > 
 				<column hflex="2"  >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de" /> 
+					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de defesa" /> 
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
 				</column>
 				<column hflex="2" >
@@ -156,7 +156,7 @@
 		<html>
 			<![CDATA[ Permite filtrar a lista de Trabalhos  com os seguintes filtros:
 			<ul><li>Semestre atual ou todos os semstres;</li> 
-			<li>Estados (PI, PAA, PR, TI, TEPB, TAAO, TAAC, TR, APROVADO);</li>
+			<li>Estados (PI, PAA, PR, TI, TEPB, TAAO, TAAC, TRO, TRC, APROVADO);</li>
 			<ul>]]>
 		</html>
 	</popup>

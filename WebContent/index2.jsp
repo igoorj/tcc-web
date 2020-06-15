@@ -267,7 +267,7 @@ th {
 								</td>
 								
 								<td>
-									<img ${tcc.arquivoExtraTCCFinal == null || tcc.arquivoExtraTCCFinal == "" ?'src="img/norar.png" onClick="showError()" '  : 'src="img/rar.png"' }
+									<img ${tcc.arquivoExtraTCC == null || tcc.arquivoExtraTCC == "" ?'src="img/norar.png" onClick="showError()" '  : 'src="img/rar.png"' }
 										style="cursor: pointer; float: right; padding-right: 10px;"
 										onClick="location.href='downloadExtra?id=${tcc.idTCC}'" />
 								</td>

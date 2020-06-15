@@ -151,7 +151,7 @@ li {
 
 			</div>
 			<div class="head"
-				style=" ${tcc.arquivoExtraTCCFinal==nul? 'display: none;' : 'display: block;' }">
+				style=" ${tcc.arquivoExtraTCC==nul? 'display: none;' : 'display: block;' }">
 				<label class="head"
 					style="font-family: sans-serif; font-weight: bold; font-size: 14px; float: left;">
 					Obter arquivos extras </label> 

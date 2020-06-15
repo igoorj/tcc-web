@@ -372,12 +372,9 @@ public class GerenciamentoUsuarioController extends CommonsController {
 								if(newUsuario!=null)
 									newUsuario.setCurso(getUsuario().getCurso());
 							if (usuarioBusiness.validate(newUsuario, null, true)) {
-								if(newUsuario.getSenha() != null)
-								{
+								if(newUsuario.getSenha() != null) {
 									newUsuario.setSenha(usuarioBusiness.encripta(newUsuario.getSenha()));
-								}
-								else
-								{
+								} else {
 									String newPassword = usuarioBusiness.generatePassword();
 									newUsuario.setSenha(usuarioBusiness.encripta(newPassword));
 								}
@@ -396,24 +393,12 @@ public class GerenciamentoUsuarioController extends CommonsController {
 									 * return; }
 									 */
 									
-									/**
+									/*
 									 * Se novo usuário for aluno, cria um tcc vazio e envia
 									 * e-mail para ele e seu orientador com os prazos
 									 */
 									if(newUsuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
-										// Criar tcc
-										TCC tcc = new TCC();
-										tcc.setAluno(newUsuario);
-										tcc.setCalendarioSemestre(getCurrentCalendar(newUsuario.getCurso()));
-										tcc.setProjeto(true);
-										tcc.setOrientador(newUsuario.getOrientador());
-										if(new TCCBusiness().save(tcc)) {
-											// Envio de email para aluno e orientador
-											EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
-											email.enviarEmail(tcc, null);
-											email = new EnviadorEmailDatasCalendarioOrientador();
-											email.enviarEmail(tcc, null);
-										}
+										createTCC(newUsuario);
 									}
 
 									allUsuarios.add(newUsuario);
@@ -644,6 +629,25 @@ public class GerenciamentoUsuarioController extends CommonsController {
 		
 	}
 	
+	/*
+	 * Cria um novo tcc para o usuario passado como parâmetro para o calendário
+	 * atual, e envia os emails das datas para ele e seu orientador
+	 */
+	private void createTCC(Usuario user) {
+		TCC tcc = new TCC();
+		tcc.setAluno(user);
+		tcc.setCalendarioSemestre(getCurrentCalendar(user.getCurso()));
+		tcc.setProjeto(true);
+		tcc.setOrientador(user.getOrientador());
+		if(new TCCBusiness().save(tcc)) {
+			// Envio de email para aluno e orientador
+			EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+			email.enviarEmail(tcc, null);
+			email = new EnviadorEmailDatasCalendarioOrientador();
+			email.enviarEmail(tcc, null);
+		}
+	}
+	
 	private void substituirUsuario(List<Usuario> usuarios,Usuario u){
 		for (int i=0;i<usuarios.size();i++) {
 			if(usuarios.get(i).getMatricula().equalsIgnoreCase(u.getMatricula())){
@@ -837,17 +841,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 							// Se aluno não tiver tcc no calendário atual,
 							// cria um novo e envia emails com os prazos
 							if(tcc == null) {
-								tcc = new TCC();
-								tcc.setAluno(usuario);
-								tcc.setCalendarioSemestre(getCurrentCalendar(usuario.getCurso()));
-								tcc.setProjeto(true);
-								tcc.setOrientador(usuario.getOrientador());
-								if(tccB.save(tcc)){
-									EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
-									email.enviarEmail(tcc, null);
-									email = new EnviadorEmailDatasCalendarioOrientador();
-									email.enviarEmail(tcc, null);
-								}
+								createTCC(usuario);
 							}
 						}
 						System.out.println("Aluno foi " + (usuario.isAtivo() ? "ativado" : "desativado"));

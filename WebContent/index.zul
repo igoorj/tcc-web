@@ -109,7 +109,7 @@
 					<image src="/img/pdf.png" style="cursor: pointer"
 						onClick="@command('downloadPDF', tcc=each)" />
 					<image style="cursor: pointer"
-						src="@load(not empty each.arquivoExtraTCCFinal ? '/img/rar.png' : '/img/norar.png')"
+						src="@load(not empty each.arquivoExtraTCC ? '/img/rar.png' : '/img/norar.png')"
 						onClick="@command('downloadExtra', tcc=each)" />
 				</row>
 			</template>
