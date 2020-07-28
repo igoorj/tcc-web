@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -58,6 +59,8 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	private String filterString = "", editUsuarioSenha = null;
 	private Usuario newUsuario,editUsuario;
 	private String novoTipo= "";
+	
+	private Logger logger = Logger.getLogger(GerenciamentoUsuarioController.class);
 	
 	
 
@@ -365,69 +368,73 @@ public class GerenciamentoUsuarioController extends CommonsController {
 		if (!submitUserListenerExists) {
 			submitUserListenerExists = true;
 			window.addEventListener(Events.ON_CLIENT_INFO,
-					new EventListener<Event>() {
-						@Override
-						public void onEvent(Event event) throws Exception {
-							if(getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR)
-								if(newUsuario!=null)
-									newUsuario.setCurso(getUsuario().getCurso());
-							if (usuarioBusiness.validate(newUsuario, null, true)) {
-								if(newUsuario.getSenha() != null) {
-									newUsuario.setSenha(usuarioBusiness.encripta(newUsuario.getSenha()));
-								} else {
-									String newPassword = usuarioBusiness.generatePassword();
-									newUsuario.setSenha(usuarioBusiness.encripta(newPassword));
-								}
-								
-								newUsuario.setAtivo(true);
-								
-								if (usuarioBusiness.salvar(newUsuario)) {
-									/*
-									 * if (!new SendMail().onSubmitUser(
-									 * newUsuario, newPassword)) { Messagebox
-									 * .show(
-									 * "O sistema não conseguiu enviar o e-mail de confirmação. Tente novamente."
-									 * , "Erro", Messagebox.OK,
-									 * Messagebox.ERROR);
-									 * usuarioBusiness.exclui(newUsuario);
-									 * return; }
-									 */
-									
-									/*
-									 * Se novo usuário for aluno, cria um tcc vazio e envia
-									 * e-mail para ele e seu orientador com os prazos
-									 */
-									if(newUsuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
-										createTCC(newUsuario);
-									}
-
-									allUsuarios.add(newUsuario);
-									filterUsuarios = allUsuarios;
-									notifyFilterUsuarios();
-									Clients.clearBusy(window);
-									Messagebox.show(
-											"Usuário adicionado com sucesso!",
-											"Sucesso", Messagebox.OK,
-											Messagebox.INFORMATION);
-									limpa();
-								} else {
-									Clients.clearBusy(window);
-									Messagebox.show(
-											"Usuário não foi adicionado!",
-											"Erro", Messagebox.OK,
-											Messagebox.ERROR);
-								}
+				new EventListener<Event>() {
+					@Override
+					public void onEvent(Event event) throws Exception {
+						if(getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR)
+							if(newUsuario!=null)
+								newUsuario.setCurso(getUsuario().getCurso());
+						if (usuarioBusiness.validate(newUsuario, null, true)) {
+							if(newUsuario.getSenha() != null) {
+								newUsuario.setSenha(usuarioBusiness.encripta(newUsuario.getSenha()));
 							} else {
-								String errorMessage = "";
-								for (String error : usuarioBusiness.getErrors())
-									errorMessage += error;
-								Clients.clearBusy(window);
-								Messagebox.show(errorMessage,
-										"Dados insuficientes / inválidos",
-										Messagebox.OK, Messagebox.ERROR);
+								String newPassword = usuarioBusiness.generatePassword();
+								newUsuario.setSenha(usuarioBusiness.encripta(newPassword));
 							}
+							
+							TCC newTCC = null;
+							newUsuario.setAtivo(true);
+							if(newUsuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
+								newTCC = createTCC(newUsuario);
+							}
+							if (usuarioBusiness.salvar(newUsuario)) {
+								if(newTCC != null) {
+									if(new TCCBusiness().save(newTCC)) {
+										// Envio de email para aluno e orientador
+										EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+										email.enviarEmail(newTCC, null);
+										email = new EnviadorEmailDatasCalendarioOrientador();
+										email.enviarEmail(newTCC, null);
+									}
+									else {
+										newUsuario.setAtivo(false);
+										usuarioBusiness.editar(newUsuario);
+										Messagebox.show("Erro ao criar TCC (vazio) do aluno!", "Erro", Messagebox.OK,
+												Messagebox.ERROR);
+									}
+								}
+								/*
+								 * Se novo usuário for aluno, cria um tcc vazio e envia
+								 * e-mail para ele e seu orientador com os prazos
+								 */
+
+								allUsuarios.add(newUsuario);
+								filterUsuarios = allUsuarios;
+								notifyFilterUsuarios();
+								Clients.clearBusy(window);
+								Messagebox.show(
+										"Usuário adicionado com sucesso!",
+										"Sucesso", Messagebox.OK,
+										Messagebox.INFORMATION);
+								limpa();
+							} else {
+								Clients.clearBusy(window);
+								Messagebox.show(
+										"Usuário não foi adicionado!",
+										"Erro", Messagebox.OK,
+										Messagebox.ERROR);
+							}
+						} else {
+							String errorMessage = "";
+							for (String error : usuarioBusiness.getErrors())
+								errorMessage += error;
+							Clients.clearBusy(window);
+							Messagebox.show(errorMessage,
+									"Dados insuficientes / inválidos",
+									Messagebox.OK, Messagebox.ERROR);
 						}
-					});
+					}
+				});
 		}
 		Events.echoEvent(Events.ON_CLIENT_INFO, window, null);
 	}
@@ -633,19 +640,27 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	 * Cria um novo tcc para o usuario passado como parâmetro para o calendário
 	 * atual, e envia os emails das datas para ele e seu orientador
 	 */
-	private void createTCC(Usuario user) {
+	private TCC createTCC(Usuario user) {
+		if(getCurrentCalendar() == null) {
+			Messagebox.show("Não é possível ativar o aluno pois não há calendário ativo.", "Erro ao ativar aluno", Messagebox.OK,
+					Messagebox.ERROR);
+			user.setAtivo(false);
+			return null;
+		}
 		TCC tcc = new TCC();
 		tcc.setAluno(user);
 		tcc.setCalendarioSemestre(getCurrentCalendar(user.getCurso()));
 		tcc.setProjeto(true);
 		tcc.setOrientador(user.getOrientador());
-		if(new TCCBusiness().save(tcc)) {
-			// Envio de email para aluno e orientador
-			EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
-			email.enviarEmail(tcc, null);
-			email = new EnviadorEmailDatasCalendarioOrientador();
-			email.enviarEmail(tcc, null);
-		}
+//		if(new TCCBusiness().save(tcc)) {
+//			// Envio de email para aluno e orientador
+//			EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+//			email.enviarEmail(tcc, null);
+//			email = new EnviadorEmailDatasCalendarioOrientador();
+//			email.enviarEmail(tcc, null);
+//			return tcc;
+//		}
+		return tcc;
 	}
 	
 	private void substituirUsuario(List<Usuario> usuarios,Usuario u){
@@ -831,24 +846,52 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			
 		Messagebox.show(mensagem, "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			    public void onEvent(Event evt) throws InterruptedException {
-		        if (evt.getName().equals("onYes")) {
-					usuario.setAtivo(check.isChecked());
-					if(usuarioBusiness.editar(usuario)) {
-						// Se o usuário foi ativado e é aluno
+		    	try {
+		    		TCC newTCC = null;
+			        if (evt.getName().equals("onYes")) {
+						usuario.setAtivo(check.isChecked());
 						if(usuario.isAtivo() && usuario.getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
 							TCCBusiness tccB = new TCCBusiness();
 							TCC tcc = tccB.getCurrentNotFinishedTCCByAuthor(usuario, getCurrentCalendar());
 							// Se aluno não tiver tcc no calendário atual,
 							// cria um novo e envia emails com os prazos
 							if(tcc == null) {
-								createTCC(usuario);
+								newTCC = createTCC(usuario);
+							}
+						}
+						if(!usuarioBusiness.editar(usuario)) {
+							Messagebox.show("Erro ao ativar usuário!", "Erro", Messagebox.OK,
+									Messagebox.ERROR);
+							return;
+						}
+						if(newTCC != null ) {
+							if(new TCCBusiness().save(newTCC)) {
+								// Envio de email para aluno e orientador
+								EnviadorEmailChain email = new EnviadorEmailDatasCalendarioAluno();
+								email.enviarEmail(newTCC, null);
+								email = new EnviadorEmailDatasCalendarioOrientador();
+								email.enviarEmail(newTCC, null);
+							}
+							else {
+								usuario.setAtivo(false);
+								usuarioBusiness.editar(usuario);
+								Messagebox.show("Erro ao criar TCC (vazio) do aluno!", "Erro", Messagebox.OK,
+										Messagebox.ERROR);
+								return;
 							}
 						}
 						System.out.println("Aluno foi " + (usuario.isAtivo() ? "ativado" : "desativado"));
-					}
-		        } 
-		        else
-		        	check.setChecked(usuario.isAtivo());
+			        }
+		    	}
+		    	catch (Exception e) {
+		    		Messagebox.show("Erro ao ativar usuário", "Erro", Messagebox.OK,
+							Messagebox.ERROR);
+		    		logger.error("Erro ao ativar usuário");
+		    		logger.error(e.getMessage());
+		    	}
+		    	finally {
+		    		check.setChecked(usuario.isAtivo());
+		    	}
 		    }
 		});
 	}
