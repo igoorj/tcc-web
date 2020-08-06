@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -62,6 +63,8 @@ public class EditorTccController extends CommonsController {
 			canChangeParticipacao = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
 			canSubmitTCC = true, canSubmitDocs = false;
 	private EnviadorEmailChain enviadorEmail = new EnviadorEmailProjetoCriado();
+	
+	private Logger logger = Logger.getLogger(EditorTccController.class);
 
 	@Init
 	public void init() {
@@ -326,7 +329,7 @@ public class EditorTccController extends CommonsController {
 		String fileName = evt.getMedia().getName();
 		if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
 			Messagebox.show("Este não é um arquivo válido! Apenas PDF são aceitos.", "Formato inválido", Messagebox.OK,
-					Messagebox.INFORMATION);
+					Messagebox.ERROR);
 			tccFile = null;
 			return;
 		}
@@ -335,21 +338,21 @@ public class EditorTccController extends CommonsController {
 		tccFile = evt.getMedia().getStreamData();
 		tccFileChanged = true;
 		iframe.setContent(pdf);
-		Messagebox.show("Arquivo enviado com sucesso.", "Confirmação", Messagebox.OK, Messagebox.INFORMATION,
-				new org.zkoss.zk.ui.event.EventListener() {
-					public void onEvent(Event evt) throws InterruptedException {
-						if (evt.getName().equals("onOK")) {
-
-						}
-					}
-				});
+		logger.info("Upload de arquivo: " + evt.getMedia().getName());
+		Messagebox.show("Arquivo enviado com sucesso.", "Confirmação", Messagebox.OK, Messagebox.INFORMATION);
 	}
-
 	@Command
 	public void extraUpload(@BindingParam("evt") UploadEvent evt) {
+		String fileName = evt.getMedia().getName();
+		if (!FilenameUtils.getExtension(fileName).equals("zip")) {
+			Messagebox.show("Este não é um arquivo válido! Apenas ZIP são aceitos.", "Formato inválido", Messagebox.OK,
+					Messagebox.ERROR);
+			extraFile = null;
+			return;
+		}
 		extraFile = evt.getMedia().getStreamData();
 		extraFileChanged = true;
-		Messagebox.show("Arquivo enviado com sucesso.");
+		Messagebox.show("Arquivo enviado com sucesso.", "Confirmação", Messagebox.OK, Messagebox.INFORMATION);
 	}
 	@Command
 	public void uploadDocumentacao(@BindingParam("evt") UploadEvent evt) {
@@ -641,6 +644,7 @@ public class EditorTccController extends CommonsController {
 
 	}
 	
+	// Atualiza as informações de usuário (coordenadores podem alterar na tela de edição de tcc do aluno)
 	private void updateTCCUser() {
 		Usuario aluno = tcc.getAluno();
 		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
@@ -663,6 +667,7 @@ public class EditorTccController extends CommonsController {
 
 	// Verifica se o arquivo foi atualizado
 	public void atualizarArquivos() {
+		logger.info("Atualizando arquivos...");
 		if (tccFileChanged && tccFile != null) {
 			savePDF();
 			tccFileChanged = false;
@@ -696,8 +701,8 @@ public class EditorTccController extends CommonsController {
 		}
 	}
 
-	@Command
 	public void savePDF() {
+		logger.info("Salvando arquivo do tcc...");
 		String newFileName = FileManager.saveFileInputSream(tccFile, "pdf");
 		if (newFileName != null) {
 			FileManager.deleteFile(tcc.getArquivoTCC());
@@ -705,9 +710,9 @@ public class EditorTccController extends CommonsController {
 		}
 	}
 
-	@Command
 	public void saveExtraFile() {
-		String newFileName = FileManager.saveFileInputSream(extraFile, "pdf");
+		logger.info("Salvando arquivo extra...");
+		String newFileName = FileManager.saveFileInputSream(extraFile, "zip");
 		if (newFileName != null) {
 			FileManager.deleteFile(tcc.getArquivoExtraTCC());
 			tcc.setArquivoExtraTCC(newFileName);
@@ -715,6 +720,7 @@ public class EditorTccController extends CommonsController {
 	}
 	
 	public void saveDocFile() {
+		logger.info("Salvando arquivo de documentação...");
 		String newFileName = FileManager.saveFileInputSream(docFile, "pdf");
 		if (newFileName != null) {
 			if (tcc.getArquivoDocumentacao() != null) {

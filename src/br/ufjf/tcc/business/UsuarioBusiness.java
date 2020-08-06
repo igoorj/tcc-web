@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import br.ufjf.ice.integra3.ws.login.interfaces.WsException_Exception;
+import org.apache.log4j.Logger;
+
 import br.ufjf.tcc.library.IntegraHandler;
 import br.ufjf.tcc.library.SessionManager;
 import br.ufjf.tcc.model.Curso;
@@ -20,6 +21,7 @@ public class UsuarioBusiness {
 	
 	private UsuarioDAO usuarioDAO;
 	private List<String> errors = new ArrayList<String>();
+	private Logger logger = Logger.getLogger(UsuarioBusiness.class.getName());
 
 	public UsuarioBusiness() {
 		this.errors = new ArrayList<String>();
@@ -152,13 +154,14 @@ public class UsuarioBusiness {
 
 	private boolean loginIntegra(String login, String password) {
 		errors.clear();
-
+		logger.info("Login Integra");
 		List<Usuario> users = new ArrayList<Usuario>();
 		IntegraHandler integra = new IntegraHandler();
 		boolean usuarioIntegra = false;
 		
 		if (login.matches("[0-9]+")) {
 			try {
+				logger.info("Fazendo login pelo Integra");
 				integra.doLogin(login, this.encripta(password, "md5"));
 				if (!integra.getProfiles().isEmpty()) {
 					users = usuarioDAO.getByMatricula(integra.getProfiles());
@@ -166,10 +169,12 @@ public class UsuarioBusiness {
 				}
 				
 			} catch (Exception e) {
+				logger.info("Erro ao realizar login pelo Integra");
 				errors.add(e.getMessage());
 				return false;
 			}
 		} else {
+			logger.info("Login pelo banco de dados");
 			Usuario user = usuarioDAO.retornaUsuario(login, this.encripta(password));
 			if(user != null)
 			{

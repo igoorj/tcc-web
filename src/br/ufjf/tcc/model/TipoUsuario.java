@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-@Table(name = "tipousuario", schema = "tcc_web_test")
+@Table(name = "tipousuario")
 public class TipoUsuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;

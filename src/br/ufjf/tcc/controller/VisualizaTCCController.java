@@ -281,9 +281,9 @@ public class VisualizaTCCController extends CommonsController {
 			
 		if (is != null)
 			Filedownload.save(is, "application/x-rar-compressed",
-					tcc.getNomeTCC() + "_complemento.pdf");
+					tcc.getNomeTCC() + "_complemento.zip");
 		else
-			Messagebox.show("O RAR não foi encontrado!", "Erro",
+			Messagebox.show("O ZIP não foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 	

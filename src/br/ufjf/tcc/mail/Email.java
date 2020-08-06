@@ -17,6 +17,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.log4j.Logger;
+
 import br.ufjf.tcc.library.ConfHandler;
 
 public class Email {
@@ -26,6 +28,7 @@ public class Email {
 	private DataSource dataSource;
 	private BodyPart bodyPart;
 	private Multipart multipart;
+	private Logger logger = Logger.getLogger(Email.class);
 
 	public Email() {
 		if (session == null) {
@@ -43,6 +46,8 @@ public class Email {
 		if(builder==null)
 			return;
 		try {
+			logger.info("Enviando email: " + builder.getTitulo());
+			System.out.println("Enviando email: " + builder.getTitulo());
 			message.setFrom(new InternetAddress(ConfHandler.getConf("MAIL.FROM"))); // Remetente
 
 			Address[] toUser = InternetAddress.parse(builder.getDestinatarios()); // Destinatário(s)
@@ -70,10 +75,13 @@ public class Email {
 			}
 			
 			message.setContent(multipart);
-//			Transport.send(message); // Método para enviar a mensagem criada
+			Transport.send(message); // Método para enviar a mensagem criada
 			System.out.println("Email enviado com sucesso!!\n\n");
+			logger.info("Email enviado com sucesso");
 
 		} catch (MessagingException e) {
+			logger.error("Erro ao enviar email");
+			logger.error(e.getMessage());
 			throw new RuntimeException(e);
 		}
 	}
