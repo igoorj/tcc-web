@@ -438,87 +438,100 @@ public class TCCBusiness {
 		return false;
 	}
 
-	public List<TCC> filtraProjetosIncompletos(List<TCC> projetos) {
+	public List<TCC> filtraProjetosIncompletos(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
 		// iteração para remover elementos ao mesmo tempo que le o array
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
-			if(!isProjetoIncompleto(tcc))
-				i.remove();
+			if(isProjetoIncompleto(tcc)) {
+				System.out.println("Entrou aqui");
+				aux.add(tcc);
+			}
 		}
-		return projetos;
+		return aux;
 	}
 
-	public List<TCC> filtraProjetosAguardandoAprovacao(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+	public List<TCC> filtraProjetosAguardandoAprovacao(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		// iteração para remover elementos ao mesmo tempo que le o array
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
-			if(!isProjetoAguardandoAprovacao(tcc))
-				i.remove();
+			if(isProjetoAguardandoAprovacao(tcc)) {
+				aux.add(tcc);
+			}
 		}
-		return projetos;
+		return aux;
 	}
 	
-	public List<TCC> filtraProjetosReprovados(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
+	public List<TCC> filtraProjetosReprovados(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
-			if(!isProjetoReprovado(tcc))
-				i.remove();
+			if(isProjetoReprovado(tcc))
+				aux.add(tcc);
 		}
-		return projetos;
-	}
-	
-	public List<TCC> filtraTrabalhosEnviadosParaBanca(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
-			TCC tcc = i.next();
-			if(!isTrabalhoEnviadoParaBanca(tcc))
-				i.remove();
-		}
-		return projetos;
-	}
-	
-	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeOrientador(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
-			TCC tcc = i.next();
-			if(!isTrabalhoAguardandoAprovacaoDeOrientador(tcc))
-				i.remove();
-		}
-		return projetos;
-	}
-	
-	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeCoordenador(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
-			TCC tcc = i.next();
-			if(!isTrabalhoAguardandoAprovacaoDeCoordenador(tcc))
-				i.remove();
-		}
-		return projetos;
-	}
-	
-	public List<TCC> filtraTrabalhosReprovados(List<TCC> projetos) {
-		for(Iterator<TCC> i = projetos.iterator(); i.hasNext();) {
-			TCC tcc = i.next();
-			if(!isTrabalhoReprovado(tcc))
-				i.remove();
-		}
-		return projetos;
+		return aux;
 	}
 
-	public List<TCC> filtraTrabalhosIncompletos(List<TCC> trabalhos) {
-		for(Iterator<TCC> i = trabalhos.iterator(); i.hasNext();) {
+	public List<TCC> filtraTrabalhosEnviadosParaBanca(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
-			if(!isTrabalhoIncompleto(tcc))
-				i.remove();
+			if(isTrabalhoEnviadoParaBanca(tcc))
+				aux.add(tcc);
 		}
-		return trabalhos;
+		return aux;
+	}
+	
+	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeOrientador(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(isTrabalhoAguardandoAprovacaoDeOrientador(tcc))
+				aux.add(tcc);
+		}
+		return aux;
+	}
+
+	public List<TCC> filtraTrabalhosAguardandoAprovacaoDeCoordenador(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(isTrabalhoAguardandoAprovacaoDeCoordenador(tcc))
+				aux.add(tcc);
+		}
+		return aux;
+	}
+	
+	public List<TCC> filtraTrabalhosReprovados(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(isTrabalhoReprovado(tcc))
+				aux.add(tcc);
+		}
+		return aux;
+	}
+
+	public List<TCC> filtraTrabalhosIncompletos(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
+			TCC tcc = i.next();
+			if(isTrabalhoIncompleto(tcc))
+				aux.add(tcc);
+		}
+		return aux;
 	}
 
 
-	public List<TCC> filtraTrabalhosFinalizados(List<TCC> trabalhos) {
-		for(Iterator<TCC> i = trabalhos.iterator(); i.hasNext();) {
+	public List<TCC> filtraTrabalhosFinalizados(List<TCC> tccs) {
+		List<TCC> aux = new ArrayList<TCC>();
+		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
-			if(!isTrabalhoAprovado(tcc))
-				i.remove();
+			if(isTrabalhoAprovado(tcc))
+				aux.add(tcc);
 		}
-		return trabalhos;
+		return aux;
 	}
 
 	public String getStatusTCC(TCC tcc) {

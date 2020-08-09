@@ -1,6 +1,7 @@
 package br.ufjf.tcc.mail;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,8 @@ import javax.ejb.LockType;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+
+import org.apache.log4j.Logger;
 
 import br.ufjf.tcc.business.CalendarioSemestreBusiness;
 import br.ufjf.tcc.business.PrazoBusiness;
@@ -26,10 +29,9 @@ public class EmailListener {
 	TCCBusiness tccBusiness;
 	CalendarioSemestreBusiness calendarioBusiness;
 	PrazoBusiness prazoBusiness;
-	Calendar calendar;
+	private Logger logger = Logger.getLogger(EmailListener.class);
 	
 	public EmailListener() {
-		this.calendar = null;
 		this.tccBusiness = new TCCBusiness();
 		this.calendarioBusiness = new CalendarioSemestreBusiness();
 		this.prazoBusiness = new PrazoBusiness();
@@ -47,19 +49,16 @@ public class EmailListener {
 		
 	private final AtomicBoolean alreadyRunning = new AtomicBoolean(false);
 	
-	@Schedule(hour="*/1", persistent = false)
+	@Schedule(hour="*/6", persistent = false)
 	@Lock(LockType.READ)
 	public void listener() throws IOException {
+		System.out.println("Email listeeener");
 		if (alreadyRunning.getAndSet(true)) return;
 		
 		try
         {
-			System.out.println("teste listner");
-//			TCC tcc = this.tccBusiness.getTCCById(438);
-//			EnviadorEmailCartaParticipacao email = new EnviadorEmailCartaParticipacao();
-//			email.enviarEmails(tcc);
+			logger.info("Executando rotina de envio de e-mails.");
 			List<CalendarioSemestre> calendarios = (List<CalendarioSemestre>) this.calendarioBusiness.getCurrentCalendars();
-			this.calendar = Calendar.getInstance();
 			for(CalendarioSemestre calendario : calendarios) {
 				this.verificarPrazos(calendario, 2);
 			}
@@ -72,23 +71,30 @@ public class EmailListener {
 	}
 	
 	public void verificarPrazos(CalendarioSemestre calendario, int diasParaAlerta) {
+		logger.info("Verificando prazos");
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
-		Calendar dataOffset = (Calendar) this.calendar.clone();
-		dataOffset.add(Calendar.DATE, diasParaAlerta);							// Adiciona dias ao dia de hoje
+		Calendar hoje = Calendar.getInstance();
+		List<TCC> tccs = this.tccBusiness.getTrabalhosAndProjetosByCalendar(calendario);
 		
 		for (Prazo prazo : prazos) {
+			Calendar dataPrazo = (dateToCalendar(prazo.getDataFinal()));
+			long diasEntre = this.compareCalendars(hoje, dataPrazo, false);
+			if((diasEntre < 0 || diasEntre > diasParaAlerta) ){
+				logger.info("Não é data para envio");
+				continue;
+			}
 			switch (prazo.getTipo()){
 				case Prazo.PRAZO_PROJETO:
-					this.verificarPrazoProjetoSubmetido(calendario, dataOffset, prazo);
+					this.verificarPrazoProjetoSubmetido(tccs);
 					break;
 				case Prazo.ENTREGA_BANCA:
-					this.verificarPrazoDadosDeDefesa(calendario, dataOffset, prazo);
+					this.verificarPrazoDadosDeDefesa(tccs);
 					break;
 				case Prazo.DEFESA:
-					this.verificarPrazoSubmissaoTCC(calendario, dataOffset, prazo);
+					this.verificarPrazoSubmissaoTCC(tccs);
 					break;
 				case Prazo.ENTREGA_FINAL:
-					this.verificarPrazoSubmissaoTCCfinal(calendario, dataOffset, prazo);
+					this.verificarPrazoSubmissaoTCCfinal(tccs);
 					break;
 				default:
 					break;	
@@ -101,21 +107,17 @@ public class EmailListener {
 	 * que ainda não concluiram o projeto, x dias antes da data limite (por parâmetro) 
 	 */
 	@Lock(LockType.READ)
-	public void verificarPrazoProjetoSubmetido(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
-		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
-		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
-		if(!datasIguais)
-			return;
-		
-		List<TCC> projetos = this.tccBusiness.getProjetosByCalendar(calendario);
-		projetos = this.tccBusiness.filtraProjetosIncompletos(projetos);
+	public void verificarPrazoProjetoSubmetido(List<TCC> tccs) {
+		List<TCC> projetos = this.tccBusiness.filtraProjetosIncompletos(tccs);
 		if(projetos == null)
 			return;
+		
+		System.out.println("Tem projeto pendente");
 		for(TCC projeto : projetos) {
 			if(tccBusiness.isProjetoIncompleto(projeto) && !projeto.isEmailAlertaPrazoProjetoSubmetidoEnviado()) {
-				System.out.println("Enviando e-mail de alerta para submeter projeto");
-				System.out.println("Nome:" + projeto.getNomeTCC());
-				System.out.println("Id: " + projeto.getIdTCC());
+				logger.info("Enviando e-mail de alerta para submeter projeto");
+				logger.info("Nome:" + projeto.getNomeTCC());
+				logger.info("Id: " + projeto.getIdTCC());
 				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoProjeto();
 				email.enviarEmail(projeto, null);
@@ -126,25 +128,18 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoDadosDeDefesa(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
-		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
-		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
-		if(!datasIguais)
-			return;
-//		System.out.println(dataOffset.getTime() + "  " + dataFinalPrazo.getTime());
-		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
-		trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(trabalhos);
-		System.out.println("teste 1");
+	public void verificarPrazoDadosDeDefesa(List<TCC> tccs) {
+		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
 		if(trabalhos == null)
 			return;
 		
 		for(TCC trabalho : trabalhos) {
 			System.out.println(trabalho.getIdTCC());
 			System.out.println(trabalho.getEmailsAlertaEnviados());
-			if(tccBusiness.isTrabalhoIncompleto(trabalho) && !trabalho.isEmailAlertaPrazoDadosDefesaEnviado()) {
-				System.out.println("Enviando e-mail de alerta para submeter dados de defesa");
-				System.out.println("Nome:" + trabalho.getNomeTCC());
-				System.out.println("Id: " + trabalho.getIdTCC());
+			if(!trabalho.isEmailAlertaPrazoDadosDefesaEnviado()) {
+				logger.info("Enviando e-mail de alerta para submeter dados de defesa");
+				logger.info("Nome:" + trabalho.getNomeTCC());
+				logger.info("Id: " + trabalho.getIdTCC());
 				
 				EnviadorEmailChain email = new EnviadorEmailAlertaDadosDeDefesa();
 				email.enviarEmail(trabalho, null);
@@ -155,23 +150,16 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoSubmissaoTCC(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
-		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
-		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
-		if(!datasIguais)
-			return;
-		
-		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
-		trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(trabalhos);
-		
+	public void verificarPrazoSubmissaoTCC(List<TCC> tccs) {
+		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
 		if(trabalhos == null)
 			return;
 		
 		for(TCC trabalho : trabalhos) {
-			if(tccBusiness.isTrabalhoIncompleto(trabalho) && !trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
-				System.out.println("Enviando e-mail de alerta para submeter trabalho");
-				System.out.println("Nome:" + trabalho.getNomeTCC());
-				System.out.println("Id: " + trabalho.getIdTCC());
+			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
+				logger.info("Enviando e-mail de alerta para submeter trabalho");
+				logger.info("Nome:" + trabalho.getNomeTCC());
+				logger.info("Id: " + trabalho.getIdTCC());
 				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
 				email.enviarEmail(trabalho, null);
@@ -182,22 +170,16 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoSubmissaoTCCfinal(CalendarioSemestre calendario, Calendar dataOffset,  Prazo prazo) {
-		Calendar dataFinalPrazo = (dateToCalendar(prazo.getDataFinal()));	// Transforma a data final do calendario do semestre (Date) em Calendar
-		boolean datasIguais = this.compareCalendars(dataOffset, dataFinalPrazo, false);
-		if(!datasIguais)
-			return;
-		
-		List<TCC> trabalhos = this.tccBusiness.getTrabalhosByCalendar(calendario);
-		trabalhos = this.tccBusiness.filtraTrabalhosEnviadosParaBanca(trabalhos);
+	public void verificarPrazoSubmissaoTCCfinal(List<TCC> tccs) {
+		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosEnviadosParaBanca(tccs);
 		if(trabalhos == null)
 			return;
 		
 		for(TCC trabalho : trabalhos) {
-			if(tccBusiness.isTrabalhoEnviadoParaBanca(trabalho) && !trabalho.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
-				System.out.println("Enviando e-mail de alerta para submeter trabalho final");
-				System.out.println("Nome:" + trabalho.getNomeTCC());
-				System.out.println("Id: " + trabalho.getIdTCC());
+			if(!trabalho.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
+				logger.info("Enviando e-mail de alerta para submeter trabalho final");
+				logger.info("Nome:" + trabalho.getNomeTCC());
+				logger.info("Id: " + trabalho.getIdTCC());
 				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalhoFinal();
 				email.enviarEmail(trabalho, null);
@@ -219,14 +201,16 @@ public class EmailListener {
 	 * O parâmetro compareHour indica se a hora será levada em 
 	 * consideração na comparação.
 	 */
-	private boolean compareCalendars(Calendar cal1, Calendar cal2, boolean compareHour) {
+	private long compareCalendars(Calendar prazo, Calendar hoje, boolean compareHour) {
+		
+		long daysBetween = ChronoUnit.DAYS.between(prazo.toInstant(), hoje.toInstant());
 		if(!compareHour) {
-			cal1 = getZeroTimeCalendar(cal1);
-			cal2 = getZeroTimeCalendar(cal2);
+			prazo = getZeroTimeCalendar(prazo);
+			hoje = getZeroTimeCalendar(hoje);
 		}
-		if(cal1.compareTo(cal2) == 0)
-			return true;
-		return false;
+		daysBetween = ChronoUnit.DAYS.between(prazo.toInstant(), hoje.toInstant());
+		System.out.println("Dias entre: " + daysBetween);
+		return daysBetween;
 	}
 	
 	/**

@@ -650,8 +650,11 @@ public class TCCDAO extends GenericoDAO {
 		        Query query = getSession()
 		        		.createQuery(
 	        					"SELECT DISTINCT t FROM TCC AS t "
-		        				+ "JOIN FETCH t.aluno AS a JOIN FETCH t.orientador "
-		        				+ "LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes "
+								+ "JOIN FETCH t.aluno AS a "
+								+ "JOIN FETCH a.curso "
+								+ "JOIN FETCH t.orientador "
+								+ "LEFT JOIN FETCH t.coOrientador "
+								+ "LEFT JOIN FETCH t.participacoes "
 		        				+ "WHERE t.calendarioSemestre = :currentCalendar ORDER BY t.dataEnvioFinal DESC");
 //		        query.setParameter("curso", curso);
 		        query.setParameter("currentCalendar", currentCalendar);

@@ -116,9 +116,9 @@ public class VisualizaTCCController extends CommonsController {
 	}
 
 	private boolean canViewTCC() {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if (getUsuario() != null) {
-			if(isSecretaria())
-			{
+			if(isSecretaria()) {
 				canEdit = true;
 				canDownloadFileBanca = true;
 				return true;
@@ -130,18 +130,14 @@ public class VisualizaTCCController extends CommonsController {
 					canAnswer = true;
 					return true;
 				}
-
+			
 			if (getUsuario().getIdUsuario() == tcc.getAluno().getIdUsuario()
-				|| getUsuario().getIdUsuario() == tcc.getOrientador().getIdUsuario()
-				|| getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR
-				|| ((getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR 
-				|| (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.SECRETARIA 
-				&& tcc.getDataEnvioFinal() != null)))) {
+					|| getUsuario().getIdUsuario() == tcc.getOrientador().getIdUsuario()
+					|| tipoUsuario == Usuario.ADMINISTRADOR || tipoUsuario == Usuario.COORDENADOR) {
 				
-				if(getUsuario().getTipoUsuario().getIdTipoUsuario() != Usuario.PROFESSOR)
+				if(tipoUsuario != Usuario.PROFESSOR && (tipoUsuario == Usuario.COORDENADOR
+						&& getUsuario().getCurso().getIdCurso() == tcc.getAluno().getCurso().getIdCurso()))
 					canEdit = true;
-				else
-					canEdit=false;
 				
 				canDownloadFileBanca = true;
 				return true;
@@ -655,29 +651,28 @@ public class VisualizaTCCController extends CommonsController {
 			return false;
 	}
 	
+	public String getLabel(@BindingParam("botao") Button button) {
+		String nome = (String) button.getAttribute("name");
+		if(tcc.isProjeto())
+			return nome + " projeto";
+		return nome + " trabalho";
+	}
 	
-	public boolean exibirAprovacao(@BindingParam("aprovar") Button aprovar, @BindingParam("reprovar") Button reprovar) {
+	
+	public boolean exibirAprovacao() {
 		int status = tcc.getStatus();
-		
 		// PAA - coordenador aprovar projeto
-		if(status == TCC.PAA && isCoordenador()) {
-			aprovar.setLabel("Aprovar projeto");
-			reprovar.setLabel("Reprovar projeto");
-			
+		if(status == TCC.PAA && isCoordenador() && getUsuario().getCurso().getIdCurso() == tcc.getAluno().getCurso().getIdCurso()) {
 			return true;
 		}
 		
 		// TAAO - orientador aprovar trabalho
 		if(status == TCC.TAAO && isOrientador()) {
-			aprovar.setLabel("Aprovar trabalho");
-			reprovar.setLabel("Reprovar trabalho");
 			return true;
 		}
 		
 		// TAAC - coordenação aprovar trabalho (formatação)
-		if(status == TCC.TAAC && isCoordenador()) {
-			aprovar.setLabel("Aprovar trabalho");
-			reprovar.setLabel("Reprovar trabalho");
+		if(status == TCC.TAAC && isCoordenador()  && getUsuario().getCurso().getIdCurso() == tcc.getAluno().getCurso().getIdCurso()) {
 			return true;
 		}
 		
