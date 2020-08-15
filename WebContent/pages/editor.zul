@@ -253,7 +253,7 @@
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
 				</hlayout>
-				<hlayout style="margin:5px;line-height:20px;" unless="${vm.canSubmitTCC}">
+				<hlayout style="margin:5px;line-height:20px;text-align: center" unless="${vm.canSubmitTCC}">
 					<label value="@load(vm.getMensagem())" />
 				</hlayout>
 				

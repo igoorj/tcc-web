@@ -76,7 +76,6 @@
 			<columns > 
 				<column hflex="2"  >
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de defesa" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
 				</column>
 				<column hflex="2" >
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de" /> 
