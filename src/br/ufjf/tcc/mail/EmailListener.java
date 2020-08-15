@@ -52,7 +52,6 @@ public class EmailListener {
 	@Schedule(hour="*/6", persistent = false)
 	@Lock(LockType.READ)
 	public void listener() throws IOException {
-		System.out.println("Email listeeener");
 		if (alreadyRunning.getAndSet(true)) return;
 		
 		try
@@ -71,7 +70,7 @@ public class EmailListener {
 	}
 	
 	public void verificarPrazos(CalendarioSemestre calendario, int diasParaAlerta) {
-		logger.info("Verificando prazos");
+		logger.info("Verificando prazos do calendário de " + calendario.getCurso().getNomeCurso());
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
 		Calendar hoje = Calendar.getInstance();
 		List<TCC> tccs = this.tccBusiness.getTrabalhosAndProjetosByCalendar(calendario);
@@ -80,21 +79,21 @@ public class EmailListener {
 			Calendar dataPrazo = (dateToCalendar(prazo.getDataFinal()));
 			long diasEntre = this.compareCalendars(hoje, dataPrazo, false);
 			if((diasEntre < 0 || diasEntre > diasParaAlerta) ){
-				logger.info("Não é data para envio");
+				logger.info("Não é data para envio. Prazo: " + prazo.getTipo() + ". Data: " + dataPrazo.getTime());
 				continue;
 			}
 			switch (prazo.getTipo()){
 				case Prazo.PRAZO_PROJETO:
-					this.verificarPrazoProjetoSubmetido(tccs);
+					this.enviarEmailAlertaSubmeterProjeto(tccs);
 					break;
 				case Prazo.ENTREGA_BANCA:
-					this.verificarPrazoDadosDeDefesa(tccs);
+					this.enviarEmailAlertaDadosDeDefesa(tccs);
 					break;
-				case Prazo.DEFESA:
-					this.verificarPrazoSubmissaoTCC(tccs);
-					break;
+//				case Prazo.DEFESA:
+//					this.enviarEmailAlertaSubmeterTCC(tccs);
+//					break;
 				case Prazo.ENTREGA_FINAL:
-					this.verificarPrazoSubmissaoTCCfinal(tccs);
+					this.enviarEmailAlertaSubmeterTCCFinal(tccs);
 					break;
 				default:
 					break;	
@@ -107,15 +106,14 @@ public class EmailListener {
 	 * que ainda não concluiram o projeto, x dias antes da data limite (por parâmetro) 
 	 */
 	@Lock(LockType.READ)
-	public void verificarPrazoProjetoSubmetido(List<TCC> tccs) {
+	public void enviarEmailAlertaSubmeterProjeto(List<TCC> tccs) {
+		logger.info("Enviando e-mails de alerta para submeter projeto");
 		List<TCC> projetos = this.tccBusiness.filtraProjetosIncompletos(tccs);
 		if(projetos == null)
 			return;
 		
-		System.out.println("Tem projeto pendente");
 		for(TCC projeto : projetos) {
 			if(tccBusiness.isProjetoIncompleto(projeto) && !projeto.isEmailAlertaPrazoProjetoSubmetidoEnviado()) {
-				logger.info("Enviando e-mail de alerta para submeter projeto");
 				logger.info("Nome:" + projeto.getNomeTCC());
 				logger.info("Id: " + projeto.getIdTCC());
 				
@@ -128,16 +126,14 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoDadosDeDefesa(List<TCC> tccs) {
+	public void enviarEmailAlertaDadosDeDefesa(List<TCC> tccs) {
+		logger.info("Enviando e-mails de alerta para submeter dados de defesa");
 		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
 		if(trabalhos == null)
 			return;
 		
 		for(TCC trabalho : trabalhos) {
-			System.out.println(trabalho.getIdTCC());
-			System.out.println(trabalho.getEmailsAlertaEnviados());
 			if(!trabalho.isEmailAlertaPrazoDadosDefesaEnviado()) {
-				logger.info("Enviando e-mail de alerta para submeter dados de defesa");
 				logger.info("Nome:" + trabalho.getNomeTCC());
 				logger.info("Id: " + trabalho.getIdTCC());
 				
@@ -150,14 +146,14 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoSubmissaoTCC(List<TCC> tccs) {
+	public void enviarEmailAlertaSubmeterTCC(List<TCC> tccs) {
+		logger.info("Enviando e-mails de alerta para submeter trabalho");
 		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
 		if(trabalhos == null)
 			return;
 		
 		for(TCC trabalho : trabalhos) {
 			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
-				logger.info("Enviando e-mail de alerta para submeter trabalho");
 				logger.info("Nome:" + trabalho.getNomeTCC());
 				logger.info("Id: " + trabalho.getIdTCC());
 				
@@ -170,14 +166,13 @@ public class EmailListener {
 	}
 	
 	
-	public void verificarPrazoSubmissaoTCCfinal(List<TCC> tccs) {
+	public void enviarEmailAlertaSubmeterTCCFinal(List<TCC> tccs) {
+		logger.info("Enviando e-mails de alerta para submeter trabalho final");
 		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosEnviadosParaBanca(tccs);
 		if(trabalhos == null)
 			return;
-		
 		for(TCC trabalho : trabalhos) {
 			if(!trabalho.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
-				logger.info("Enviando e-mail de alerta para submeter trabalho final");
 				logger.info("Nome:" + trabalho.getNomeTCC());
 				logger.info("Id: " + trabalho.getIdTCC());
 				
@@ -197,7 +192,7 @@ public class EmailListener {
 	
 	
 	/**
-	 * Compara dois calendários e retorna verdadeiro se forem iguais.
+	 * Compara dois calendários e retorna o número de dias entre os calendários.
 	 * O parâmetro compareHour indica se a hora será levada em 
 	 * consideração na comparação.
 	 */
@@ -209,7 +204,6 @@ public class EmailListener {
 			hoje = getZeroTimeCalendar(hoje);
 		}
 		daysBetween = ChronoUnit.DAYS.between(prazo.toInstant(), hoje.toInstant());
-		System.out.println("Dias entre: " + daysBetween);
 		return daysBetween;
 	}
 	

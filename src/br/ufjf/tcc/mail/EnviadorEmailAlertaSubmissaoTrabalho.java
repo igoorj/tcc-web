@@ -6,7 +6,7 @@ import java.util.List;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
-
+// Não está sendo usado
 //Email número 08 do drive
 public class EnviadorEmailAlertaSubmissaoTrabalho extends EnviadorEmailChain{
 	
