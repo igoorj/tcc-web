@@ -46,6 +46,7 @@ import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Pergunta;
 import br.ufjf.tcc.model.Resposta;
 import br.ufjf.tcc.model.TCC;
+import br.ufjf.tcc.model.TipoUsuario;
 import br.ufjf.tcc.model.Usuario;
 
 public class VisualizaTCCController extends CommonsController {
@@ -88,6 +89,7 @@ public class VisualizaTCCController extends CommonsController {
 		
 		if (tcc != null && canViewTCC()) {
 			if (getUsuario() != null && checkLogin()) {
+				canEdit = verificarCanEditTcc();
 				if (canAnswer) {
 					List<Pergunta> questions = new PerguntaBusiness()
 							.getQuestionsByQuestionary(new QuestionarioBusiness()
@@ -119,7 +121,6 @@ public class VisualizaTCCController extends CommonsController {
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if (getUsuario() != null) {
 			if(isSecretaria()) {
-				canEdit = true;
 				canDownloadFileBanca = true;
 				return true;
 			}
@@ -135,16 +136,27 @@ public class VisualizaTCCController extends CommonsController {
 					|| getUsuario().getIdUsuario() == tcc.getOrientador().getIdUsuario()
 					|| tipoUsuario == Usuario.ADMINISTRADOR || tipoUsuario == Usuario.COORDENADOR) {
 				
-				if(tipoUsuario != Usuario.PROFESSOR && (tipoUsuario == Usuario.COORDENADOR
-						&& getUsuario().getCurso().getIdCurso() == tcc.getAluno().getCurso().getIdCurso()))
-					canEdit = true;
-				
 				canDownloadFileBanca = true;
 				return true;
 			}
 		}
 
 		return (tcc.getStatus() == TCC.APROVADO && tcc.getArquivoTCC() != null);
+	}
+	
+	
+	private boolean verificarCanEditTcc() {
+		if(getUsuario() == null || getUsuario().getCurso().getIdCurso() != tcc.getAluno().getCurso().getIdCurso()) {
+			return false;
+		}
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario == Usuario.COORDENADOR || 
+				tipoUsuario == Usuario.ADMINISTRADOR || 
+				isSecretaria() || getUsuario().getIdUsuario() == tcc.getAluno().getIdUsuario()) {
+			return true;
+		}
+		
+		return false;
 	}
 
 
