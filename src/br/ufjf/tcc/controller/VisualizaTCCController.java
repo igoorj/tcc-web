@@ -146,6 +146,8 @@ public class VisualizaTCCController extends CommonsController {
 	
 	
 	private boolean verificarCanEditTcc() {
+		if(getUsuario().getCurso() == null)
+			return false;
 		if(getUsuario() == null || getUsuario().getCurso().getIdCurso() != tcc.getAluno().getCurso().getIdCurso()) {
 			return false;
 		}

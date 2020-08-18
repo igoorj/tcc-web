@@ -395,7 +395,7 @@ public class TCCBusiness {
 					return true;
 				break;
 			case Prazo.ENTREGA_FINAL:
-				if(prazo.getDataFinal().before(new Date()) && status < TCC.TRO)
+				if(prazo.getDataFinal().before(new Date()) && status < TCC.APROVADO)
 					return true;
 				break;
 
@@ -417,7 +417,7 @@ public class TCCBusiness {
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
 		List <Prazo> prazos = calendario.getPrazos();
 		Calendar hoje = Calendar.getInstance();
-		System.out.println("Data de hoje mais 7 dias: " + hoje.getTime());
+//		System.out.println("Data de hoje mais 7 dias: " + hoje.getTime());
 		for (Prazo prazo : prazos) {
 			switch (prazo.getTipo()) {
 			case Prazo.PRAZO_PROJETO:
@@ -432,8 +432,9 @@ public class TCCBusiness {
 			case Prazo.ENTREGA_FINAL:
 				hoje = Calendar.getInstance();
 				hoje.add(Calendar.DAY_OF_MONTH, -2);
-				if(prazo.getDataFinal().before(hoje.getTime()) && isTrabalhoReprovado(tcc))
+				if(prazo.getDataFinal().before(hoje.getTime()) && isTrabalhoReprovado(tcc)) {
 					return true;
+				}
 				break;
 
 			default:
@@ -519,7 +520,6 @@ public class TCCBusiness {
 		for(Iterator<TCC> i = tccs.iterator(); i.hasNext();) {
 			TCC tcc = i.next();
 			if(isProjetoIncompleto(tcc)) {
-				System.out.println("Entrou aqui");
 				aux.add(tcc);
 			}
 		}

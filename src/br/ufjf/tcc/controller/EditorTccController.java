@@ -34,6 +34,7 @@ import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.library.FileManager;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoSubmetido;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalSubmetido;
 import br.ufjf.tcc.mail.EnviadorEmailChain;
 import br.ufjf.tcc.mail.EnviadorEmailChainTAAProfessor;
@@ -550,7 +551,7 @@ public class EditorTccController extends CommonsController {
 				return;
 			case TCC.TRC:
 				tcc.setStatus(TCC.TAAC);
-				emails.add(new EnviadorEmailAvisoTrabalhoFinalSubmetido());
+				emails.add(new EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador());
 				break;
 			case TCC.APROVADO:
 				return;
