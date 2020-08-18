@@ -31,8 +31,8 @@ public class EnviadorEmailAvisoTrabalhoFinalReprovado extends EnviadorEmailChain
 		emailBuilder.appendMensagem("Final do seu Trabalho de Conclusão de Curso submetido no ").breakLine();
 		emailBuilder.appendMensagem("Sistema de Monografias. Segue abaixo o(s) motivo(s) da reprovação:").breakLine();
 		emailBuilder.appendMensagem("(descrição dos motivos para a reprovação que o orientador fez).").breakLine().breakLine();
-		emailBuilder.appendMensagem("Você tem até 2 (dois) dias, desde que não ultrapasse o último dia ");
-		emailBuilder.appendMensagem("letivo do semestre,  para corrigir seu trabalho e submeter a nova ");
+		emailBuilder.appendMensagem("Você tem até 2 (dois) dias após o fim do prazo ");
+		emailBuilder.appendMensagem("para corrigir seu trabalho e submeter a nova ");
 		emailBuilder.appendMensagem("versão para ser avaliada pelo(a) orientador(a).").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem( nomeCoordenador).breakLine();

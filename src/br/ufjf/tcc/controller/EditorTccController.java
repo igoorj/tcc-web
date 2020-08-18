@@ -61,7 +61,7 @@ public class EditorTccController extends CommonsController {
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
 			canChangeParticipacao = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
-			canSubmitTCC = true, canSubmitDocs = false;
+			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false;
 	private EnviadorEmailChain enviadorEmail = new EnviadorEmailProjetoCriado();
 	
 	private Logger logger = Logger.getLogger(EditorTccController.class);
@@ -89,6 +89,7 @@ public class EditorTccController extends CommonsController {
 			statusInicialTCC = tcc.getStatusTCC();
 			
 			canChangeOrientacao = false;
+			verificarAtrasado();
 			verificarCanChangeParticipacao();
 			verificarCanSubmitTCC();
 			verificarCanSubmitDocs();
@@ -117,9 +118,9 @@ public class EditorTccController extends CommonsController {
 					tcc.getAluno().setCurso(getUsuario().getCurso());
 				canChangeMatricula = true;
 			}
-
 			if (tcc == null || !canEdit())
 				redirectHome();
+			verificarAtrasado();
 
 		}
 		if (tcc != null) {
@@ -155,7 +156,11 @@ public class EditorTccController extends CommonsController {
 	}
 	
 	public String getMensagem() {
-		return "Seu trabalho está sob avaliação";
+		if(tccAtrasado) {
+			String projeto = tcc.isProjeto() ? "projeto" : "trabalho";
+			return "Você perdeu a data para envio do " + projeto;
+		}
+		return "Seu trabalho está sob avaliação.";
 	}
 	
 	public TCC getTcc() {
@@ -754,9 +759,18 @@ public class EditorTccController extends CommonsController {
 		if(verificarJaApresentou()) 
 			canChangeParticipacao = true;
 	}
+	public void verificarAtrasado() {
+		if(tccBusiness.isTrabalhoAtrasado(tcc))
+			tccAtrasado = true;
+	}
 	
 	public void verificarCanSubmitTCC() {
 		int status = tcc.getStatus();
+		if(tccAtrasado) {
+			canSubmitTCC = false;
+			if(tccBusiness.isTccReprovado(tcc) && !tccBusiness.isTccReprovadoAtrasado(tcc))
+				canSubmitTCC = true;
+		}
 		if(status == TCC.PAA || status == TCC.TAAC || status == TCC.TAAO)
 			canSubmitTCC = false;
 //		if(status == TCC.TEPB) {

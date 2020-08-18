@@ -23,7 +23,7 @@ public class EnviadorEmailAvisoTrabalhoFinalSubmetido extends EnviadorEmailChain
 		
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
-		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
+//		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		String titulo = tcc.getNomeTCC();
 		
@@ -39,7 +39,7 @@ public class EnviadorEmailAvisoTrabalhoFinalSubmetido extends EnviadorEmailChain
 		emailBuilder.appendMensagem("semestre, para corrigir o(s) problema(s) e submeter uma nova ");
 		emailBuilder.appendMensagem("Versão Final, que também deverá receber a sua avaliação.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
-		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
+//		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		

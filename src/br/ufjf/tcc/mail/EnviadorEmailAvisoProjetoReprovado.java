@@ -32,7 +32,7 @@ public class EnviadorEmailAvisoProjetoReprovado extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("submetido no Sistema de Monografias pelo(a) discente foi Reprovado.").breakLine();
 		emailBuilder.appendMensagem("Segue abaixo o(s) motivos da reprovação:").breakLine();
 		emailBuilder.appendMensagem(tcc.getJustificativaReprovacao() + ".").breakLine(); 
-		emailBuilder.appendMensagem("O(a) discente tem até 7 (sete) dias corridos para corrigir o Projeto e submeter a versão corrigida no Sistema de Monografias.").breakLine(); 
+		emailBuilder.appendMensagem("O(a) discente tem até 7 (sete) dias corridos depois do fim do prazo para corrigir o Projeto e submeter a versão corrigida no Sistema de Monografias.").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenenação do Curso de " + nomeCurso).breakLine();

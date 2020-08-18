@@ -2,6 +2,7 @@ package br.ufjf.tcc.business;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -375,6 +376,74 @@ public class TCCBusiness {
 	}
 	
 	
+	public boolean isTrabalhoAtrasado(TCC tcc) {
+		if(tcc == null)
+			return false;
+		int status = tcc.getStatus();
+		if(tcc == null || status == TCC.APROVADO)
+			return false;
+		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
+		List <Prazo> prazos = calendario.getPrazos();
+		for (Prazo prazo : prazos) {
+			switch (prazo.getTipo()) {
+			case Prazo.PRAZO_PROJETO:
+				if(prazo.getDataFinal().before(new Date()) && tcc.isProjeto())
+					return true;
+				break;
+			case Prazo.ENTREGA_BANCA:
+				if(prazo.getDataFinal().before(new Date()) && status < TCC.TEPB)
+					return true;
+				break;
+			case Prazo.ENTREGA_FINAL:
+				if(prazo.getDataFinal().before(new Date()) && status < TCC.TRO)
+					return true;
+				break;
+
+			default:
+				break;
+			}
+		}
+		return false;
+		
+	}
+	
+	/*
+	 * Verifica se o tcc está reprovado, mas dentro de 7 dias
+	 * após o término do prazo.
+	 */
+	public boolean isTccReprovadoAtrasado(TCC tcc) {
+		if(tcc == null || tcc.getStatus() == TCC.APROVADO)
+			return false;
+		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
+		List <Prazo> prazos = calendario.getPrazos();
+		Calendar hoje = Calendar.getInstance();
+		System.out.println("Data de hoje mais 7 dias: " + hoje.getTime());
+		for (Prazo prazo : prazos) {
+			switch (prazo.getTipo()) {
+			case Prazo.PRAZO_PROJETO:
+				hoje.add(Calendar.DAY_OF_MONTH, -7);
+				if(prazo.getDataFinal().before(hoje.getTime()) && isProjetoReprovado(tcc))
+					return true;
+				break;
+//			case Prazo.ENTREGA_BANCA:
+//				if(prazo.getDataFinal().before(new Date()) && status == TCC.TRC)
+//					return true;
+//				break;
+			case Prazo.ENTREGA_FINAL:
+				hoje = Calendar.getInstance();
+				hoje.add(Calendar.DAY_OF_MONTH, -2);
+				if(prazo.getDataFinal().before(hoje.getTime()) && isTrabalhoReprovado(tcc))
+					return true;
+				break;
+
+			default:
+				break;
+			}
+		}
+		return false;
+	}
+	
+	
 
 	public boolean isProjetoAguardandoAprovacao(TCC tcc) {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PAA)
@@ -390,6 +459,12 @@ public class TCCBusiness {
 	
 	public boolean isProjetoReprovado(TCC tcc) {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PR)
+			return true;
+		return false;
+	}
+	
+	public boolean isTccReprovado(TCC tcc) {
+		if(isTrabalhoReprovado(tcc) || isProjetoReprovado(tcc))
 			return true;
 		return false;
 	}
@@ -413,7 +488,7 @@ public class TCCBusiness {
 	}
 	
 	public boolean isTrabalhoReprovado(TCC tcc) {
-		if(tcc.isProjeto() && (tcc.getStatus() == TCC.TRC || tcc.getStatus() == TCC.TRO) )
+		if(!tcc.isProjeto() && (tcc.getStatus() == TCC.TRC || tcc.getStatus() == TCC.TRO) )
 			return true;
 		return false;
 	}

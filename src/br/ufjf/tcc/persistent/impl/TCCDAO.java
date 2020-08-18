@@ -654,7 +654,8 @@ public class TCCDAO extends GenericoDAO {
 								+ "JOIN FETCH a.curso "
 								+ "JOIN FETCH t.orientador "
 								+ "LEFT JOIN FETCH t.coOrientador "
-								+ "LEFT JOIN FETCH t.participacoes "
+								+ "LEFT JOIN FETCH t.participacoes as p "
+								+ "LEFT JOIN FETCH p.professor  "
 		        				+ "WHERE t.calendarioSemestre = :currentCalendar ORDER BY t.dataEnvioFinal DESC");
 //		        query.setParameter("curso", curso);
 		        query.setParameter("currentCalendar", currentCalendar);

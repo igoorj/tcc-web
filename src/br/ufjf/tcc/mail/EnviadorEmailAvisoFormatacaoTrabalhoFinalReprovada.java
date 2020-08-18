@@ -33,8 +33,8 @@ public class EnviadorEmailAvisoFormatacaoTrabalhoFinalReprovada extends Enviador
 		emailBuilder.appendMensagem( titulo + " de Curso submetido no Sistema de Monografias.").breakLine();
 		emailBuilder.appendMensagem("Segue abaixo o(s) motivo(s) da reprovação:").breakLine();
 		emailBuilder.appendMensagem("(descrição dos motivos para a reprovação que o coordenador(a) fez).").breakLine().breakLine();
-		emailBuilder.appendMensagem("O(a) discente tem até 2 (dois) dias, desde que não ultrapasse o último dia letivo ");
-		emailBuilder.appendMensagem("do semestre,  para corrigir o TCC e enviar a nova versão para ser avaliada.").breakLine();
+		emailBuilder.appendMensagem("O(a) discente tem até 2 (dois) dias após o fim do prazo ");
+		emailBuilder.appendMensagem("para corrigir o TCC e enviar a nova versão para ser avaliada.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso " + nomeCurso).breakLine();

@@ -54,7 +54,7 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("para esta atividade se tornar completa, pois ainda ");
 		emailBuilder.appendMensagem("não consta que o(a) discente realizou esta atividade completamente.").breakLine(); 
 		emailBuilder.appendMensagem("Se essa tarefa não for cumprida dentro do prazo, não haverá ");
-		emailBuilder.appendMensagem("como dar andamento das demais atividades dessa discplina , e desta forma ");
+		emailBuilder.appendMensagem("como dar andamento das demais atividades, e dessa forma ");
 		emailBuilder.appendMensagem("não será possível gerar a documentação necessária para a Defesa do TCC.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();

@@ -43,7 +43,8 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 	public List<CalendarioSemestre> getCalendarsByDate(Date date) {
 		try {
 			Query query = getSession().createQuery(
-							"SELECT c FROM CalendarioSemestre AS c "
+						   "SELECT c FROM CalendarioSemestre AS c "
+						+ "JOIN FETCH c.curso "
 						+ 	"WHERE c.finalSemestre >= :date "
 					);
 			query.setParameter("date", date);
@@ -81,7 +82,9 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT c FROM CalendarioSemestre AS c WHERE c = :calend");
+							"SELECT c FROM CalendarioSemestre AS c " +
+							"LEFT JOIN FETCH c.prazos " +
+							"WHERE c = :calend");
 			query.setParameter("calend", tcc.getCalendarioSemestre());
 			
 			currentCalendar = (CalendarioSemestre) query.uniqueResult();
