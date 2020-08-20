@@ -650,11 +650,11 @@ public class TCC implements Serializable,Comparable<TCC> {
 	public boolean isEmailAlertaPrazoDadosDefesaEnviado() {
 		return this.emailsAlertaEnviados > 1;
 	}
-	public boolean isEmailAlertaPrazoTrabalhoEnviado() {
+//	public boolean isEmailAlertaPrazoTrabalhoEnviado() {
+//		return this.emailsAlertaEnviados > 2;
+//	}
+	public boolean isEmailAlertaPrazoTrabalhoFinalEnviado() {
 		return this.emailsAlertaEnviados > 2;
-	}
-	public boolean isEmailAlertaPrazoTrabalhoFinaloEnviado() {
-		return this.emailsAlertaEnviados > 3;
 	}
 
 	public void setEmailAlertaEnviado(int emailAlerta) {

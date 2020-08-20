@@ -146,24 +146,24 @@ public class EmailListener {
 	}
 	
 	
-	public void enviarEmailAlertaSubmeterTCC(List<TCC> tccs) {
-		logger.info("Enviando e-mails de alerta para submeter trabalho");
-		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
-		if(trabalhos == null)
-			return;
-		
-		for(TCC trabalho : trabalhos) {
-			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
-				logger.info("Nome:" + trabalho.getNomeTCC());
-				logger.info("Id: " + trabalho.getIdTCC());
-				
-				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
-				email.enviarEmail(trabalho, null);
-				trabalho.setEmailAlertaEnviado(3);
-				this.tccBusiness.edit(trabalho);
-			}
-		}
-	}
+//	public void enviarEmailAlertaSubmeterTCC(List<TCC> tccs) {
+//		logger.info("Enviando e-mails de alerta para submeter trabalho");
+//		List<TCC> trabalhos = this.tccBusiness.filtraTrabalhosIncompletos(tccs);
+//		if(trabalhos == null)
+//			return;
+//		
+//		for(TCC trabalho : trabalhos) {
+//			if(!trabalho.isEmailAlertaPrazoTrabalhoEnviado()) {
+//				logger.info("Nome:" + trabalho.getNomeTCC());
+//				logger.info("Id: " + trabalho.getIdTCC());
+//				
+//				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalho();
+//				email.enviarEmail(trabalho, null);
+////				trabalho.setEmailAlertaEnviado(3);
+////				this.tccBusiness.edit(trabalho);
+//			}
+//		}
+//	}
 	
 	
 	public void enviarEmailAlertaSubmeterTCCFinal(List<TCC> tccs) {
@@ -172,13 +172,13 @@ public class EmailListener {
 		if(trabalhos == null)
 			return;
 		for(TCC trabalho : trabalhos) {
-			if(!trabalho.isEmailAlertaPrazoTrabalhoFinaloEnviado()) {
+			if(!trabalho.isEmailAlertaPrazoTrabalhoFinalEnviado()) {
 				logger.info("Nome:" + trabalho.getNomeTCC());
 				logger.info("Id: " + trabalho.getIdTCC());
 				
 				EnviadorEmailChain email = new EnviadorEmailAlertaSubmissaoTrabalhoFinal();
 				email.enviarEmail(trabalho, null);
-				trabalho.setEmailAlertaEnviado(4);
+				trabalho.setEmailAlertaEnviado(3);
 				this.tccBusiness.edit(trabalho);
 			}
 		}

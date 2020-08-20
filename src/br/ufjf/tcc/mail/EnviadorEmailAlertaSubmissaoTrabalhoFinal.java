@@ -36,7 +36,7 @@ public class EnviadorEmailAlertaSubmissaoTrabalhoFinal extends EnviadorEmailChai
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submissão de trabalho final - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados " + nomeAluno + " e " + nomeOrientador + ", ").breakLine();
-		emailBuilder.appendMensagem("daqui a 2 dias (" + formatter.format(calendario.getTime()));
+		emailBuilder.appendMensagem("dentro de 2 dias (" + formatter.format(calendario.getTime()));
 		emailBuilder.appendMensagem(") se encerra o prazo para incluir no Sistema de Monografias a versão Final ");
 		emailBuilder.appendMensagem("do TCC, após correções sugeridas pelos membros da Banca Examinadora. ").breakLine();
 		emailBuilder.appendMensagem("Ainda não consta no sistema que o(a) discente realizou esta atividade ");

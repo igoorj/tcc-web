@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.joda.time.DateTime;
+
 import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Prazo;
@@ -34,10 +36,10 @@ public class EnviadorEmailDatasCalendarioOrientador extends EnviadorEmailChain {
 		
 		CalendarioSemestre calendario = tcc.getCalendarioSemestre();
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
-		Date dataLimiteSubmissaoProjeto = prazos.get(0).getDataFinal();
-		Date dataLimiteEntregaBanca = prazos.get(1).getDataFinal();
-		Date dataLimiteDefesa = prazos.get(2).getDataFinal();
-		Date dataLimiteSubmissaoTrabalhoFinal = prazos.get(3).getDataFinal();
+		String dataLimiteSubmissaoProjeto = new DateTime(prazos.get(0).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteEntregaBanca = new DateTime(prazos.get(1).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteDefesa = new DateTime(prazos.get(2).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteSubmissaoTrabalhoFinal = new DateTime(prazos.get(3).getDataFinal()).toString("dd/MM/yyyy");
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Datas do calendário - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) " + nomeOrientador + ", ").breakLine();

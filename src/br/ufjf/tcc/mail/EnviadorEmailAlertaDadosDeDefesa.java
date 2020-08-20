@@ -37,7 +37,7 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de inclusão dos dados da Defesa - "+nomeAluno);
 		emailBuilder.appendMensagem("Prezados " + nomeAluno + " e " + nomeOrientador + ", ").breakLine();
-		emailBuilder.appendMensagem("daqui a 2 dias se encerra o prazo para incluir ");
+		emailBuilder.appendMensagem("dentro de 2 dias se encerra o prazo para incluir ");
 		emailBuilder.appendMensagem("no Sistema de Monografias os dados da Defesa do Trabalho de Conclusão de Curso (TCC) e submeter  ");
 		emailBuilder.appendMensagem("a versão do TCC a ser avaliado pelos membros da Banca Examinadora. ");
 		emailBuilder.appendMensagem("É preciso informar: data, hora, local e ");
