@@ -24,10 +24,25 @@ import br.ufjf.tcc.business.TCCBusiness;
  * 
  */
 @Entity
-@Table(name = "TCC")
+@Table(name = "tcc")
 public class TCC implements Serializable,Comparable<TCC> {
 
 	private static final long serialVersionUID = 1L;
+	/*
+	 * PI	- Projeto Incompleto
+	 * PR	- Projeto Reprovado
+	 * PAA	- Projeto Aguardando Aprovação
+	 * TI	- Trabalho Incompleto
+	 * TEPB	- Trabalho Enviado Para Banca
+	 * TRO	- Trabalho Reprovado
+	 * TAAO	- Trabalho Aguardando Aprovação de Orientador
+	 * TRO	- Trabalho Reprovado por Orientador
+	 * TAAC	- Trabaho Aguardadno Aprovação de Coordenador
+	 * TRC	- Trabalho Reprovado por Orientador
+	 * APROVADO - Trabalho aprovado
+	 */
+	public static final int PI = 0, PR = 1, PAA = 2, TI = 3, TEPB = 4,
+			TRO = 5, TAAO = 6, TRC = 7, TAAC = 8,  APROVADO = 9;
 
 	/**
 	 * Campo com ID do TCC. Relaciona com a coluna {@code idTCC} do banco e é
@@ -79,16 +94,18 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code arquivoTCCBanca} do banco através da anotação
 	 * {@code @Column(name = "arquivoTCCBanca", length = 255, nullable = true)}.
 	 */
-	@Column(name = "arquivoTCCBanca", length = 255, nullable = true)
-	private String arquivoTCCBanca;
+//	@Column(name = "arquivoTCCBanca", length = 255, nullable = true)
+//	private String arquivoTCCBanca;
 
 	/**
 	 * Campo com o arquivo final do TCC. Relaciona com a coluna
 	 * {@code arquivoTCCFinal} do banco através da anotação
 	 * {@code @Column(name = "arquivoTCCFinal", length = 255, nullable = true)}.
 	 */
-	@Column(name = "arquivoTCCFinal", length = 255, nullable = true)
-	private String arquivoTCCFinal;
+	@Column(name = "arquivoTCC", length = 255, nullable = true)
+	private String arquivoTCC;
+//	@Column(name = "arquivoTCCFinal", length = 255, nullable = true)
+//	private String arquivoTCCFinal;
 
 	/**
 	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
@@ -96,8 +113,8 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code @Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)}
 	 * .
 	 */
-	@Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)
-	private String arquivoExtraTCCBanca;
+//	@Column(name = "arquivoExtraTCCBanca", length = 255, nullable = true)
+//	private String arquivoExtraTCCBanca;
 
 	/**
 	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
@@ -105,8 +122,19 @@ public class TCC implements Serializable,Comparable<TCC> {
 	 * {@code @Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)}
 	 * .
 	 */
-	@Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)
-	private String arquivoExtraTCCFinal;
+	@Column(name = "arquivoExtraTCC", length = 255, nullable = true)
+	private String arquivoExtraTCC;
+//	@Column(name = "arquivoExtraTCCFinal", length = 255, nullable = true)
+//	private String arquivoExtraTCCFinal;
+	
+	/**
+	 * Campo com o arquivo extra final do TCC. Relaciona com a coluna
+	 * {@code arquivoDocumentacao} do banco através da anotação
+	 * {@code @Column(name = "arquivoDocumentacao", length = 255, nullable = true)}
+	 * .
+	 */
+	@Column(name = "arquivoDocumentacao", length = 255, nullable = true)
+	private String arquivoDocumentacao;
 
 	/**
 	 * Campo com a sala de defesa. Relaciona com a coluna {@code salaDefesa} do
@@ -172,17 +200,28 @@ public class TCC implements Serializable,Comparable<TCC> {
 	@Column(name = "projeto", nullable = false) 
 	private boolean projeto;
 	
+	/**
+	 * Compo que indica se os e-mails de alerta já foram enviados
+	 * # 0 => nenhum e-mail de aviso enviado
+	 * # 1 => e-mail de aviso de prazo para finalização do projeto enviado
+	 * # 2 => e-mail de aviso de prazo para informar dados de defesa enviado
+	 * # 3 => e-mail de aviso de prazo para colocar trabalho para banca no sistema enviado
+	 * # 4 => e-mail de aviso de prazo para colocar versão final do trabalho no sistema enviado
+	 */
+	@Column(name = "emailsAlertaEnviados")
+	private int emailsAlertaEnviados;
+	
 	@Column(name = "entregouDoc", nullable = false) 
 	private boolean entregouDoc;
 	
 	@Column(name = "trabFinal", nullable = false) 
 	private boolean trabFinal;
 	
-	@Column(name = "arqProjFinal", length = 255, nullable = true)
-	private String arqProjFinal;
-	
-	@Column(name = "arqExtraProjFinal", length = 255, nullable = true)
-	private String arqExtraProjFinal;
+//	@Column(name = "arqProjFinal", length = 255, nullable = true)
+//	private String arqProjFinal;
+//	
+//	@Column(name = "arqExtraProjFinal", length = 255, nullable = true)
+//	private String arqExtraProjFinal;
 
 	/**
 	 * Relacionamento N para 1 entre TCC e Usuario. Mapeando {@link Usuario} na
@@ -247,6 +286,11 @@ public class TCC implements Serializable,Comparable<TCC> {
 	@Column(name = "certificadoDigital", length = 255, nullable = true)
 	private String certificadoDigital;
 	
+	@Column(name = "justificativaReprovacao", nullable = true)
+	private String justificativaReprovacao;
+	
+	@Column(name = "status", nullable = true)
+	private int status;
 
 	public TCC() {
 
@@ -261,8 +305,10 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.subNomeTCC = subNomeTCC;
 		this.resumoTCC = resumoTCC;
 		this.palavrasChave = palavrasChave;
-		this.arquivoTCCFinal = arquivoTCCFinal;
-		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+//		this.arquivoTCCFinal = arquivoTCCFinal;
+//		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+		this.arquivoTCC = arquivoExtraTCCFinal;
+		this.arquivoExtraTCC = arquivoExtraTCCFinal;
 		this.dataEnvioFinal = dataEnvioFinal;
 		this.aluno = aluno;
 		this.orientador = orientador;
@@ -292,37 +338,67 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.subNomeTCC = subNomeTCC;
 	}
 
-	public String getArquivoTCCBanca() {
-		return arquivoTCCBanca;
+//	public String getArquivoTCCBanca() {
+//		return arquivoTCCBanca;
+//	}
+
+	public int getEmailsAlertaEnviados() {
+		return emailsAlertaEnviados;
 	}
 
-	public void setArquivoTCCBanca(String arquivoTCCBanca) {
-		this.arquivoTCCBanca = arquivoTCCBanca;
+	public void setEmailsAlertaEnviados(int emailsAlertaEnviados) {
+		this.emailsAlertaEnviados = emailsAlertaEnviados;
 	}
 
-	public String getArquivoTCCFinal() {
-		return arquivoTCCFinal;
+//	public void setArquivoTCCBanca(String arquivoTCCBanca) {
+//		this.arquivoTCCBanca = arquivoTCCBanca;
+//	}
+//
+//	public String getArquivoTCCFinal() {
+//		return arquivoTCCFinal;
+//	}
+//
+//	public void setArquivoTCCFinal(String arquivoTCCFinal) {
+//		this.arquivoTCCFinal = arquivoTCCFinal;
+//	}
+//
+//	public String getArquivoExtraTCCBanca() {
+//		return arquivoExtraTCCBanca;
+//	}
+//
+//	public void setArquivoExtraTCCBanca(String arquivoExtraTCCBanca) {
+//		this.arquivoExtraTCCBanca = arquivoExtraTCCBanca;
+//	}
+//
+//	public String getArquivoExtraTCCFinal() {
+//		return arquivoExtraTCCFinal;
+//	}
+	public void setArquivoExtraTCC(String arquivoExtraTCC) {
+		this.arquivoExtraTCC= arquivoExtraTCC;
 	}
 
-	public void setArquivoTCCFinal(String arquivoTCCFinal) {
-		this.arquivoTCCFinal = arquivoTCCFinal;
+	public String getArquivoExtraTCC() {
+		return arquivoExtraTCC;
+	}
+	public void setArquivoTCC(String arquivoTCC) {
+		this.arquivoTCC= arquivoTCC;
+	}
+	
+	public String getArquivoTCC() {
+		return arquivoTCC;
 	}
 
-	public String getArquivoExtraTCCBanca() {
-		return arquivoExtraTCCBanca;
+	public String getArquivoDocumentacao() {
+		return arquivoDocumentacao;
 	}
 
-	public void setArquivoExtraTCCBanca(String arquivoExtraTCCBanca) {
-		this.arquivoExtraTCCBanca = arquivoExtraTCCBanca;
+	public void setArquivoDocumentacao(String arquivoDocumentacao) {
+		this.arquivoDocumentacao = arquivoDocumentacao;
 	}
 
-	public String getArquivoExtraTCCFinal() {
-		return arquivoExtraTCCFinal;
-	}
-
-	public void setArquivoExtraTCCFinal(String arquivoExtraTCCFinal) {
-		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
-	}
+//	public void setArquivoExtraTCCFinal(String arquivoExtraTCCFinal) {
+//		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
+//	}
 
 	public String getSalaDefesa() {
 		return salaDefesa;
@@ -438,10 +514,20 @@ public class TCC implements Serializable,Comparable<TCC> {
 	
 	public boolean isProjeto() {
 		return projeto;
-		}
+	}
 
 	public void setProjeto(boolean projeto) {
 		this.projeto = projeto;
+	}
+	
+	public int getStatus()
+	{
+		return this.status;
+	}
+	
+	public void setStatus(int status)
+	{
+		this.status = status;
 	}
 
 	public String getStatusTCC()
@@ -477,21 +563,21 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.entregouDoc = entregouDoc;
 	}
 
-	public String getArqProjFinal() {
-		return arqProjFinal;
-	}
-
-	public void setArqProjFinal(String arqProjFinal) {
-		this.arqProjFinal = arqProjFinal;
-	}
-
-	public String getArqExtraProjFinal() {
-		return arqExtraProjFinal;
-	}
-
-	public void setArqExtraProjFinal(String arqExtraProjFinal) {
-		this.arqExtraProjFinal = arqExtraProjFinal;
-	}
+//	public String getArqProjFinal() {
+//		return arqProjFinal;
+//	}
+//
+//	public void setArqProjFinal(String arqProjFinal) {
+//		this.arqProjFinal = arqProjFinal;
+//	}
+//
+//	public String getArqExtraProjFinal() {
+//		return arqExtraProjFinal;
+//	}
+//
+//	public void setArqExtraProjFinal(String arqExtraProjFinal) {
+//		this.arqExtraProjFinal = arqExtraProjFinal;
+//	}
 
 	public boolean isTrabFinal() {
 		return trabFinal;
@@ -525,6 +611,14 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.certificadoDigital = certificadoDigital;
 	}
 	
+	public String getJustificativaReprovacao() {
+		return justificativaReprovacao;
+	}
+	
+	public void setJustificativaReprovacao(String justificativaReprovacao) {
+		this.justificativaReprovacao = justificativaReprovacao;
+	}
+	
 	public List<Usuario> getProfessoresParticipacoes() {
 		List<Usuario> usuarioParticipacoes = new ArrayList<>();
 		for (Participacao participacao : getParticipacoes()) {
@@ -545,4 +639,26 @@ public class TCC implements Serializable,Comparable<TCC> {
 	{
 		return (new TCCBusiness()).isTarefasDentroDoPrazo(this);
 	}
+
+	/*
+	 * Retorna o campo no banco de dados que diz
+	 * se o e-mail de alerta foi enviado
+	 */
+	public boolean isEmailAlertaPrazoProjetoSubmetidoEnviado() {
+		return this.emailsAlertaEnviados > 0;
+	}
+	public boolean isEmailAlertaPrazoDadosDefesaEnviado() {
+		return this.emailsAlertaEnviados > 1;
+	}
+//	public boolean isEmailAlertaPrazoTrabalhoEnviado() {
+//		return this.emailsAlertaEnviados > 2;
+//	}
+	public boolean isEmailAlertaPrazoTrabalhoFinalEnviado() {
+		return this.emailsAlertaEnviados > 2;
+	}
+
+	public void setEmailAlertaEnviado(int emailAlerta) {
+		this.emailsAlertaEnviados = emailAlerta;
+	}
+	
 }

@@ -12,11 +12,11 @@ HIBERNATE.DRIVE = com.mysql.jdbc.Driver
 HIBERNATE.DIALECT = org.hibernate.dialect.MySQLDialect
 
 
-HIBERNATE.DB = jdbc:mysql://localhost/tcc_web
+HIBERNATE.DB = jdbc:mysql://localhost/tcc_web_test?dontTrackOpenResources=true
 
-HIBERNATE.USER = root
+HIBERNATE.USER = caio
 
-HIBERNATE.PASS = 1234
+HIBERNATE.PASS = admin
 
 
 
@@ -28,14 +28,14 @@ INTEGRA.APPTOKEN = 83c603028e89e447dadf439c5bbb2b778af0980d
 
 # File Manager
 
-FILE.PATH = /tcc-web/
+FILE.PATH = /home/caio/workspaces/eclipse-workspace/tcc-web/
 
 
 
 # Mail
 
-MAIL.USERNAME = sistema.ice.ufjf@gmail.com
+MAIL.USERNAME = 27d9480699f724
 
-MAIL.PASS = Si1stema
+MAIL.PASS = cfd953f37d988e
 
-MAIL.FROM = sistema.ice.ufjf@gmail.com
+MAIL.FROM = reisdima@hotmail.com

@@ -14,10 +14,11 @@ import br.ufjf.tcc.model.Participacao;
 
 public class CartaParticipacaoBanca {
 	private static final String PASTA_ARQUIVOS_TEMP = ConfHandler.getConf("FILE.PATH") + "arquivosTemporarios/";
-	private static final String PASTA_COM_TEMPLATE = ConfHandler.getConf("FILE.PATH") + "templatePDF/";
+	private static final String PASTA_COM_TEMPLATE = ConfHandler.getConf("FILE.PATH") + "Atas/";
 	private static final String TEMPLATE = "CartaParticipacaoBanca";
 	
 	private String nomeArquivo;
+	private String camimhoArquivo;
 	
 	public CartaParticipacaoBanca() {
 	}
@@ -26,10 +27,10 @@ public class CartaParticipacaoBanca {
 			String nomeCoorientador, String tituloTrabalho, String dataDefesa, List<Participacao> membrosDaBanca, String siapeProfessor, String certificadoDigital)
 	{
 		String template = PASTA_COM_TEMPLATE + TEMPLATE + ".pdf";
-		String Arquivo_Saida = PASTA_ARQUIVOS_TEMP + TEMPLATE + "-" + idTCC + "-" + siapeProfessor + ".pdf";
 		this.nomeArquivo = TEMPLATE + "-" + idTCC + "-" + siapeProfessor + ".pdf";
+		this.camimhoArquivo = PASTA_ARQUIVOS_TEMP + nomeArquivo;
 		try {
-			FileOutputStream saida = new FileOutputStream(Arquivo_Saida);
+			FileOutputStream saida = new FileOutputStream(PASTA_ARQUIVOS_TEMP + nomeArquivo);
 			PdfReader leitor = new PdfReader(new PdfReader(new FileInputStream(template)));
 			PdfStamper stamper = new PdfStamper(leitor, saida);
 			AcroFields form = stamper.getAcroFields();
@@ -68,9 +69,15 @@ public class CartaParticipacaoBanca {
 		}
 	}
 	
-	public String obterNomeArquivo() {
+	public String getNomeArquivo() {
 		if(this.nomeArquivo != null)
 			return this.nomeArquivo;
+		return "";
+	}
+	
+	public String getCaminhoArquivo() {
+		if(this.camimhoArquivo != null)
+			return this.camimhoArquivo;
 		return "";
 	}
 	

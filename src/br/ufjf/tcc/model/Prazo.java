@@ -20,13 +20,19 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name = "Prazo")
+@Table(name = "prazo")
 public class Prazo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	//Prazos do processo do TCC
-	public static final int ENTREGA_BANCA = 1, DEFESA = 2, ENTREGA_FINAL = 3, FIM_SEMESTRE = 4, PRAZO_PROJETO = 0;
+	/*
+	 * PRAZ0_PROJETO: Data limite para enviar o projeto
+	 * ENTREGA_BANCA: Data limite para entregar versão do trabalho para a banca e informar os dados da defesa
+	 * DEFESA: Data limite para defesa do trabalho
+	 * ENTREGA_FINAL: Data limite para submeter a versão final do trabalho e entregar na coordenação 
+	 * as fichas de avaliação da banca e a ata de defesa
+	 */
+	public static final int PRAZO_PROJETO = 0, ENTREGA_BANCA = 1, DEFESA = 2, ENTREGA_FINAL = 3, FIM_SEMESTRE = 4;
 
 	/**
 	 * Campo com ID do Prazo. Relaciona com a coluna {@code idPrazo} do banco e

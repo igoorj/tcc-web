@@ -1,6 +1,7 @@
 package br.ufjf.tcc.persistent.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Transaction;
@@ -18,20 +19,43 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT c FROM CalendarioSemestre AS c LEFT JOIN FETCH c.prazos AS p WHERE c.curso = :curso AND c.finalSemestre >= :date ORDER BY p.tipo");
+							"SELECT c FROM CalendarioSemestre AS c "
+							+ "LEFT JOIN FETCH c.prazos AS p "
+							+ "WHERE c.curso = :curso AND c.finalSemestre >= :date ORDER BY p.tipo");
 			query.setParameter("date", date);
 			query.setParameter("curso", curso);
 			
 			currentCalendar = (CalendarioSemestre) query.uniqueResult();
 			
 			getSession().close();
-			return currentCalendar;
+			return currentCalendar;	
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return currentCalendar;
+	}
+	
+	/* 
+	 * Retorna os calendários ativos de todos cursos
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CalendarioSemestre> getCalendarsByDate(Date date) {
+		try {
+			Query query = getSession().createQuery(
+						   "SELECT c FROM CalendarioSemestre AS c "
+						+ "JOIN FETCH c.curso "
+						+ 	"WHERE c.finalSemestre >= :date "
+					);
+			query.setParameter("date", date);
+			List<CalendarioSemestre> currentCalendars = (List<CalendarioSemestre>) query.list();
+			getSession().close();
+			if(currentCalendars != null)
+				return currentCalendars;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public CalendarioSemestre getCalendarById(int id) {
@@ -47,7 +71,6 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			getSession().close();
 			return currentCalendar;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -59,7 +82,9 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT c FROM CalendarioSemestre AS c WHERE c = :calend");
+							"SELECT c FROM CalendarioSemestre AS c " +
+							"LEFT JOIN FETCH c.prazos " +
+							"WHERE c = :calend");
 			query.setParameter("calend", tcc.getCalendarioSemestre());
 			
 			currentCalendar = (CalendarioSemestre) query.uniqueResult();
@@ -68,7 +93,6 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			getSession().close();
 			return currentCalendar;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -92,7 +116,6 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			getSession().close();
 			return true;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

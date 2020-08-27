@@ -22,7 +22,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-@Table(name = "Participacao")
+@Table(name = "participacao")
 public class Participacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -81,7 +81,14 @@ public class Participacao implements Serializable {
 	private TCC tcc;
 	
 	@Column(name = "suplente", length = 4)
-	private int suplente;
+	private boolean suplente;
+	
+	/**
+	 * Campo preenchido pelo aluno para indicar se o membro estava presente
+	 * no dia da defesa do tcc
+	 */
+	@Column(name = "participou", nullable = false)
+	private boolean participou;
 
 	public int getIdParticipacao() {
 		return idParticipacao;
@@ -123,16 +130,24 @@ public class Participacao implements Serializable {
 		this.tcc = tcc;
 	}
 
-	public int getSuplente() {
+	public boolean getSuplente() {
 		return suplente;
 	}
 
-	public void setSuplente(int suplente) {
+	public void setSuplente(boolean suplente) {
 		this.suplente = suplente;
 	}
 	
 	public boolean isSuplente() {
-		return getSuplente()==1;
+		return getSuplente();
+	}
+
+	public boolean isParticipou() {
+		return participou;
+	}
+
+	public void setParticipou(boolean participou) {
+		this.participou = participou;
 	}
 
 }

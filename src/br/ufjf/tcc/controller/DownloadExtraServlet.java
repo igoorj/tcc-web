@@ -33,7 +33,7 @@ public class DownloadExtraServlet extends HttpServlet {
 			tcc = tccBusiness.getTCCById(Integer.parseInt(tccId));
 		}
 		
-		File file = FileManager.getFile(tcc.getArquivoExtraTCCFinal());
+		File file = FileManager.getFile(tcc.getArquivoExtraTCC());
 		
 		byte[] bytes = null;
 		

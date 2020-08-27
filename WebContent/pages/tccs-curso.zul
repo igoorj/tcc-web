@@ -36,17 +36,21 @@
 									</template>
 								</combobox>
 								
-								<label value="Tipos: " visible="true" />
+								<label style="margin-top:6px" value="Tipos: " visible="true" />
 																
 								<div visible="true">
-									<combobox value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
+									<combobox id="status" value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
 									    <comboitem label="Todos" />
 									    <comboitem label="Projetos"/>
 									    <comboitem label="Trabalhos"/>
 									    <comboitem label="Projetos incompletos"/>
 									    <comboitem label="Projetos aguardando aprovação"/>
+									    <comboitem label="Projetos reprovados"/>
 									    <comboitem label="Trabalhos incompletos"/>
-									    <comboitem label="Trabalhos aguardando aprovação"/>
+									    <comboitem label="Trabalhos enviados para banca"/>
+									    <comboitem label="Trabalhos aguardando aprovação de orientador"/>
+									    <comboitem label="Trabalhos aguardando aprovação de coordenador"/>
+									    <comboitem label="Trabalhos reprovados"/>
 									    <comboitem label="Trabalhos Finalizados"/>									   
 									    
 									</combobox>
@@ -59,7 +63,7 @@
 									spacing="3px" />
 								
 								<button label="Filtrar" width="60px"
-									onClick="@command('filtra')" />
+									onClick="@command('filtraProjeto', item=status.selectedIndex)" />
 								<image src="/img/help.gif"
 									tooltip="filterHelp" style="cursor: help" />
 							</hlayout>
@@ -71,8 +75,7 @@
 			</auxhead>
 			<columns > 
 				<column hflex="2"  >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
+					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de defesa" /> 
 				</column>
 				<column hflex="2" >
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de" /> 
@@ -133,7 +136,7 @@
 					<label value="@load(each.salaDefesa)" />
 					<label value="@load(each.aluno.nomeUsuario)" />
 					<label value="@load(each.orientador.nomeUsuario)" />
-					<label value="@load(each.dataEnvioFinal eq null? vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
+					<label value="@load(each.dataEnvioFinal eq null ? (each.dataEnvioBanca eq null ? '' : vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16)) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
 					<label value="@load(each.statusTCC)" />
 					<div align="center" >
 					<checkbox disabled="@load(each.statusTCC eq 'Aprovado'? 'true' : 'false')" style="center" checked="@load(each.entregouDoc)" onCheck="@command('checkEnviouDoc',tcc=each)" />
@@ -151,7 +154,8 @@
 	<popup id="filterHelp">
 		<html>
 			<![CDATA[ Permite filtrar a lista de Trabalhos  com os seguintes filtros:
-			<ul><li>Semestre atual ou todos os semstres;</li> <li>Estados (PI,PAA,TI,TAA);</li>
+			<ul><li>Semestre atual ou todos os semstres;</li> 
+			<li>Estados (PI, PAA, PR, TI, TEPB, TAAO, TAAC, TRO, TRC, APROVADO);</li>
 			<ul>]]>
 		</html>
 	</popup>
@@ -160,9 +164,15 @@
 		<html>
 			<![CDATA[ Status:
 			<ul><li>PI - Projeto incompleto</li>
-			<li>TI - Trabalho incompleto</li>
 			<li>PAA - Projeto aguardando aprovação</li>
-			<li>TAA - Trabalho aguardando aprovação</li>
+			<li>PR - Projeto reprovado</li>
+			<li>TI - Trabalho incompleto</li>
+			<li>TEPB - Trabalho enviado para banca</li>
+			<li>TAAO - Trabalho aguardando aprovação de orientador</li>
+			<li>TAAC - Trabalho aguardando aprovação de coordenador</li>
+			<li>TRO - Trabalho reprovado por orientador</li>
+			<li>TRC - Trabalho reprovado por coordenador</li>
+			<li>Aprovado - Trabalhos finalizados</li>
 			<ul>]]>
 		</html>
 	</popup>

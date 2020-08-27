@@ -46,7 +46,7 @@ public class HomeAlunoController extends CommonsController {
 			
 			prazos = getCurrentCalendar().getPrazos();
 			
-			TCC tccUsuario = (new TCCBusiness()).getCurrentTCCByAuthor(getUsuario(), getCurrentCalendar(getUsuario().getCurso()));
+//			TCC tccUsuario = (new TCCBusiness()).getCurrentTCCByAuthor(getUsuario(), getCurrentCalendar(getUsuario().getCurso()));
 //			if(tccUsuario!=null)
 //			if(tccUsuario.isProjeto())
 //			{
@@ -93,6 +93,22 @@ public class HomeAlunoController extends CommonsController {
 
 	public List<String> getInfos() {
 		List<String> infos = new ArrayList<String>();
+		
+		TCC tcc = new TCCBusiness().getCurrentNotFinishedTCCByAuthor(getUsuario(), getCurrentCalendar(getUsuario().getCurso()));
+		if (tcc != null) {
+			if (tcc.getStatus() == TCC.PR) {
+				infos.add("Seu projeto foi reprovado, façaa as respectivas correções conforme a justificativa: "
+						+ tcc.getJustificativaReprovacao());
+			}
+			else if (tcc.getStatus() == TCC.TRO) {
+				infos.add("Seu trabalho foi reprovado pelo orientador, faça as respectivas correções conforme a justificativa: "
+						+ tcc.getJustificativaReprovacao());
+			}
+			else if (tcc.getStatus() == TCC.TRC) {
+				infos.add("Seu trabalho foi reprovado pelo coordenador de curso, faça as respectivas correções conforme a justificativa: "
+						+ tcc.getJustificativaReprovacao());
+			}
+		}
 
 		for (Aviso aviso : (new AvisoBusiness()).getAvisosByCurso(getUsuario()
 				.getCurso()))
@@ -100,9 +116,10 @@ public class HomeAlunoController extends CommonsController {
 
 		TCCBusiness tccBusiness = new TCCBusiness();
 		if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0
-				&& tccBusiness.getMissing(getUsuario().getTcc().get(0), true)) {
+				&& !tccBusiness.validateTCC(tcc, tcc.getStatus())) {
 			infos.addAll(tccBusiness.getErrors());
 		}
+		
 		return infos;
 	}
 

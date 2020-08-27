@@ -28,7 +28,7 @@ public class ListaPublicaController extends CommonsController {
 	private List<Curso> cursos = this.getAllCursos();
 	private List<String> years;
 	private String emptyMessage = "Selecione um curso na caixa acima.";
-	private TCCBusiness tccB= new TCCBusiness();
+	private TCCBusiness tccB = new TCCBusiness();
 	private List<TCC> tccsByCurso = tccB.getAllFinishedTCCs();
 	private List<TCC> filterTccs = tccsByCurso;
 	private String filterString = "";
@@ -192,8 +192,7 @@ public class ListaPublicaController extends CommonsController {
 
 	@Command
 	public void downloadPDF(@BindingParam("tcc") TCC tcc) {
-		InputStream is = FileManager
-				.getFileInputSream(tcc.getArquivoTCCFinal());
+		InputStream is = FileManager.getFileInputSream(tcc.getArquivoTCC());
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		
@@ -205,10 +204,8 @@ public class ListaPublicaController extends CommonsController {
 
 	@Command
 	public void downloadExtra(@BindingParam("tcc") TCC tcc) {
-		if (tcc.getArquivoExtraTCCFinal() != null
-				&& tcc.getArquivoExtraTCCFinal() != "") {
-			InputStream is = FileManager.getFileInputSream(tcc
-					.getArquivoExtraTCCFinal());
+		if (tcc.getArquivoExtraTCC() != null && tcc.getArquivoExtraTCC() != "") {
+			InputStream is = FileManager.getFileInputSream(tcc.getArquivoExtraTCC());
 			if (is != null)
 				Filedownload.save(is, "application/x-rar-compressed",
 						tcc.getNomeTCC() + ".rar");

@@ -1,6 +1,7 @@
 package br.ufjf.tcc.business;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -29,8 +30,7 @@ public class CalendarioSemestreBusiness {
 		errors.clear();
 
 		validateName(calendarioSemestre.getNomeCalendarioSemestre());
-		validateDates(calendarioSemestre.getFinalSemestre(),
-				calendarioSemestre.getCurso());
+		validateDates(calendarioSemestre);
 
 		return errors.size() == 0;
 	}
@@ -40,12 +40,16 @@ public class CalendarioSemestreBusiness {
 			errors.add("É necessário informar o nome do calendário;\n");
 	}
 
-	public void validateDates(Date end, Curso curso) {
-		if (end == null)
+	public void validateDates(CalendarioSemestre calendario) {
+		if (calendario.getFinalSemestre() == null)
 			errors.add("É necessário informar a data final;\n");
-		else if (new DateTime(end).isBeforeNow())
+		else if (new DateTime(calendario.getFinalSemestre()).isBeforeNow())
 			errors.add("O final do semestre deve ser em uma data futura;\n");
-
+		Calendar dataFinal = Calendar.getInstance();
+		dataFinal.setTime(calendario.getFinalSemestre());
+		dataFinal.set(Calendar.HOUR_OF_DAY, 23);
+		dataFinal.set(Calendar.MINUTE, 59);
+		calendario.setFinalSemestre(dataFinal.getTime());
 	}
 
 	public boolean save(CalendarioSemestre calendarioSemestre) {
@@ -67,5 +71,9 @@ public class CalendarioSemestreBusiness {
 	
 	public boolean updateFimSemCalendarById(Date fim,int id) {
 		return calendarioSemestreDAO.updateFimSemCalendarById(fim, id);
+	}
+	
+	public List<CalendarioSemestre> getCurrentCalendars(){
+		return calendarioSemestreDAO.getCalendarsByDate(new Date());
 	}
 }

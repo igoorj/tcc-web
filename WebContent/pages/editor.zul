@@ -65,11 +65,11 @@
 							<textbox
 								value="@load(vm.tcc.orientador.nomeUsuario)" hflex="1"
 								readonly="true" />
-							<button id="butOrientador" label="Alterar" visible="@load(vm.canChangeOrientacao)"
+							<button id="butOrientador" label="Alterar" if="${vm.canChangeOrientacao}"
 								onClick="@command('changeOrientador', window=changeOrientacao)" />
 						</hlayout>
 						
-						<div visible="@load(vm.canChangeOrientacao)"
+						<div if="${vm.canChangeOrientacao}"
 							style="text-align:center;margin-left:20px">
 							<label
 								value="@load(not vm.hasCoOrientador ? 'adicionar co-orientador' : 'remover co-orientador')"
@@ -85,13 +85,13 @@
 								value="@load(vm.tcc.coOrientador.nomeUsuario)" hflex="1"
 								readonly="true" />
 							<button id="butCoOrientador" label="Alterar"
-								onClick="@command('changeCoOrientador', window=changeOrientacao)" visible="@load(vm.canChangeOrientacao)" />
+								onClick="@command('changeCoOrientador', window=changeOrientacao)" if="${vm.canChangeOrientacao}" />
 						</hlayout>
 					</vlayout>
 				</groupbox>
 
 				<groupbox id="bancaForm" mold="3d" width="100%"
-					visible="@load(not vm.userSecretaria and not vm.project)" open="false">
+					if="${not vm.userSecretaria and not vm.project}" open="false">
 					<caption label="Banca Examinadora" />
 					<vlayout hflex="1" style="margin:15px">
 					
@@ -137,6 +137,7 @@
 								<column label="Nome do examinador" />
 								<column label="Ação" width="60px" />
 								<column label="Suplente" width="60px" />
+								<column label="Participou?" width="80px" if="${vm.canChangeParticipacao}"/>
 								
 							</columns>
 							
@@ -146,14 +147,17 @@
 										value="@load(each.professor.nomeUsuario)" />
 									<button image="/img/delete.png"
 										onClick="@command('removeFromBanca', participacao=each)" />
-									<radio style="padding:10px"  checked="@load(each.isSuplente())"
-									 id="@load(each.professor.idUsuario)" value="@load(each)" radiogroup="banca"  />
+									<checkbox style="padding:10px"  checked="@load(each.isSuplente())"
+									  value="@load(each)" 
+									 onCheck="@command('onCheckSuplente', membro=self.value, checked=self.checked)" />
+									<checkbox style="padding:10px"  checked="@load(each.isParticipou())"
+									value="@load(each)" if="${vm.canChangeParticipacao}"
+									onCheck="@command('onCheckParticipou', membro=self.value, checked=self.checked)" />
 								</row>
 							</template>
 						</grid>
 					</vlayout>
 				</groupbox>
-
 				<groupbox id="tccForm" mold="3d" width="100%"
 					closable="@load(vm.userSecretaria)">
 					<caption label="Trabalho" />
@@ -197,6 +201,7 @@
 							<label value="Data de Apresentação: "
 								style="margin-top:5px" />
 							<datebox
+								onChange="@command('validarDataApresentacao', datebox=self)"
 								value="@bind(vm.tcc.dataApresentacao)" format="dd/MM/yyyy HH:mm"
 								hflex="1" />
 						</hlayout>
@@ -227,15 +232,38 @@
 								label="Selecionar arquivo (PDF)..." upload="true,maxsize=204800"
 								onUpload="@command('upload', button=self, evt=event)" />
 							<button hflex="1"
-								label="Selecionar arquivo extra..." upload="true,maxsize=204800"
+								label="Selecionar arquivo extra (ZIP)..." upload="true,maxsize=204800"
 								visible="@load(not vm.project)"
 								onUpload="@command('extraUpload', button=self, evt=event)" />
 						</hlayout>
+						<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitDocs()}">
+							<button hflex="1"
+								label="Selecionar arquivo de documentação..." upload="true,maxsize=204800"
+								onUpload="@command('uploadDocumentacao', button=self, evt=event)" />
+						</hlayout>
 					</vlayout>
 				</groupbox>
-				<div align="center" style="margin:15px" >
-					<button label="Atualizar"
-						onClick="@command('submit')" width="100%" height="30px"/>
+				<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitTCC}">
+					<div hflex="1" align="center" style="margin:15px" >
+						<button label="Atualizar"
+							onClick="@command('updateTCC')" width="100%" height="30px"/>
+					</div>
+					<div hflex="1" align="center" style="margin:15px" >
+						<button label="Submeter"
+							onClick="@command('submit')" width="100%" height="30px"/>
+					</div>
+				</hlayout>
+				<hlayout style="margin:5px;line-height:20px;text-align: center" unless="${vm.canSubmitTCC}">
+					<label value="@load(vm.getMensagem())" />
+				</hlayout>
+				
+				<div if="${vm.exibirBaixarDocumentacao()}">
+					<label value="Arquivo de documentação" style="font-size: 14px; font-weight: bold; margin-top: 10px" />
+					<div
+						style="cursor: pointer;display:inline;position:relative"
+						onClick="@command('downloadDocumentacao')">
+						<image src="/img/rar.png" />
+					</div>
 				</div>
 
 			</div>

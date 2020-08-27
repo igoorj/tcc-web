@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.BaseFont;
@@ -20,6 +22,8 @@ import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 
 public abstract class Ata {
+	
+	private Logger logger = Logger.getLogger(Ata.class);
 	
 	protected static int qtAvaliador;
 
@@ -88,7 +92,7 @@ public abstract class Ata {
 		}
 		
 		for (Participacao p : tcc.getParticipacoes()) {
-			if (p.getSuplente() != 1) {
+			if (!p.getSuplente()) {
 				part.add(p);
 			}
 		}
@@ -114,7 +118,7 @@ public abstract class Ata {
 	}
 
 	protected void iniciarParametros() throws Exception {
-		
+		logger.info("Iniciando parâmetros...");
 		String ARQUIVO_SAIDA = PASTA_ARQUIVOS_TEMP + FICHA_AVALIACAO_FINAL + idAluno + EXTENSAO_PDF;
 		template = getPathTemplate();
 		saida = new FileOutputStream(ARQUIVO_SAIDA);
@@ -122,6 +126,7 @@ public abstract class Ata {
 		stamper = new PdfStamper(leitor, saida);
 		bfTextoSimples = BaseFont.createFont(BaseFont.TIMES_BOLD, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
 		form = stamper.getAcroFields();
+		logger.info("Parâmetros iniciados");
 
 	}
 	
@@ -149,8 +154,11 @@ public abstract class Ata {
 	}
 	
 	public boolean existe(){
+		logger.info("Verificando se arquivo da ata existe...");
 		if(tcc==null)
 			return false;
+		logger.info("Path arquivoFichaAvaliacaoIndividual: " + PASTA_COM_TEMPLATE_ATAS+FICHA_AVALIACAO_INDIVIDUAL+tcc.getAluno().getCurso().getCodigoCurso()+EXTENSAO_PDF);
+		logger.info("Path arquivoAta: " + PASTA_COM_TEMPLATE_ATAS+TEMPLATE_SEM_COORIENTADOR+tcc.getAluno().getCurso().getCodigoCurso()+EXTENSAO_PDF);
 		
 		File arquivoAta=null;
 		File arquivoFichaAvaliacaoIndividual = null;
@@ -167,18 +175,23 @@ public abstract class Ata {
 		}
 		
 		if(arquivoAta!=null && arquivoAta.exists() 
-				&& arquivoFichaAvaliacaoIndividual!=null && arquivoFichaAvaliacaoIndividual.exists())
+				&& arquivoFichaAvaliacaoIndividual!=null && arquivoFichaAvaliacaoIndividual.exists()) {
+			
+			logger.info("Arquivo existe");
 			return true;		
+		}
+		logger.info("Arquivo não existe");
 		return false;
 	}
 	
 	public void deletarPDFsFichaGerados() {
-
+		logger.info("Deletando fichas gerados...");
 		for (int i = 0; i < qtAvaliador; i++) {
 			deleteFile(PASTA_ARQUIVOS_TEMP + idAluno + "-" + i + ".pdf");
 		}
 		deleteFile(PASTA_ARQUIVOS_TEMP + FICHA_AVALIACAO_FINAL + idAluno + ".pdf");
 		deleteFile(PASTA_ARQUIVOS_TEMP + FICHA_AVALIACAO_INDIVIDUAL + idAluno + ".pdf");
+		logger.info("Fichas deletadas");
 
 	}
 	

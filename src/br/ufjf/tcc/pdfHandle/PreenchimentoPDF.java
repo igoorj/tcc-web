@@ -133,7 +133,7 @@ public class PreenchimentoPDF {
 		}
 
 		for(int i=0;i<participacoes.size();i++){
-			if (participacoes.get(i).getSuplente() == 0) {
+			if (!participacoes.get(i).getSuplente()) {
 				avaliadores += "\n\n" + participacoes.get(i).getProfessor().getNomeUsuario();
 				avaliadores += "\n" + retirarNull(participacoes.get(i).getProfessor().getTitulacao());
 			}else{

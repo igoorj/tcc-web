@@ -8,12 +8,17 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.pdf.BaseFont;
 
+import org.apache.log4j.Logger;
+
+import br.ufjf.tcc.mail.EmailListener;
 import br.ufjf.tcc.model.TCC;
 
 public class AtaSCoorientador extends Ata {
+	private Logger logger = Logger.getLogger(AtaSCoorientador.class);
 	
 	public AtaSCoorientador(TCC tcc){
 		super(tcc);
+		logger.info("Criando ata Sem Coorientador.");
 	}
 
 	protected String getPathTemplate() throws Exception {
@@ -23,6 +28,7 @@ public class AtaSCoorientador extends Ata {
 	// PREENCHE AS PAGINAS QUE CONTEM INFORMAÇÕES
 	@Override
 	public void preencherPDF() throws Exception {
+		logger.info("Preenchendo pdf...");
 		iniciarParametros();
 		
 		over = stamper.getOverContent(leitor.getNumberOfPages()-1);
@@ -41,6 +47,7 @@ public class AtaSCoorientador extends Ata {
 
 		UniaoPDF.unirPDFsFichaAvaliacaoIndividual(qtAvaliador, idAluno);
 		UniaoPDF.unirFichaAvaliacaoFinalComFichaAvaliacaoIndividual(idAluno);
+		logger.info("PDF preenchido");
 
 	}
 
