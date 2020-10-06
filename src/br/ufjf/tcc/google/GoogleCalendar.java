@@ -35,7 +35,6 @@ public class GoogleCalendar {
 
 	private static final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-	private static final String TOKENS_DIRECTORY_PATH = "Documentos/bolsa_web/tcc-config/tokens/heder";
 
 	// Refer to the Java quickstart on how to setup the environment:
 	// https://developers.google.com/calendar/quickstart/java
@@ -161,60 +160,3 @@ public class GoogleCalendar {
 		return id;
 	}
 
-	/**
-	 * Creates an authorized Credential object.
-	 * 
-	 * @param HTTP_TRANSPORT The network HTTP Transport.
-	 * @return An authorized Credential object.
-	 * @throws IOException If the credentials.json file cannot be found.
-	 */
-//    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-//        // Load client secrets.
-//        InputStream in = GoogleCalendar.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-//        if (in == null) {
-//            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-//        }
-//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-//
-//        // Build flow and trigger user authorization request.
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-//                .setAccessType("offline")
-//                .build();
-//        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-//        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-//    }
-
-//	DateTime startDateTime = new DateTime(null);
-//	EventDateTime start = new EventDateTime()
-//	    .setDateTime(startDateTime)
-//	    .setTimeZone("America/Los_Angeles");
-//	DateTime endDateTime = new DateTime(null);
-//	EventDateTime end = new EventDateTime()
-//	    .setDateTime(endDateTime)
-//	    .setTimeZone("America/Los_Angeles");
-//	
-//
-//	String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=2"};
-//	event.setRecurrence(Arrays.asList(recurrence));
-//
-//	EventAttendee[] attendees = new EventAttendee[] {
-//	    new EventAttendee().setEmail("lpage@example.com"),
-//	    new EventAttendee().setEmail("sbrin@example.com"),
-//	};
-//	
-//
-//	EventReminder[] reminderOverrides = new EventReminder[] {
-//	    new EventReminder().setMethod("email").setMinutes(24 * 60),
-//	    new EventReminder().setMethod("popup").setMinutes(10),
-//	};
-//	Event.Reminders reminders = new Event.Reminders()
-//	    .setUseDefault(false)
-//	    .setOverrides(Arrays.asList(reminderOverrides));
-//	event.setReminders(reminders);
-//
-//	String calendarId = "primary";
-//	event = service.events().insert(calendarId, event).execute();
-//	System.out.printf("Event created: %s\n", event.getHtmlLink());
-}
