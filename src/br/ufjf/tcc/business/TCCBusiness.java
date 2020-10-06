@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import br.ufjf.tcc.google.GoogleCalendar;
 import br.ufjf.tcc.library.ConfHandler;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
@@ -793,5 +794,10 @@ public class TCCBusiness {
 		}
 
 		return tarefasDentroDoPrazo;
+	}
+	
+	public void marcarTcc(TCC tcc) {
+		GoogleCalendar calendar = new GoogleCalendar();
+		calendar.marcarDefesaTcc(tcc);
 	}
 }
