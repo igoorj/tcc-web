@@ -17,6 +17,7 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import br.ufjf.tcc.business.SalaBusiness;
 import br.ufjf.tcc.library.ConfHandler;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
@@ -77,8 +78,12 @@ public abstract class Ata {
 		this.mes = mes.toString();
 		this.ano = ano.toString();
 		this.hora = hora;
-		this.sala = tcc.getSalaDefesa() ;
-		
+		if(tcc.getSala() != null) {
+			this.sala = new SalaBusiness().getSalaByTcc(tcc).getNomeSala();
+		}
+		else {
+			this.sala = tcc.getSalaDefesa();
+		}
 		List<Participacao> part = new ArrayList<Participacao>();
 		Participacao orientador = new Participacao();
 		Participacao coorientador = new Participacao();

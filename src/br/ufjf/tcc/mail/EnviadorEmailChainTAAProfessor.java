@@ -19,7 +19,7 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho com defesa agendada - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) professor(a), ").breakLine().breakLine();
 			emailBuilder.appendMensagem("O aluno(a) <b>" + nomeAluno + "</b> informou os dados da sua defesa de trabalho de conclusão de curso.");
-			emailBuilder.appendMensagem(" O texto do trabalho está disponível no sistema de acompanhamento de monografias. Para ter acesso ao trabalho, basta logar no sistema*.").breakLine().breakLine();
+			emailBuilder.appendMensagem(" O texto do trabalho está disponível no sistema de acompanhamento de monografias. Para ter acesso ao trabalho, basta logar no sistema.").breakLine().breakLine();
 			emailBuilder.appendHtmlTopico("Informações do trabalho:").breakLine();
 			emailBuilder.appendHtmlTextBold("Título: ");
 			emailBuilder.appendMensagem(tcc.getNomeTCC()).breakLine();
@@ -39,10 +39,8 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			}
 			String dataFormatada = new DateTime(tcc.getDataApresentacao().getTime()).toString("dd/MM/yyyy - HH:mm");
 			emailBuilder.appendMensagem("<b>Data da apresentação:</b> "+dataFormatada).breakLine();
-			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSalaDefesa()).breakLine().breakLine();
+			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSala().getNomeSala()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema().breakLine().breakLine();
-			
-			emailBuilder.appendMensagem("<b> * Funcionalidade disponível somente para usuários do SIGA-UFJF. </b>").breakLine();
 			inserirDestinatarios(tcc.getProfessoresParticipacoes(), emailBuilder);
 //	}
 		return emailBuilder;

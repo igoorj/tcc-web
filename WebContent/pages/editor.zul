@@ -201,17 +201,24 @@
 							<label value="Data de Apresentação: "
 								style="margin-top:5px" />
 							<datebox
-								onChange="@command('validarDataApresentacao', datebox=self)"
+								onChange="@command('validarDataApresentacao')"
 								value="@bind(vm.tcc.dataApresentacao)" format="dd/MM/yyyy HH:mm"
 								hflex="1" />
 						</hlayout>
 
 						<hlayout style="margin:5px;line-height:20px;"
-							visible="@load(not vm.userSecretaria and not vm.project)">
+							if="${not vm.userSecretaria and not vm.project}">
 							<label value="Sala de Defesa: "
 								style="margin-top:5px" />
-							<textbox width="80px"
-								value="@bind(vm.tcc.salaDefesa)" maxlength="50" />
+								<combobox id="cmbSalas" hflex="1"
+								model="@load(vm.salas)" readonly="true"
+								value="@load(vm.tcc.sala.nomeSala)"
+								selectedItem="@bind(vm.tcc.sala)">
+								<template name="model">
+									<comboitem
+										label="@load(each.nomeSala)" />
+								</template>
+							</combobox>
 						</hlayout>
 
 						<label value="Resumo: " style="margin:5px;" />
@@ -257,14 +264,23 @@
 					<label value="@load(vm.getMensagem())" />
 				</hlayout>
 				
-				<div if="${vm.exibirBaixarDocumentacao()}">
-					<label value="Arquivo de documentação" style="font-size: 14px; font-weight: bold; margin-top: 10px" />
-					<div
+				<hlayout if="${vm.exibirBaixarDocumentacao()}">
+					<label value="Arquivo de documentação: " style="font-size: 14px; font-weight: bold; margin-top: 10px" />
+					<span 
 						style="cursor: pointer;display:inline;position:relative"
 						onClick="@command('downloadDocumentacao')">
+						<image src="/img/pdf.png" />
+					</span>
+				</hlayout>
+				
+				<hlayout if="${vm.exibirBaixarArquivoExtra()}">
+					<label value="Arquivo extra: " style="font-size: 14px; font-weight: bold; margin-top: 10px" />
+					<span 
+						style="cursor: pointer;display:inline;position:relative"
+						onClick="@command('downloadArquivoExtra')">
 						<image src="/img/rar.png" />
-					</div>
-				</div>
+					</span>
+				</hlayout>
 
 			</div>
 			<div style="float: left;width: 65%; height: 100%;">

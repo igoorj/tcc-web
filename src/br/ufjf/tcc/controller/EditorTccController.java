@@ -30,6 +30,7 @@ import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.DepartamentoBusiness;
 import br.ufjf.tcc.business.ParticipacaoBusiness;
+import br.ufjf.tcc.business.SalaBusiness;
 import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.library.FileManager;
@@ -44,6 +45,7 @@ import br.ufjf.tcc.mail.EnviadorEmailInformesDadosDefesa;
 import br.ufjf.tcc.mail.EnviadorEmailProjetoCriado;
 import br.ufjf.tcc.model.Departamento;
 import br.ufjf.tcc.model.Participacao;
+import br.ufjf.tcc.model.Sala;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.TipoUsuario;
 import br.ufjf.tcc.model.Usuario;
@@ -52,12 +54,14 @@ public class EditorTccController extends CommonsController {
 
 	private TCCBusiness tccBusiness = new TCCBusiness();
 	private Usuario tempUser = null;
+	private Sala tempSala = null;
 	private TCC tcc = null;
 	private String statusInicialTCC = "";
 	private Iframe iframe;
 	private InputStream tccFile = null, extraFile = null, docFile = null;
 	private AMedia pdf = null;
 	private List<Departamento> departamentos;
+	private List<Sala> salas;
 	private List<Usuario> orientadores = new ArrayList<Usuario>();
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
@@ -78,13 +82,7 @@ public class EditorTccController extends CommonsController {
 			TCC tempTCC = tccBusiness.getCurrentNotFinishedTCCByAuthor(getUsuario(), getCurrentCalendar());
 			// Cria novo projeto
 			if (tempTCC == null) {
-				tempTCC = new TCC();
-				tempTCC.setProjeto(true);
-				tempTCC.setAluno(getUsuario());
-				if(getUsuario().getOrientador() != null) {
-					tempTCC.setOrientador(getUsuario().getOrientador());
-				}
-				tempTCC.setCalendarioSemestre(getCurrentCalendar());
+				tempTCC = createTCC(getUsuario());
 			}
 			tcc = tempTCC;
 			statusInicialTCC = tcc.getStatusTCC();
@@ -124,11 +122,13 @@ public class EditorTccController extends CommonsController {
 			verificarAtrasado();
 
 		}
+		
 		if (tcc != null) {
 			hasCoOrientador = (tcc.getCoOrientador() != null);
 			hasSubtitulo = (tcc.getSubNomeTCC() != null);
 		}
 		departamentos = (new DepartamentoBusiness()).getAll();
+		salas = (new SalaBusiness()).getAll();
 	}
 
 	private boolean canEdit() {
@@ -161,6 +161,9 @@ public class EditorTccController extends CommonsController {
 			String projeto = tcc.isProjeto() ? "projeto" : "trabalho";
 			return "Você perdeu a data para envio do " + projeto;
 		}
+		else if(tcc.getStatus() == TCC.TEPB) {
+			return "Esperando data de apresentação";
+		}
 		return "Seu trabalho está sob avaliação.";
 	}
 	
@@ -178,6 +181,9 @@ public class EditorTccController extends CommonsController {
 
 	public List<Departamento> getDepartamentos() {
 		return departamentos;
+	}
+	public List<Sala> getSalas() {
+		return salas;
 	}
 
 	public boolean getHasCoOrientador() {
@@ -230,6 +236,13 @@ public class EditorTccController extends CommonsController {
 
 	public void setTempUser(Usuario tempUser) {
 		this.tempUser = tempUser;
+	}
+	public Sala getTempSala() {
+		return tempSala;
+	}
+	
+	public void setTempSala(Sala tempSala) {
+		this.tempSala = tempSala;
 	}
 
 	@NotifyChange({ "tcc", "alunoEditBlock" })
@@ -391,6 +404,21 @@ public class EditorTccController extends CommonsController {
 					tcc.getNomeTCC() + "_documentacao.pdf");
 		else
 			Messagebox.show("O PDF não foi encontrado!", "Erro",
+					Messagebox.OK, Messagebox.ERROR);
+	}
+	
+	@Command
+	public void downloadArquivoExtra() {
+		InputStream is = null;
+		
+		if (tcc.getArquivoExtraTCC() != null) 
+			is = FileManager.getFileInputSream(tcc.getArquivoExtraTCC());
+		
+		if (is != null)
+			Filedownload.save(is, "application/x-rar-compressed",
+					tcc.getNomeTCC() + "_arquivoExtra.zip");
+		else
+			Messagebox.show("O ZIP não foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 
@@ -746,14 +774,24 @@ public class EditorTccController extends CommonsController {
 		return false;
 	}
 	
+	public boolean exibirBaixarArquivoExtra() {
+		if(tcc != null) {
+			if(tcc.getArquivoExtraTCC() != null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	
 	@Command
-	public void validarDataApresentacao(@BindingParam("datebox")  Datebox datebox ) {
+	public void validarDataApresentacao( ) {
 		if(!tccBusiness.validateDataApresentacao(tcc)) {
 			Messagebox.show("A data informada está fora do prazo de apresentação", "Data inválida", Messagebox.OK,
 					Messagebox.ERROR);
 			tcc.setDataApresentacao(null);
 		}
+		
 	}
 
 	public void verificarCanChangeParticipacao() {
@@ -774,6 +812,9 @@ public class EditorTccController extends CommonsController {
 		}
 		if(status == TCC.PAA || status == TCC.TAAC || status == TCC.TAAO)
 			canSubmitTCC = false;
+		else if(status == TCC.TEPB && !verificarJaApresentou()) {
+			canSubmitTCC = false;
+		}
 //		if(status == TCC.TEPB) {
 //			if(!verificarJaApresentou()) {
 //				canSubmitTCC = false;
@@ -868,5 +909,5 @@ public class EditorTccController extends CommonsController {
 		}
 		return newTcc;
 	}
-
+	
 }

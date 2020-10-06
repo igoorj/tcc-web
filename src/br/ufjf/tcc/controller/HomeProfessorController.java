@@ -23,15 +23,16 @@ import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.AvisoBusiness;
 import br.ufjf.tcc.business.CursoBusiness;
-import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.business.ParticipacaoBusiness;
+import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.business.QuestionarioBusiness;
+import br.ufjf.tcc.business.SalaBusiness;
 import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.model.Aviso;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
-import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.Participacao;
+import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.Questionario;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
@@ -284,8 +285,14 @@ public class HomeProfessorController extends CommonsController {
 		if (tcc.getDataApresentacao() != null) {
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
 			lbl.setValue(dateFormat.format(tcc.getDataApresentacao()));
-			if (tcc.getSalaDefesa() != null)
+			
+			if (tcc.getSala() != null) {
+				lbl.setValue(lbl.getValue() + " - Sala " + new SalaBusiness().getSalaByTcc(tcc).getNomeSala());
+			}
+			else if(tcc.getSalaDefesa() != null) {
 				lbl.setValue(lbl.getValue() + " - Sala " + tcc.getSalaDefesa());
+			}
+			
 		} else{
 			lbl.setValue("Não Informada");
 		}

@@ -13,6 +13,7 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import br.ufjf.tcc.business.ParticipacaoBusiness;
+import br.ufjf.tcc.business.SalaBusiness;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 
@@ -116,7 +117,12 @@ public class PreenchimentoPDF {
 		form.setField("hora", hora);
 
 		form.setFieldProperty("sala", "textcolor", Color.BLACK ,null);
-		form.setField("sala", tcc.getSalaDefesa());
+		if(tcc.getSala() != null) {
+			form.setField("sala", new SalaBusiness().getSalaByTcc(tcc).getNomeSala());
+		}
+		else {
+			form.setField("sala", tcc.getSalaDefesa());
+		}
 		
 		String avaliadores = "";
 		String suplente = "";

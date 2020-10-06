@@ -24,12 +24,12 @@ public class EnviadorEmailAvisoProjetoSubmetido extends EnviadorEmailChain{
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de projeto submetido - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) Coordenador(a),").breakLine();
 		emailBuilder.appendMensagem("O Projeto do Trabalho de Conclusão de Curso do(a) discente ");
-		emailBuilder.appendMensagem(nomeAluno + ", com o título " + titulo + ", ");
+		emailBuilder.appendMensagem( "<b>" + nomeAluno + "</b>, com o título <b>" + titulo + "</b>, ");
 		emailBuilder.appendMensagem("já foi submetido ao Sistema de Monografias.").breakLine();
 		emailBuilder.appendMensagem("Agora é necessário receber a sua avaliação, de Aprovação ou Reprovação, ");
 		emailBuilder.appendMensagem("para dar continuidade das atividades do TCC. ").breakLine();
 		emailBuilder.appendMensagem("Em caso de reprovação, descreva o(s) motivo(s). O(a) discente terá o prazo de 7 ");
-		emailBuilder.appendMensagem("(sete) dias corridos para submeter o projeto corrigido ");
+		emailBuilder.appendMensagem("(sete) dias corridos depois do prazo final para submeter o projeto corrigido ");
 		emailBuilder.appendMensagem("para ser novamente avaliado.").breakLine();
 		emailBuilder.appendLinkSistema();
 		

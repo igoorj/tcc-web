@@ -18,7 +18,10 @@ public class UsuarioDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT u FROM Usuario AS u LEFT JOIN FETCH u.curso LEFT JOIN FETCH u.orientador LEFT JOIN FETCH u.participacoes JOIN FETCH u.tipoUsuario WHERE u.matricula = :matricula AND u.senha = :senha");
+							  "SELECT u FROM Usuario AS u "
+							+ "LEFT JOIN FETCH u.curso LEFT JOIN FETCH u.orientador "
+							+ "LEFT JOIN FETCH u.participacoes JOIN FETCH u.tipoUsuario "
+							+ "WHERE u.matricula = :matricula AND u.senha = :senha");
 			query.setParameter("matricula", matricula);
 			query.setParameter("senha", senha);
 

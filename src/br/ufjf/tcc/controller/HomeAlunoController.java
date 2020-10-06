@@ -95,9 +95,12 @@ public class HomeAlunoController extends CommonsController {
 		List<String> infos = new ArrayList<String>();
 		
 		TCC tcc = new TCCBusiness().getCurrentNotFinishedTCCByAuthor(getUsuario(), getCurrentCalendar(getUsuario().getCurso()));
+		if(tcc == null) {
+			return null;
+		}
 		if (tcc != null) {
 			if (tcc.getStatus() == TCC.PR) {
-				infos.add("Seu projeto foi reprovado, façaa as respectivas correções conforme a justificativa: "
+				infos.add("Seu projeto foi reprovado, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
 			else if (tcc.getStatus() == TCC.TRO) {

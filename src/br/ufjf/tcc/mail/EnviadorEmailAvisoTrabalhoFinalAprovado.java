@@ -20,7 +20,7 @@ public class EnviadorEmailAvisoTrabalhoFinalAprovado extends EnviadorEmailChain{
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Aprovado - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezado(a) " + nomeAluno).breakLine().breakLine();
+		emailBuilder.appendMensagem("Prezado(a) <b>" + nomeAluno + "</b>,").breakLine().breakLine();
 		emailBuilder.appendMensagem("Parabéns. O seu trabalho foi aprovado pela Coordenação de Curso e ");
 		emailBuilder.appendMensagem("está disponível para acesso público no repositório de trabalhos acadêmicos.");
 		emailBuilder.appendMensagem("Att.,").breakLine();

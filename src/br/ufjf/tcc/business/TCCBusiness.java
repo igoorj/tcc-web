@@ -1,6 +1,8 @@
 package br.ufjf.tcc.business;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,13 +41,12 @@ public class TCCBusiness {
 		validateOrientador(tcc.getOrientador());
 		validateName(tcc);
 		validateResumo(tcc.getResumoTCC());
-//		validateDataApresentacao(tcc);
-		validateSala(tcc.getSalaDefesa(), tcc);
+		validateApresentacao(tcc);
 		validateBanca(tcc.getParticipacoes());
 		validatePalavraChave(tcc.getPalavrasChave());
 		if (checkFile)
 			validateArquivo(tcc.getArquivoTCC());
-
+		System.out.println(errors.size());
 		return errors.size() == 0 ? false : true;
 	}
 
@@ -106,9 +107,8 @@ public class TCCBusiness {
 	
 	public void validateDadosDeDefesa(TCC tcc) {
 		validateProjeto(tcc);
-		validateDataApresentacao(tcc);
+		validateApresentacao(tcc);
 		validateBanca(tcc.getParticipacoes());
-		validateSala(tcc.getSalaDefesa(), tcc);
 	}
 	
 	/*
@@ -145,6 +145,19 @@ public class TCCBusiness {
 	/*
 	 * Verifica se a data de apresentação está dentro do prazo da defesa
 	 */
+	public boolean validateApresentacao(TCC tcc) {
+		if(tcc != null) {
+			validateDataApresentacao(tcc);
+			validateSalaApresentacao(tcc);
+			return true;
+		}
+		errors.add("É necessário informar o tcc.\n");
+		return false;
+	}
+	
+	/*
+	 * Verifica se a data de apresentação está dentro do prazo da defesa
+	 */
 	public boolean validateDataApresentacao(TCC tcc) {
 		if(tcc != null) {
 			if(tcc.getDataApresentacao() == null) {
@@ -156,8 +169,8 @@ public class TCCBusiness {
 				System.out.println("Não existe prazo pra defesa\n");
 				return false;
 			}
-			// 0 se for igual, negativo se for antes
-			int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
+				// 0 se for igual, negativo se for antes
+				int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
 			if(comparacao > 0) {
 				errors.add("A data da sua aprensentação está fora dos limites de prazo\n");
 				return false;
@@ -166,6 +179,37 @@ public class TCCBusiness {
 		}
 		errors.add("É necessário informar o tcc.\n");
 		return false;
+	}
+	/*
+	 * Verifica se a sala está em uso no horário da apresentação
+	 */
+	public boolean validateSalaApresentacao(TCC tcc) {
+		SalaBusiness salaBusiness = new SalaBusiness();
+		if(tcc.getSala() == null) {
+			errors.add("É necessário informar a sala de apresentação\n");
+			return false;
+		}
+		if(salaBusiness.getSalaByTcc(tcc).isOnline())
+			return true;
+		List<TCC> tccs = tccDao.getTCCByDataApresentacao(new Date(tcc.getDataApresentacao().getTime()));
+		System.out.println("Encontrados: " + tccs.size());
+		List<TCC> result = new ArrayList<TCC>();
+		for(TCC tccIt : tccs) {
+			if(tccIt.getIdTCC() != tcc.getIdTCC() && tccIt.getSala().getIdSala() == tcc.getSala().getIdSala()
+					&& !tccIt.getSala().isOnline()) {
+//				result.add(tccIt);
+				errors.add("Já existe uma defesa marcada para essa hora nessa sala\n");
+				return false;
+			}
+		}
+//		if(result != null && result.size() > 0) {
+//			for(TCC tccIt : result) {
+//				System.out.println("ID tcc2: " + tccIt.getIdTCC());
+//			}
+//			errors.add("Já existe uma defesa marcada para essa hora nessa sala\n");
+//			return false;
+//		}
+		return true;
 	}
 
 	public void validateSala(String sala, TCC tcc) {
@@ -417,7 +461,6 @@ public class TCCBusiness {
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
 		List <Prazo> prazos = calendario.getPrazos();
 		Calendar hoje = Calendar.getInstance();
-//		System.out.println("Data de hoje mais 7 dias: " + hoje.getTime());
 		for (Prazo prazo : prazos) {
 			switch (prazo.getTipo()) {
 			case Prazo.PRAZO_PROJETO:
@@ -425,10 +468,6 @@ public class TCCBusiness {
 				if(prazo.getDataFinal().before(hoje.getTime()) && isProjetoReprovado(tcc))
 					return true;
 				break;
-//			case Prazo.ENTREGA_BANCA:
-//				if(prazo.getDataFinal().before(new Date()) && status == TCC.TRC)
-//					return true;
-//				break;
 			case Prazo.ENTREGA_FINAL:
 				hoje = Calendar.getInstance();
 				hoje.add(Calendar.DAY_OF_MONTH, -2);
@@ -453,8 +492,9 @@ public class TCCBusiness {
 	}
 
 	public boolean isProjetoIncompleto(TCC tcc) {
-		if(tcc.isProjeto() && tcc.getStatus() == TCC.PI)
+		if(tcc.isProjeto() && tcc.getStatus() == TCC.PI) {
 			return true;
+		}
 		return false;
 	}
 	

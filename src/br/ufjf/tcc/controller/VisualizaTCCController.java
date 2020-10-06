@@ -415,7 +415,10 @@ public class VisualizaTCCController extends CommonsController {
 	public void abrirModalReprovacao(@BindingParam("window") Window window)
 	{
 		String tipoTcc = (tcc.isProjeto() ? "Projeto" : "Trabalho");
-		window.setTitle("Reprovar " + tipoTcc);
+		if(window != null) {
+			window.setTitle("Reprovar " + tipoTcc);
+			
+		}
 		window.doModal();
 	}
 	
