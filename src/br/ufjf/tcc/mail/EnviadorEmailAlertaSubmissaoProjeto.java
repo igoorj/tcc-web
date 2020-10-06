@@ -27,13 +27,14 @@ public class EnviadorEmailAlertaSubmissaoProjeto extends EnviadorEmailChain{
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submissão de projeto - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezado " + nomeAluno + " e " + nomeOrientador + ",").breakLine();
+		emailBuilder.appendMensagem("Prezado <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>,");
+		emailBuilder.breakLine();
 		emailBuilder.appendMensagem("dentro de 2 dias se encerra o prazo para Submissão do Projeto ");
 		emailBuilder.appendMensagem("de Trabalho de Conclusão de Curso no Sistema de Monografias. ");
 		emailBuilder.appendMensagem("Ainda não consta no sistema que o(a) discente realizou esta atividade completamente.").breakLine();
 		emailBuilder.appendMensagem("Se essa tarefa não for cumprida dentro do prazo, não haverá como dar andamento das ");
 		emailBuilder.appendMensagem("demais atividades, e desta forma não será possível ");
-		emailBuilder.appendMensagem("gerar a documentação necessária para a Defesa do TCC.").breakLine();
+		emailBuilder.appendMensagem("gerar a documentação necessária para a Defesa do TCC.").breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

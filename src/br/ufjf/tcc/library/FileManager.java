@@ -17,9 +17,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import jonelo.jacksum.JacksumAPI;
-import jonelo.jacksum.algorithm.AbstractChecksum;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,6 +30,8 @@ import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
+import jonelo.jacksum.JacksumAPI;
+import jonelo.jacksum.algorithm.AbstractChecksum;
 
 public class FileManager {
 

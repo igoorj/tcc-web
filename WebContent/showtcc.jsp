@@ -141,7 +141,7 @@ li {
 				style="word-wrap: break-word; font-family: sans-serif; font-weight: normal; font-size: 12px">
 				${tcc.palavrasChave } </label>
 			<div class="head"
-				style=" ${tcc.arquivoTCCFinal==nul? 'visibility: hidden;' : 'visibility: visible;' }">
+				style=" ${tcc.arquivoTCC==nul? 'visibility: hidden;' : 'visibility: visible;' }">
 				<label class="head"
 					style="font-family: sans-serif; font-weight: bold; font-size: 14px; float: left;">
 					Obter PDF </label> 

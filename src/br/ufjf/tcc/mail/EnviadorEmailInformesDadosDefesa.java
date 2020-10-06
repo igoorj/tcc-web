@@ -51,18 +51,21 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Informes dos Dados de Defesa - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados, ").breakLine();
-		emailBuilder.appendMensagem("no dia " + dataApresentacaoString + " às " + horaApresentacao + " na(o) " + tcc.getSalaDefesa() + " acontecerá a ");
+		emailBuilder.appendMensagem("no dia " + dataApresentacaoString + " às " + horaApresentacao + " na(o) " + tcc.getSala().getNomeSala() + " acontecerá a ");
 		emailBuilder.appendMensagem("Defesa do Trabalho de Conclusão de Curso " + titulo);
-		emailBuilder.appendMensagem(" do(a) discente " + nomeAluno + ". A Banca Examinadora será composta por: ").breakLine(); 
-		emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine();
+		emailBuilder.appendMensagem(" do(a) discente ");
+		emailBuilder.appendHtmlTextBold( nomeAluno ).appendMensagem(".").breakLine();
+		emailBuilder.appendMensagem("A Banca Examinadora será composta por: ").breakLine().breakLine(); 
+		emailBuilder.appendMensagem("<b>Orientador(a):</b> " + nomeOrientador).breakLine();
 		if(tcc.possuiCoorientador())
-			emailBuilder.appendMensagem("Coorientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
+			emailBuilder.appendMensagem("<b>Coorientador(a):</b> " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
 		for(String membro : membros) {
-			emailBuilder.appendMensagem("Membro da banca: " + membro).breakLine();
+			emailBuilder.appendMensagem("<b>Membro da banca:</b> " + membro).breakLine();
 		}
 		for(String suplente : suplentes) {
-			emailBuilder.appendMensagem("Suplente: " + suplente).breakLine();
+			emailBuilder.appendMensagem("<b>Suplente:</b> " + suplente).breakLine();
 		}
+		emailBuilder.breakLine();
 		emailBuilder.appendMensagem("A Coordenação do Curso " + curso.getNomeCurso() + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();

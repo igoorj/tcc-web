@@ -2,6 +2,7 @@ package br.ufjf.tcc.persistent.impl;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -124,6 +125,32 @@ public class TCCDAO extends GenericoDAO {
 
 		return null;
 	}
+	
+	/*
+	 * Retorna os tccs que a data de defesa esteja num intervalo
+	 * de 3 horas antes ou depois da data informada
+	 */
+	public List<TCC> getTCCByDataApresentacao(Date data) {
+		try {
+			Query query = getSession()
+					.createQuery(
+							  "SELECT t FROM TCC AS t "
+							+ "LEFT JOIN FETCH t.sala "
+							+ "WHERE t.dataApresentacao >= :data "
+							+ "AND t.dataApresentacao <= :data2");
+			query.setParameter("data", new Date(data.getTime() - 3 * 3600000));
+			query.setParameter("data2", new Date(data.getTime() + 3 * 3600000));
+			List<TCC> resultados = query.list();
+			getSession().close();
+			
+			if (resultados != null)
+				return resultados;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public TCC getTCCById(int id) {
 		TCC resultado = null;
@@ -132,6 +159,7 @@ public class TCCDAO extends GenericoDAO {
 					.createQuery(
 							"SELECT t FROM TCC AS t "
 							+ "JOIN FETCH t.aluno AS a JOIN FETCH a.curso "
+							+ "LEFT JOIN FETCH t.sala "
 							+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
 							+ "LEFT JOIN FETCH t.participacoes AS p "
 							+ "LEFT JOIN FETCH p.professor "
@@ -228,7 +256,10 @@ public class TCCDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso AND t.dataEnvioFinal IS NOT NULL AND t.arquivoTCCFinal IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
+							  "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+							+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+							+ "WHERE a.curso = :curso AND t.dataEnvioFinal IS NOT NULL "
+							+ "AND t.arquivoTCC IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
 			query.setParameter("curso", curso);
 
 			List<TCC> resultados = query.list();
@@ -249,8 +280,10 @@ public class TCCDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE t.dataEnvioFinal IS NOT NULL AND t.arquivoTCCFinal IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
-			
+							  "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+							+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+							+ "WHERE t.dataEnvioFinal IS NOT NULL "
+							+ "AND t.arquivoTCC IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
 
 			List<TCC> resultados = query.list();
 
@@ -336,17 +369,21 @@ public class TCCDAO extends GenericoDAO {
 	public List<TCC> getNewest(int quantidade)//pega os x ultimos trabalhos terminados
 	{
 	try {
-	Query query = getSession()
-	.createQuery(
-	"SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador WHERE t.dataEnvioFinal IS NOT NULL AND t.arquivoTCCFinal IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
-	query.setMaxResults(quantidade);
+		Query query = getSession()
+			.createQuery(
+					  "SELECT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+					+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+					+ "WHERE t.dataEnvioFinal IS NOT NULL AND "
+					+ "t.arquivoTCC IS NOT NULL ORDER BY t.dataEnvioFinal DESC");
+		
+		query.setMaxResults(quantidade);
 
-	        List<TCC> resultados = query.list();
+        List<TCC> resultados = query.list();
 
-	        getSession().close();
+        getSession().close();
 
-	        if (resultados != null)
-	            return resultados;
+        if (resultados != null)
+            return resultados;
 
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -359,7 +396,15 @@ public class TCCDAO extends GenericoDAO {
 	    try {
 	        Query query = getSession()
 	                .createQuery(
-	                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH a.curso AS curs JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes WHERE a.curso = :curso AND t.dataEnvioFinal IS NULL AND t.calendarioSemestre = :currentCalendar AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
+	                        	"SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+	                        + "JOIN FETCH a.curso AS curs JOIN FETCH t.orientador "
+	                        + "LEFT JOIN FETCH t.sala "
+	                        + "LEFT JOIN FETCH t.coOrientador "
+	                        + "LEFT JOIN FETCH t.participacoes "
+	                        + "WHERE a.curso = :curso AND t.dataEnvioFinal IS NULL "
+	                        + "AND t.calendarioSemestre = :currentCalendar "
+	                        + "AND t.projeto = :projeto "
+	                        + "ORDER BY t.dataEnvioFinal DESC");
 	        query.setParameter("curso", curso);
 	        query.setParameter("currentCalendar", currentCalendar);
 	        query.setParameter("projeto", false);
@@ -462,6 +507,7 @@ public class TCCDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 			.createQuery( "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+					+ "LEFT JOIN FETCH t.sala "
 					+ "JOIN FETCH a.curso JOIN FETCH t.orientador "
 					+ "LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes AS p "
 					+ "LEFT JOIN FETCH p.professor WHERE t.aluno = :user "

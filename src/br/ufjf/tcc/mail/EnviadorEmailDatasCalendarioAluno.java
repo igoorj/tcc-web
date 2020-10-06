@@ -41,18 +41,28 @@ public class EnviadorEmailDatasCalendarioAluno extends  EnviadorEmailChain{
 		String dataLimiteSubmissaoTrabalhoFinal = new DateTime(prazos.get(3).getDataFinal()).toString("dd/MM/yyyy");
 				
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Datas do calendário");
-		emailBuilder.appendMensagem("Prezado(a) " + nomeAluno + ",").breakLine();
+		emailBuilder.appendMensagem("Prezado(a) <b>" + nomeAluno + "</b>,").breakLine();
 		emailBuilder.appendMensagem(" você foi matriculado na disciplina de Trabalho de Conclusão de Curso (TCC), ");
-		emailBuilder.appendMensagem("tendo como orientador(a) "+ nomeOrientador + ". ").breakLine(); 
-		emailBuilder.appendMensagem("Segue abaixo os prazos limites das atividades desta disciplina:").breakLine(); 
+		emailBuilder.appendMensagem("tendo como orientador(a) <b>"+ nomeOrientador + "</b>. "); 
 		
-		emailBuilder.appendMensagem(dataLimiteSubmissaoProjeto + " Data limite para submissão do Projeto de TCC no Sistema de Monografias.").breakLine(); 
-		emailBuilder.appendMensagem(dataLimiteEntregaBanca + " Data limite para informar no sistema os dados da Defesa do TCC, fazer a submissão ").breakLine();
+		emailBuilder.breakLine().breakLine();
+		emailBuilder.appendHtmlTopico("Prazos para as atividades da disciplina:"); 
+		emailBuilder.breakLine().breakLine();
+		emailBuilder.appendMensagem("<b>[" + dataLimiteSubmissaoProjeto + "]</b> - Submissão do <b>Projeto de TCC</b> no Sistema de Monografias.").breakLine(); 
+		emailBuilder.appendMensagem("<b>[" + dataLimiteEntregaBanca + "]</b> - Informar no sistema os <b>Dados da Defesa do TCC</b>, fazer a submissão ");
 		emailBuilder.appendMensagem("do mesmo e entregar o TCC para a Banca Examinadora.").breakLine();
-		emailBuilder.appendMensagem(dataLimiteDefesa + " Data limite para a Defesa do TCC.").breakLine();
-		emailBuilder.appendMensagem(dataLimiteSubmissaoTrabalhoFinal + " Data limite para entrega na Coordenação das Fichas de Avaliação da Banca Examinadora e da Ata de Defesa e, ").breakLine(); 
-		emailBuilder.appendMensagem("fazer a submissão da Versão Final do TCC no Sistema de Monografias.").breakLine();
+		emailBuilder.appendMensagem("<b>[" + dataLimiteDefesa + "]</b> - Defesa do TCC.").breakLine();
+		emailBuilder.appendMensagem("<b>[" + dataLimiteSubmissaoTrabalhoFinal + "]</b> - Entrega na Coordenação das <b>Fichas de Avaliação da Banca Examinadora</b> e da <b>Ata de Defesa</b> e, "); 
+		emailBuilder.appendMensagem("fazer a <b>submissão</b> da Versão Final do TCC no Sistema de Monografias.");
+//		emailBuilder.appendMensagem("Segue abaixo os prazos limites das atividades desta disciplina:").breakLine(); 
+//		emailBuilder.appendMensagem("<b>" + dataLimiteSubmissaoProjeto + "</b> Data limite para submissão do Projeto de TCC no Sistema de Monografias.").breakLine(); 
+//		emailBuilder.appendMensagem("<b>" + dataLimiteEntregaBanca + "</b> Data limite para informar no sistema os dados da Defesa do TCC, fazer a submissão ").breakLine();
+//		emailBuilder.appendMensagem("do mesmo e entregar o TCC para a Banca Examinadora.").breakLine();
+//		emailBuilder.appendMensagem("<b>" + dataLimiteDefesa + "</b> Data limite para a Defesa do TCC.").breakLine();
+//		emailBuilder.appendMensagem("<b>" + dataLimiteSubmissaoTrabalhoFinal + "</b> Data limite para entrega na Coordenação das Fichas de Avaliação da Banca Examinadora e da Ata de Defesa e, ").breakLine(); 
+//		emailBuilder.appendMensagem("fazer a submissão da Versão Final do TCC no Sistema de Monografias.");
 		
+		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

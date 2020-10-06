@@ -36,26 +36,30 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		}
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de inclusão dos dados da Defesa - "+nomeAluno);
-		emailBuilder.appendMensagem("Prezados " + nomeAluno + " e " + nomeOrientador + ", ").breakLine();
-		emailBuilder.appendMensagem("dentro de 2 dias se encerra o prazo para incluir ");
+		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ").breakLine();
+		emailBuilder.appendMensagem("dentro de <b>2 dias</b> se encerra o prazo para incluir ");
 		emailBuilder.appendMensagem("no Sistema de Monografias os dados da Defesa do Trabalho de Conclusão de Curso (TCC) e submeter  ");
 		emailBuilder.appendMensagem("a versão do TCC a ser avaliado pelos membros da Banca Examinadora. ");
-		emailBuilder.appendMensagem("É preciso informar: data, hora, local e ");
-		emailBuilder.appendMensagem(" nome dos membros que farão parte da Banca Examinadora do TCC: ").breakLine(); 
+		emailBuilder.breakLine().breakLine();
+		emailBuilder.appendMensagem("<b>É preciso informar:</b> data, hora, local e ");
+		emailBuilder.appendMensagem("nome dos membros que farão parte da Banca Examinadora do TCC: ").breakLine(); 
 		
+		
+		emailBuilder.appendMensagem("<ol>");
 		emailBuilder.appendMensagem("<li>Orientador(a)</li>");
 		emailBuilder.appendMensagem("<li>Coorientador(a) (se houver)</li>");
 		emailBuilder.appendMensagem("<li>Membro 1</li>");
 		emailBuilder.appendMensagem("<li>Membro 2</li>");
 		emailBuilder.appendMensagem("<li>Suplente</li>");
 		emailBuilder.appendMensagem("</ol>");
-		
+		emailBuilder.breakLine();
 		emailBuilder.appendMensagem("É preciso preencher todas as informações no sistema ");
 		emailBuilder.appendMensagem("para esta atividade se tornar completa, pois ainda ");
 		emailBuilder.appendMensagem("não consta que o(a) discente realizou esta atividade completamente.").breakLine(); 
 		emailBuilder.appendMensagem("Se essa tarefa não for cumprida dentro do prazo, não haverá ");
 		emailBuilder.appendMensagem("como dar andamento das demais atividades, e dessa forma ");
-		emailBuilder.appendMensagem("não será possível gerar a documentação necessária para a Defesa do TCC.").breakLine();
+		emailBuilder.appendMensagem("não será possível gerar a documentação necessária para a Defesa do TCC.");
+		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

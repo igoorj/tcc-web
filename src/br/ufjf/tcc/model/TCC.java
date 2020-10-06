@@ -29,10 +29,10 @@ public class TCC implements Serializable,Comparable<TCC> {
 
 	private static final long serialVersionUID = 1L;
 	/*
-	 * PI	- Projeto Incompleto
-	 * PR	- Projeto Reprovado
+	 * PI		- Projeto Incompleto
+	 * PR		- Projeto Reprovado
 	 * PAA	- Projeto Aguardando Aprovação
-	 * TI	- Trabalho Incompleto
+	 * TI		- Trabalho Incompleto
 	 * TEPB	- Trabalho Enviado Para Banca
 	 * TRO	- Trabalho Reprovado
 	 * TAAO	- Trabalho Aguardando Aprovação de Orientador
@@ -99,8 +99,8 @@ public class TCC implements Serializable,Comparable<TCC> {
 
 	/**
 	 * Campo com o arquivo final do TCC. Relaciona com a coluna
-	 * {@code arquivoTCCFinal} do banco através da anotação
-	 * {@code @Column(name = "arquivoTCCFinal", length = 255, nullable = true)}.
+	 * {@code arquivoTCC} do banco através da anotação
+	 * {@code @Column(name = "arquivoTCC", length = 255, nullable = true)}.
 	 */
 	@Column(name = "arquivoTCC", length = 255, nullable = true)
 	private String arquivoTCC;
@@ -291,13 +291,22 @@ public class TCC implements Serializable,Comparable<TCC> {
 	
 	@Column(name = "status", nullable = true)
 	private int status;
+	
+	/**
+	 * Relacionamento N para 1 entre TCC e Sala. Mapeando {@link Sala} na
+	 * variável {@code sala} e retorno do tipo {@code LAZY} que indica que não
+	 * será carregado automáticamente este dado quando retornarmos o {@link TCC}
+	 */
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idSala", nullable = true)
+	private Sala sala;
 
 	public TCC() {
 
 	}
 
 	public TCC(String nomeTCC, String subNomeTCC, String resumoTCC,
-			String palavrasChave, String arquivoTCCFinal,
+			String palavrasChave, String arquivoTCC,
 			String arquivoExtraTCCFinal, Timestamp dataEnvioFinal,
 			Usuario aluno, Usuario orientador) {
 		super();
@@ -307,7 +316,7 @@ public class TCC implements Serializable,Comparable<TCC> {
 		this.palavrasChave = palavrasChave;
 //		this.arquivoTCCFinal = arquivoTCCFinal;
 //		this.arquivoExtraTCCFinal = arquivoExtraTCCFinal;
-		this.arquivoTCC = arquivoExtraTCCFinal;
+		this.arquivoTCC = arquivoTCC;
 		this.arquivoExtraTCC = arquivoExtraTCCFinal;
 		this.dataEnvioFinal = dataEnvioFinal;
 		this.aluno = aluno;
@@ -660,5 +669,15 @@ public class TCC implements Serializable,Comparable<TCC> {
 	public void setEmailAlertaEnviado(int emailAlerta) {
 		this.emailsAlertaEnviados = emailAlerta;
 	}
+
+	public Sala getSala() {
+		return sala;
+	}
+
+	public void setSala(Sala sala) {
+		this.sala = sala;
+	}
+	
+	
 	
 }

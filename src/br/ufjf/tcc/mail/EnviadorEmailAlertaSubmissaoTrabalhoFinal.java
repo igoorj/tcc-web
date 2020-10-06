@@ -35,15 +35,17 @@ public class EnviadorEmailAlertaSubmissaoTrabalhoFinal extends EnviadorEmailChai
 		calendario.add(Calendar.DATE, 5);
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submissão de trabalho final - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezados " + nomeAluno + " e " + nomeOrientador + ", ").breakLine();
+		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ");
+		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("dentro de 2 dias (" + formatter.format(calendario.getTime()));
 		emailBuilder.appendMensagem(") se encerra o prazo para incluir no Sistema de Monografias a versão Final ");
-		emailBuilder.appendMensagem("do TCC, após correções sugeridas pelos membros da Banca Examinadora. ").breakLine();
+		emailBuilder.appendMensagem("do TCC, após correções sugeridas pelos membros da Banca Examinadora. ").breakLine().breakLine();
 		emailBuilder.appendMensagem("Ainda não consta no sistema que o(a) discente realizou esta atividade ");
 		emailBuilder.appendMensagem("completamente. Por isso a Coordenação solicita que o(a) discente ");
-		emailBuilder.appendMensagem("preencha todas as informações no sistema para esta atividade se ");
-		emailBuilder.appendMensagem("tornar completa. Se essa tarefa não for cumprida dentro do prazo, ");
-		emailBuilder.appendMensagem("não haverá como dar andamento das demais atividades dessa disciplina. ");
+		emailBuilder.appendMensagem("preencha todas as informações no sistema para esta atividade se tornar completa.");
+		emailBuilder.breakLine().breakLine();
+		emailBuilder.appendMensagem("Se essa tarefa não for cumprida dentro do prazo, ");
+		emailBuilder.appendMensagem("não haverá como dar andamento das demais atividades. ");
 		emailBuilder.appendMensagem("Desta forma não será possível deixar esse TCC Público no Sistema de Monografias.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();

@@ -4,9 +4,6 @@ import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import br.ufjf.tcc.model.Participacao;
-import br.ufjf.tcc.model.TCC;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -15,6 +12,10 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import br.ufjf.tcc.business.SalaBusiness;
+import br.ufjf.tcc.model.Participacao;
+import br.ufjf.tcc.model.TCC;
 
 public class PDFHandler {
 	private static String FILE = "/Users/Matheus/Desktop/FirstPdf.pdf";
@@ -82,7 +83,13 @@ public class PDFHandler {
 			phrase.add(new Phrase(hour.format(tcc.getDataApresentacao()),
 					defaultFont));
 			phrase.add(new Phrase("  Local: ", infoFont));
-			phrase.add(new Phrase(tcc.getSalaDefesa(), defaultFont));
+			if(tcc.getSala() != null) {
+				phrase.add(new Phrase(new SalaBusiness().getSalaByTcc(tcc).getNomeSala(), defaultFont));
+			}
+			else {
+				phrase.add(new Phrase(tcc.getSalaDefesa(), defaultFont));
+			}
+			phrase.add(new Phrase(tcc.getSala().getNomeSala(), defaultFont));
 			paragraph = new Paragraph(phrase);
 			paragraph.setSpacingAfter(15);
 			document.add(paragraph);
