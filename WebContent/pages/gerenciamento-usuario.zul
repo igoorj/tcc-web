@@ -243,8 +243,9 @@
 					<row visible="false">
 						<label value="Orientador:" />
 						<combobox id="comboOrientador" width="100%"
-							readonly="true" model="@load(vm.allByDepartamento)"
-							value="@load(vm.newUsuario.orientador ne null ? vm.newUsuario.orientador.nomeUsuario : 'Nenhum')"
+							readonly="false" model="@load(vm.allByDepartamento)"
+							value="@load(vm.newUsuario.orientador.nomeUsuario)"
+							placeholder="Selecione o orientador"
 							selectedItem="@bind(vm.newUsuario.orientador)"
 							disabled="true" autodrop="true">
 							<template name="model">

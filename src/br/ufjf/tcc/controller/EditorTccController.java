@@ -55,6 +55,7 @@ public class EditorTccController extends CommonsController {
 	private TCCBusiness tccBusiness = new TCCBusiness();
 	private Usuario tempUser = null;
 	private Sala tempSala = null;
+	private Timestamp tempDataApresentacao;
 	private TCC tcc = null;
 	private String statusInicialTCC = "";
 	private Iframe iframe;
@@ -65,7 +66,7 @@ public class EditorTccController extends CommonsController {
 	private List<Usuario> orientadores = new ArrayList<Usuario>();
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
-			canChangeParticipacao = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
+			canChangeParticipacao = false, canChangeBanca = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
 			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false;
 	private EnviadorEmailChain enviadorEmail = new EnviadorEmailProjetoCriado();
 	
@@ -92,11 +93,14 @@ public class EditorTccController extends CommonsController {
 			verificarCanChangeParticipacao();
 			verificarCanSubmitTCC();
 			verificarCanSubmitDocs();
+			verificarCanChangeBanca();
 			break;
 
 		case Usuario.ADMINISTRADOR:
 
 		case Usuario.COORDENADOR:
+			canChangeParticipacao = true;
+			canChangeBanca = true;
 			canChangeMatricula = true;
 			canChangeOrientacao = true;
 			canSubmitTCC = true;
@@ -124,6 +128,8 @@ public class EditorTccController extends CommonsController {
 		}
 		
 		if (tcc != null) {
+			tempSala = tcc.getSala();
+			tempDataApresentacao = tcc.getDataApresentacao();
 			hasCoOrientador = (tcc.getCoOrientador() != null);
 			hasSubtitulo = (tcc.getSubNomeTCC() != null);
 		}
@@ -150,6 +156,10 @@ public class EditorTccController extends CommonsController {
 	
 	public boolean isCanChangeParticipacao() {
 		return canChangeParticipacao;
+	}
+	
+	public boolean isCanChangeBanca() {
+		return canChangeBanca;
 	}
 	
 	public boolean isCanSubmitTCC() {
@@ -240,9 +250,56 @@ public class EditorTccController extends CommonsController {
 	public Sala getTempSala() {
 		return tempSala;
 	}
+	public Timestamp getTempDataApresentacao() {
+		return tempDataApresentacao;
+	}
 	
+	/*
+	 * Se for orientador alterando, permite alterar em qualquer momento
+	 * Se for o aluno, verifica se a defesa já foi marcada
+	 */
 	public void setTempSala(Sala tempSala) {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario == Usuario.COORDENADOR) {
+			tcc.setSala(tempSala);
+			this.tempSala = tempSala;
+			return;
+		}
+		if(tcc.getStatus() >= TCC.TEPB) {
+			Messagebox.show("Não é possível alterar a sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			this.tempSala= tcc.getSala();
+			return;
+		}
+		tcc.setSala(tempSala);
 		this.tempSala = tempSala;
+	}
+	
+	/*
+	 * Se for orientador alterando, permite alterar em qualquer momento
+	 * Se for o aluno, verifica se a data está dentro do prazo de apresentação
+	 * e se ele já não marcou a defesa
+	 */
+	public void setTempDataApresentacao(Timestamp tempDataApresentacao) {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario == Usuario.COORDENADOR) {
+			tcc.setDataApresentacao(tempDataApresentacao);
+			this.tempDataApresentacao = tempDataApresentacao;
+			return;
+		}
+		if(!tccBusiness.validateDataApresentacao(tempDataApresentacao, tcc.getCalendarioSemestre())) {
+			Messagebox.show("A data informada está fora do prazo de apresentação", "Data inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			tcc.setDataApresentacao(null);
+		}
+		if(tcc.getStatus() >= TCC.TEPB) {
+			Messagebox.show("Não é possível alterar a data de apresentação depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			tempDataApresentacao = tcc.getDataApresentacao();
+			return;
+		}
+		tcc.setDataApresentacao(tempDataApresentacao);
+		this.tempDataApresentacao = tempDataApresentacao;
 	}
 
 	@NotifyChange({ "tcc", "alunoEditBlock" })
@@ -375,6 +432,13 @@ public class EditorTccController extends CommonsController {
 	}
 	@Command
 	public void uploadDocumentacao(@BindingParam("evt") UploadEvent evt) {
+		String fileName = evt.getMedia().getName();
+		if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
+			Messagebox.show("Este não é um arquivo válido! Apenas PDF são aceitos.", "Formato inválido", Messagebox.OK,
+					Messagebox.ERROR);
+			docFile = null;
+			return;
+		}
 		docFile = evt.getMedia().getStreamData();
 		docFileChanged = true;
 		Messagebox.show("Arquivo enviado com sucesso.");
@@ -786,19 +850,30 @@ public class EditorTccController extends CommonsController {
 	
 	
 	@Command
-	public void validarDataApresentacao( ) {
-		if(!tccBusiness.validateDataApresentacao(tcc)) {
-			Messagebox.show("A data informada está fora do prazo de apresentação", "Data inválida", Messagebox.OK,
+	public void validarSala( ) {
+		System.out.println("Teste validar sala");
+		System.out.println("SalaId: " + tempSala.getIdSala());
+		System.out.println("Sala: " + tempSala.getNomeSala());
+		if(tcc.getStatus() >= TCC.TEPB) {
+			Messagebox.show("Não é possível alterar a sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
 					Messagebox.ERROR);
-			tcc.setDataApresentacao(null);
+			tempSala = tcc.getSala();
+			return;
 		}
 		
+		tcc.setSala(tempSala);
 	}
 
 	public void verificarCanChangeParticipacao() {
 		if(verificarJaApresentou()) 
 			canChangeParticipacao = true;
 	}
+	
+	public void verificarCanChangeBanca() {
+		if(tcc.getStatus() == TCC.TI) 
+			canChangeBanca = true;
+	}
+	
 	public void verificarAtrasado() {
 		if(tccBusiness.isTrabalhoAtrasado(tcc))
 			tccAtrasado = true;
