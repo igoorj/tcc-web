@@ -64,8 +64,8 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 	}
 	
 	
-	
-	public void enviarEmails(TCC tcc) {
+	@Override
+	public void enviarEmail(TCC tcc, String status) {
 		List<Participacao> participacoes = tcc.getParticipacoes();
 		// Verifica quem prticipou e separa em suplentes e membros
 		
