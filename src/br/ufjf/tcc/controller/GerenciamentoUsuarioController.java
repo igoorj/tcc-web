@@ -79,6 +79,10 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			allUsuarios = usuarioBusiness.getAll();
 		else if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR)
 			allUsuarios = usuarioBusiness.getAllByCurso(getUsuario().getCurso());
+		else {
+			redirectHome();
+			return;
+		}
 
 		filterUsuarios = allUsuarios;
 	}

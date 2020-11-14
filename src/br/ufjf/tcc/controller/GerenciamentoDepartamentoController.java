@@ -8,6 +8,7 @@ import java.util.Map;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -17,6 +18,7 @@ import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.DepartamentoBusiness;
 import br.ufjf.tcc.model.Departamento;
+import br.ufjf.tcc.model.Usuario;
 
 public class GerenciamentoDepartamentoController extends CommonsController {
 	private DepartamentoBusiness departamentoBusiness = new DepartamentoBusiness();
@@ -27,6 +29,16 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 	private String filterString = "";
 	private boolean submitUserListenerExists = false;
 
+	
+	@Init
+	public void init() {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario != Usuario.ADMINISTRADOR) {
+			redirectHome();
+			return;
+		}
+	}
+	
 	public List<Departamento> getFilterDepartamentos() {
 		return filterDepartamentos;
 	}

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -19,6 +20,7 @@ import br.ufjf.tcc.business.CursoBusiness;
 import br.ufjf.tcc.business.DepartamentoBusiness;
 import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Departamento;
+import br.ufjf.tcc.model.Usuario;
 
 public class GerenciamentoCursoController extends CommonsController {
 	private CursoBusiness cursoBusiness = new CursoBusiness();
@@ -31,6 +33,17 @@ public class GerenciamentoCursoController extends CommonsController {
 	private List<Departamento> departamentos = new DepartamentoBusiness()
 			.getAll();
 
+	
+	@Init
+	public void init() {
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario != Usuario.ADMINISTRADOR) {
+			redirectHome();
+			return;
+		}
+		
+	}
+	
 	public List<Curso> getFilterCursos() {
 		return filterCursos;
 	}
