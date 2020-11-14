@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -64,6 +65,9 @@ public class Sala implements Serializable {
 	 */
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sala")
 	private List<TCC> tcc = new ArrayList<TCC>();
+	
+	@Transient
+	private boolean editingStatus;
 
 	public int getIdSala() {
 		return idSala;
@@ -81,7 +85,7 @@ public class Sala implements Serializable {
 		this.nomeSala = nome;
 	}
 
-	public boolean isOnline() {
+	public boolean getOnline() {
 		return online;
 	}
 
@@ -96,7 +100,20 @@ public class Sala implements Serializable {
 	public void setTcc(List<TCC> tcc) {
 		this.tcc = tcc;
 	}
+	
+	public boolean getEditingStatus() {
+		return editingStatus;
+	}
 
+	public void setEditingStatus(boolean editingStatus) {
+		this.editingStatus = editingStatus;
+	}
+
+	public void copy(Sala another) {
+		this.idSala = another.idSala;
+		this.nomeSala = another.nomeSala;
+		this.online = another.online;
+	}
 	
 	
 }

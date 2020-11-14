@@ -1,8 +1,7 @@
 package br.ufjf.tcc.business;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +16,7 @@ import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Prazo;
+import br.ufjf.tcc.model.Sala;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 import br.ufjf.tcc.persistent.impl.TCCDAO;
@@ -42,7 +42,9 @@ public class TCCBusiness {
 		validateOrientador(tcc.getOrientador());
 		validateName(tcc);
 		validateResumo(tcc.getResumoTCC());
-		validateApresentacao(tcc);
+//		validateApresentacao(tcc);
+		validateDataApresentacao(tcc.getDataApresentacao(), tcc.getCalendarioSemestre());
+		validateSalaApresentacao(tcc);
 		validateBanca(tcc.getParticipacoes());
 		validatePalavraChave(tcc.getPalavrasChave());
 		if (checkFile)
@@ -117,7 +119,7 @@ public class TCCBusiness {
 	 */
 	public void validateTrabalho(TCC tcc) {
 		// Necessita dos mesmo campos de projeto
-		validateProjeto(tcc);
+		validateDadosDeDefesa(tcc);
 		validateArquivoDocumentacao(tcc.getArquivoDocumentacao());
 		validateParticipacao(tcc.getParticipacoes());
 	}
@@ -148,7 +150,7 @@ public class TCCBusiness {
 	 */
 	public boolean validateApresentacao(TCC tcc) {
 		if(tcc != null) {
-			validateDataApresentacao(tcc);
+			validateDataApresentacao(tcc.getDataApresentacao(), tcc.getCalendarioSemestre());
 			validateSalaApresentacao(tcc);
 			return true;
 		}
@@ -159,26 +161,24 @@ public class TCCBusiness {
 	/*
 	 * Verifica se a data de apresentação está dentro do prazo da defesa
 	 */
-	public boolean validateDataApresentacao(TCC tcc) {
-		if(tcc != null) {
-			if(tcc.getDataApresentacao() == null) {
-				errors.add("É necessário informar a data de aprensetação\n");
-				return false;
-			}
-			Prazo prazoDefesa = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.DEFESA, tcc.getCalendarioSemestre());
+	public boolean validateDataApresentacao(Timestamp data, CalendarioSemestre calendario) {
+		if(data != null && calendario != null) {
+			Prazo prazoDefesa = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.DEFESA, calendario);
 			if(prazoDefesa == null) {
 				System.out.println("Não existe prazo pra defesa\n");
 				return false;
 			}
-				// 0 se for igual, negativo se for antes
-				int comparacao = tcc.getDataApresentacao().compareTo(prazoDefesa.getDataFinal());
+			// 0 se for igual, negativo se for antes
+			int comparacao = data.compareTo(prazoDefesa.getDataFinal());
 			if(comparacao > 0) {
+				System.out.println("Erro na comparacao\n");
 				errors.add("A data da sua aprensentação está fora dos limites de prazo\n");
 				return false;
 			}
 			return true;
 		}
-		errors.add("É necessário informar o tcc.\n");
+		System.out.println("Passou tudo\n");
+		errors.add("É necessário informar o a data de apresentação e o calendário.\n");
 		return false;
 	}
 	/*
@@ -190,26 +190,20 @@ public class TCCBusiness {
 			errors.add("É necessário informar a sala de apresentação\n");
 			return false;
 		}
-		if(salaBusiness.getSalaByTcc(tcc).isOnline())
+		if(salaBusiness.getSalaByTcc(tcc).getOnline())
 			return true;
+		if(tcc.getDataApresentacao() == null) {
+			return false;
+		}
 		List<TCC> tccs = tccDao.getTCCByDataApresentacao(new Date(tcc.getDataApresentacao().getTime()));
 		System.out.println("Encontrados: " + tccs.size());
-		List<TCC> result = new ArrayList<TCC>();
 		for(TCC tccIt : tccs) {
 			if(tccIt.getIdTCC() != tcc.getIdTCC() && tccIt.getSala().getIdSala() == tcc.getSala().getIdSala()
-					&& !tccIt.getSala().isOnline()) {
-//				result.add(tccIt);
+					&& !tccIt.getSala().getOnline()) {
 				errors.add("Já existe uma defesa marcada para essa hora nessa sala\n");
 				return false;
 			}
 		}
-//		if(result != null && result.size() > 0) {
-//			for(TCC tccIt : result) {
-//				System.out.println("ID tcc2: " + tccIt.getIdTCC());
-//			}
-//			errors.add("Já existe uma defesa marcada para essa hora nessa sala\n");
-//			return false;
-//		}
 		return true;
 	}
 
@@ -289,6 +283,10 @@ public class TCCBusiness {
 
 	public List<TCC> getTCCsByCurso(Curso curso) {
 		return tccDao.getTCCsByCurso(curso);
+	}
+	
+	public List<TCC> getTCCsBySala(Sala sala) {
+		return tccDao.getTCCsBySala(sala);
 	}
 	
 	public TCC getCurrentTCCByAuthor(Usuario user, CalendarioSemestre currentCalendar) {
@@ -394,6 +392,7 @@ public class TCCBusiness {
 	public List<TCC> getAllTrabalhosByCurso(Curso curso) {
 		return tccDao.getAllTrabalhosByCurso(curso);
 	}
+	
 
 	public List<TCC> getTrabalhosByCalendar(CalendarioSemestre currentCalendar) {
 		return tccDao.getTrabalhosByCalendar(currentCalendar);
@@ -777,7 +776,7 @@ public class TCCBusiness {
 				break;
 
 			case Prazo.ENTREGA_FINAL:
-				if (!tcc.isEntregouDoc() || !tcc.isTrabFinal()) {
+				if (!tcc.isEntregouDocumentacao() || !tcc.isTrabFinal()) {
 					tarefasDentroDoPrazo = false;
 				}
 				break;
