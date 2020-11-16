@@ -560,6 +560,7 @@ public class EditorTccController extends CommonsController {
 				Messagebox.show("Esse professor já está na lista ou é o orientador/co-orientador do TCC", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 			}
+			tempUser = null;
 		}
 	}
 

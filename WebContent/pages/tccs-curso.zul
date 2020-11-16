@@ -78,30 +78,17 @@
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de defesa" /> 
 				</column>
 				<column hflex="2" >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
+					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de defesa" /> 
 				</column>
-				<column hflex="8" label="Autor"
+				<column hflex="6" label="Autor"
 					sort="auto(aluno.nomeUsuario)" />
-				<column hflex="7" label="Orientador" sort="auto(orientador.nomeUsuario)" />
+				<column hflex="6" label="Orientador" sort="auto(orientador.nomeUsuario)" />
 				<column hflex="2" >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="horário" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="de envio" />
+					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e horário de envio" /> 
 				</column>
-				<column hflex="2" label="Status" image="/img/help.gif"
+				<column hflex="3" label="Status" image="/img/help.gif"
 					tooltip="filterStatus" style="cursor: help" />
-				<column hflex="2" align="left" > 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Entregou" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="documentos?" /> 
-				 </column>
-				<column hflex="2">
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Enviou" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="trabalho" />
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="final?" /> 
-					  
-				</column>
-				<column hflex="2"  label="Excluir" />
+				<column hflex="1"  label="Excluir" />
 			</columns>
 			<template name="lista">
 				<row xmlns:w="client"
@@ -137,13 +124,7 @@
 					<label value="@load(each.aluno.nomeUsuario)" />
 					<label value="@load(each.orientador.nomeUsuario)" />
 					<label value="@load(each.dataEnvioFinal eq null ? (each.dataEnvioBanca eq null ? '' : vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16)) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
-					<label value="@load(each.statusTCC)" />
-					<div align="center" >
-						<checkbox disabled="true" style="center" checked="@load(each.isEntregouDocumentacao())" />
-					</div>
-					<div align="center" >
-					<checkbox disabled="true" style="center" checked="@load(each.isTrabFinal())" />
-					</div>
+					<label value="@load(each.statusCorridoTCC)" />
 					<button image="/img/delete.png" 
 						onClick="@command('excluirTCC', tcc=each)" />
 				</row>
