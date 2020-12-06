@@ -68,7 +68,6 @@ public class EditorTccController extends CommonsController {
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
 			canChangeParticipacao = false, canChangeBanca = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
 			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false;
-	private EnviadorEmailChain enviadorEmail = new EnviadorEmailProjetoCriado();
 	
 	private Logger logger = Logger.getLogger(EditorTccController.class);
 
@@ -134,7 +133,7 @@ public class EditorTccController extends CommonsController {
 			hasSubtitulo = (tcc.getSubNomeTCC() != null);
 		}
 		departamentos = (new DepartamentoBusiness()).getAll();
-		salas = (new SalaBusiness()).getAll();
+		salas = (new SalaBusiness()).getAllByCurso(tcc.getAluno().getCurso());
 	}
 
 	private boolean canEdit() {

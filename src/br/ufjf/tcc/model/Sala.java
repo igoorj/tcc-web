@@ -41,11 +41,11 @@ public class Sala implements Serializable {
 	private int idSala;
 
 	/**
-	 * Campo com o nome da sala. Relaciona com a coluna {@code aviso} do banco
+	 * Campo com o nome da sala. Relaciona com a coluna {@code nomeSala} do banco
 	 * através da anotação
-	 * {@code @Column(name = "nome", length = 50, nullable = true)}.
+	 * {@code @Column(name = "nomeSala", length = 50, nullable = true)}.
 	 */
-	@Column(name = "nomeSala", length = 50, nullable = false)
+	@Column(name = "nomeSala", length = 50, nullable = true)
 	private String nomeSala;
 	
 	/**
@@ -65,6 +65,24 @@ public class Sala implements Serializable {
 	 */
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "sala")
 	private List<TCC> tcc = new ArrayList<TCC>();
+	
+	/**
+	 * Relacionamento N para 1 entre Sala e Curso. Mapeando {@link Curso} na
+	 * variável {@code curso} e retorno do tipo {@code LAZY} que indica que não
+	 * será carregado automáticamente este dado quando retornarmos o
+	 * {@link Sala}.
+	 */
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idCurso", nullable = true)
+	private Curso curso;
+	
+	/**
+	 * Campo com o calendarId, usado para criar evento em um calendário específico do google. 
+	 * {@code @Column(name = "googleCalendarId", length = 200, nullable = true)}.
+	 */
+	@Column(name = "googleCalendarId", length = 200, nullable = true)
+	private String googleCalendarId;
 	
 	@Transient
 	private boolean editingStatus;
@@ -114,6 +132,23 @@ public class Sala implements Serializable {
 		this.nomeSala = another.nomeSala;
 		this.online = another.online;
 	}
+
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
+	}
+
+	public String getGoogleCalendarId() {
+		return googleCalendarId;
+	}
+
+	public void setGoogleCalendarId(String googleCalendarId) {
+		this.googleCalendarId = googleCalendarId;
+	}
+	
 	
 	
 }

@@ -47,7 +47,6 @@ public class GoogleCalendar {
 	private HttpRequestInitializer getCredentials(final NetHttpTransport HTTP_TRANSPORT, TCC tcc) throws IOException {
 		logger.debug("Obtendo credenciais...");
 		String credentialsPath = CREDENTIALS_FILE_PATH + tcc.getAluno().getCurso().getCodigoCurso() + ".json";
-//		String credentialsPath = CREDENTIALS_FILE_PATH;
 		logger.debug("Caminho do arquivo de credenciais: " + credentialsPath);
 		System.out.println("Caminho: " + credentialsPath);
 		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath));
@@ -58,6 +57,8 @@ public class GoogleCalendar {
 	}
 
 	public boolean marcarDefesaTcc(TCC tcc) {
+		System.out.println("Criando evento de defesa de tcc...");
+		System.out.println("Id tcc: " + tcc.getIdTCC());
 		logger.debug("Criando evento de defesa de tcc...");
 		logger.debug("Id: " + tcc.getIdTCC());
 		try {
@@ -65,7 +66,7 @@ public class GoogleCalendar {
 			Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT, tcc))
 					.build();
 			Event newEvent = buildEvent(tcc);
-			String calendarId = "primary";
+			String calendarId = tcc.getSala().getGoogleCalendarId() == null ? "primary" : tcc.getSala().getGoogleCalendarId();
 			try {
 				service.events().get(calendarId, newEvent.getId()).execute();
 				System.out.println("Update no evento");

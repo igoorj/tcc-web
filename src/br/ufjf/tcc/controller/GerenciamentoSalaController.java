@@ -8,8 +8,9 @@ import java.util.Map;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.DependsOn;
 import org.zkoss.bind.annotation.Init;
-import org.zkoss.zk.ui.Executions;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -17,26 +18,28 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Window;
 
-import br.ufjf.tcc.business.DepartamentoBusiness;
+import br.ufjf.tcc.business.CursoBusiness;
 import br.ufjf.tcc.business.SalaBusiness;
-import br.ufjf.tcc.model.Departamento;
+import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Sala;
-import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
 public class GerenciamentoSalaController extends CommonsController {
 	private SalaBusiness salaBusiness = new SalaBusiness();
-	private Sala novaSala = null;
+	private Sala auxSala = new Sala();
 	private Map<Integer, Sala> editTemp = new HashMap<Integer, Sala>();
 	private List<Sala> allSalas = salaBusiness.getAll();
 	private List<Sala> filterSalas = allSalas;
+	private List<Curso> cursos = (new CursoBusiness()).getAll();	
 	private String filterString = "";
-	private boolean submitUserListenerExists = false;
+	private boolean submitSalaListenerExists = false;
 		
 	
 	
 	@Init
 	public void init() {
+		System.out.println("Teste no init");
+		
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if(tipoUsuario != Usuario.ADMINISTRADOR) {
 			redirectHome();
@@ -45,16 +48,22 @@ public class GerenciamentoSalaController extends CommonsController {
 		
 	}
 	
+	
 	public List<Sala> getFilterSalas() {
 		return filterSalas;
 	}
 
-	public Sala getNovaSala() {
-		return this.novaSala;
+	public Sala getAuxSala() {
+		return this.auxSala;
 	}
-
-	public void setNovaSala(Sala novaSala) {
-		this.novaSala = novaSala;
+	
+	public List<Curso> getCursos() {
+		return this.cursos;
+	}
+	
+	
+	public void setAuxSala(Sala sala) {
+		this.auxSala = sala;
 	}
 
 	public String getFilterString() {
@@ -64,21 +73,6 @@ public class GerenciamentoSalaController extends CommonsController {
 	public void setFilterString(String filterString) {
 		this.filterString = filterString;
 	}
-
-//	@Command
-//	public void changeEditableStatus(@BindingParam("departamento") Sala sala) {
-//		if (!sala.getEditingStatus()) {
-//			Sala temp = new Sala();
-//			temp.copy(sala);
-//			editTemp.put(sala.getIdSala(), temp);
-//			departamento.setEditingStatus(true);
-//		} else {
-//			departamento.copy(editTemp.get(departamento.getIdDepartamento()));
-//			editTemp.remove(departamento.getIdDepartamento());
-//			departamento.setEditingStatus(false);
-//		}
-//		refreshRowTemplate(departamento);
-//	}
 
 	@Command
 	public void confirm(@BindingParam("sala") Sala sala) {
@@ -151,24 +145,36 @@ public class GerenciamentoSalaController extends CommonsController {
 		BindUtils.postNotifyChange(null, null, this, "filterSalas");
 	}
 
-	@Command
-	public void addSala(@BindingParam("window") Window window) {
-		this.limpa();
+	
+	@NotifyChange("auxSala")
+	@Command 
+	public void formSala(@BindingParam("window") Window window, @BindingParam("sala") Sala sala) {
+		if(sala == null) {
+			sala = new Sala();
+			window.setTitle("Criar sala");
+		} else {
+			System.out.println("Form sala: " + sala.getNomeSala());
+			window.setTitle("Editar sala");
+		}
+		setAuxSala(sala);
 		window.doModal();
 	}
+	
 
 	@Command
 	public void submitSala(@BindingParam("window") final Window window) {
 		Clients.showBusy(window, "Cadastrando...");
 
-		if (!submitUserListenerExists) {
-			submitUserListenerExists = true;
+		if (!submitSalaListenerExists) {
+			submitSalaListenerExists = true;
 			window.addEventListener(Events.ON_CLIENT_INFO, new EventListener<Event>() {
 				@Override
 				public void onEvent(Event event) throws Exception {
-					if (salaBusiness.validate(novaSala)) {
-						if (salaBusiness.salvar(novaSala)) {
-							allSalas.add(novaSala);
+					if (salaBusiness.validate(auxSala)) {
+						if (salaBusiness.salvar(auxSala)) {
+							if(auxSala.getIdSala() != 0) {
+								allSalas.add(auxSala);
+							}
 							filterSalas = allSalas;
 							notifySalas();
 							Clients.clearBusy(window);
@@ -191,33 +197,19 @@ public class GerenciamentoSalaController extends CommonsController {
 				}
 			});
 		}
-
 		Events.echoEvent(Events.ON_CLIENT_INFO, window, null);
 	}
 
-	@Command
-	public void changeEditableStatus(@BindingParam("sala") Sala sala) {
-		System.out.println("Id da sala: " + sala.getIdSala());
-		if (!sala.getEditingStatus()) {
-			Sala temp = new Sala();
-			temp.copy(sala);
-			editTemp.put(sala.getIdSala(), temp);
-			sala.setEditingStatus(true);
-		} else {
-			sala.copy(editTemp.get(sala.getIdSala()));
-			editTemp.remove(sala.getIdSala());
-			sala.setEditingStatus(false);
-		}
-		refreshRowTemplate(sala);
-	}
 	
 	public void notifySalas() {
 		BindUtils.postNotifyChange(null, null, this, "filterSalas");
 	}
-
+	
+	
 	public void limpa() {
-		novaSala = new Sala();
-		BindUtils.postNotifyChange(null, null, this, "novaSala");
+		System.out.println("Limpando sala...");
+		this.auxSala = new Sala();
+		BindUtils.postNotifyChange(null, null, this, "auxSala");
 	}
 
 }
