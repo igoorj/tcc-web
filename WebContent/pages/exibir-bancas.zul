@@ -127,7 +127,7 @@
 							</vlayout>
 						</popup>
 					</div>
-					<label value="@load(each.salaDefesa)" />
+					<label value="@load(each.sala.nomeSala ne null ? each.sala.nomeSala : each.salaDefesa)" />
 					<label value="@load(each.aluno.nomeUsuario)" />
 					<label value="@load(each.orientador.nomeUsuario)" />
 					<label value="@load(each.dataEnvioFinal eq null? vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />

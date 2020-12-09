@@ -375,26 +375,6 @@ public class TCCsCursoController extends CommonsController {
 				});
 	}
 
-	@Command
-	public void checkEnviouDoc(@BindingParam("tcc") TCC tcc) {
-		if (tcc.isEntregouDoc()) {
-			tcc.setEntregouDoc(false);
-		} else {
-			tcc.setEntregouDoc(true);
-		}
-		new TCCBusiness().edit(tcc);
-	}
-	
-	@Command
-	public void checkEnviouTrabFinal(@BindingParam("tcc") TCC tcc) {
-		if (tcc.isTrabFinal()) {
-			tcc.setTrabFinal(false);
-		} else {
-			tcc.setTrabFinal(true);
-		}
-		new TCCBusiness().edit(tcc);
-
-	}
 
 	public SimpleDateFormat getSdf() {
 		return sdf;

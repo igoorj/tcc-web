@@ -101,11 +101,12 @@
 							emptyMessage="Nenhum examinador adicionado"
 							style="margin-left:5px; margin-right:5px; margin-top:5px;">
 							<auxhead>
-								<auxheader colspan="3">
+								<auxheader colspan="3"
+									if="${vm.canChangeBanca}">
 									<vlayout>
 										<combobox width="75%"
 											id="cmbDepartamentoBanca" model="@load(vm.departamentos)"
-											readonly="true" value="Selecione o Departamento"
+											readonly="true" placeholder="Selecione o Departamento"
 											tooltiptext="Selecione o Departamento"
 											onSelect="@command('selectedDepartamento', dep=self.selectedItem)">
 											<template name="model">
@@ -114,8 +115,8 @@
 											</template>
 										</combobox>
 										<combobox
-											model="@load(vm.orientadores)" width="75%" readonly="true"
-											value="Selecione o Examinador"
+											model="@load(vm.orientadores)" width="75%" readonly="false"
+											placeholder="Selecione o Examinador"
 											tooltiptext="Selecione o Examinador"
 											selectedItem="@load(vm.tempUser) @save(vm.tempUser, before='addToBanca')">
 											<template name="model">
@@ -135,17 +136,17 @@
 							<columns>
 							
 								<column label="Nome do examinador" />
-								<column label="Ação" width="60px" />
+								<column label="Ação" width="60px" if="${vm.canChangeBanca}"/>
 								<column label="Suplente" width="60px" />
 								<column label="Participou?" width="80px" if="${vm.canChangeParticipacao}"/>
 								
 							</columns>
 							
-							<template name="model">							
+							<template name="model">
 								<row>
 									<label
 										value="@load(each.professor.nomeUsuario)" />
-									<button image="/img/delete.png"
+									<button if="${vm.canChangeBanca}" image="/img/delete.png"
 										onClick="@command('removeFromBanca', participacao=each)" />
 									<checkbox style="padding:10px"  checked="@load(each.isSuplente())"
 									  value="@load(each)" 
@@ -201,8 +202,8 @@
 							<label value="Data de Apresentação: "
 								style="margin-top:5px" />
 							<datebox
-								onChange="@command('validarDataApresentacao')"
-								value="@bind(vm.tcc.dataApresentacao)" format="dd/MM/yyyy HH:mm"
+								readonly="true"
+								value="@bind(vm.tempDataApresentacao)" format="dd/MM/yyyy HH:mm"
 								hflex="1" />
 						</hlayout>
 
@@ -212,11 +213,13 @@
 								style="margin-top:5px" />
 								<combobox id="cmbSalas" hflex="1"
 								model="@load(vm.salas)" readonly="true"
-								value="@load(vm.tcc.sala.nomeSala)"
-								selectedItem="@bind(vm.tcc.sala)">
+								value="@load(vm.tempSala.nomeSala)"
+								selectedItem="@bind(vm.tempSala)"
+								>
 								<template name="model">
 									<comboitem
-										label="@load(each.nomeSala)" />
+										label="@load(each.nomeSala)"
+										value = "@load(each)" />
 								</template>
 							</combobox>
 						</hlayout>

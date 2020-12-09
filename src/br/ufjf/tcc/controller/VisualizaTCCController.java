@@ -58,7 +58,6 @@ public class VisualizaTCCController extends CommonsController {
 	private Div informacoes, ficha;
 	private boolean exibeBaixarTrabExtra;
 	private boolean possuiBanca ;
-	private boolean exibirChave ;
 	private Button btnAtualizarTCC;
 
 	public String getPageTitle() {
@@ -85,7 +84,6 @@ public class VisualizaTCCController extends CommonsController {
 			possuiBanca=true;
 		
 		this.exibeBaixarTrabExtra = exibirBaixarTrabalhoExtra();
-		this.exibirChave = exibirChave();
 		
 		if (tcc != null && canViewTCC()) {
 			if (getUsuario() != null && checkLogin()) {
@@ -128,7 +126,7 @@ public class VisualizaTCCController extends CommonsController {
 				if (p.getProfessor().getIdUsuario() == getUsuario()
 						.getIdUsuario()) {
 					canDownloadFileBanca = true;
-					canAnswer = true;
+//					canAnswer = true;
 					return true;
 				}
 			
@@ -169,7 +167,12 @@ public class VisualizaTCCController extends CommonsController {
 	public void setTcc(TCC tcc) {
 		this.tcc = tcc;
 	}
-
+	
+	/**
+	 * canAnswer decide exibir a aba de perguntas e respostas para membros da banca
+	 * Ainda não implemtado.
+	 * @return
+	 */
 	public boolean isCanAnswer() {
 		return canAnswer;
 	}
@@ -564,7 +567,6 @@ public class VisualizaTCCController extends CommonsController {
 		
 	}
 	
-	
 	@Command
 	public void aprovarTCC(@BindingParam("window") final Window window) {
 		int status = tcc.getStatus();
@@ -629,17 +631,6 @@ public class VisualizaTCCController extends CommonsController {
 			if(tccBusiness.isProjetoAguardandoAprovacao(tcc))
 				return true;
 		}
-		return false;
-	}
-	
-	
-	// TODO perguntar
-	public boolean exibirChave(){
-//		if(tcc.getArqProjFinal()!=null){
-//			if(tcc.getArquivoTCCBanca()!=null || tcc.getArquivoTCCFinal()!=null)
-//				return true;
-//		}
-		
 		return false;
 	}
 	
@@ -713,16 +704,5 @@ public class VisualizaTCCController extends CommonsController {
 		this.possuiBanca = possuiBanca;
 	}
 
-	public boolean isExibirChave() {
-		return exibirChave;
-	}
-
-	public void setExibirChave(boolean exibirChave) {
-		this.exibirChave = exibirChave;
-	}
-
-	
-	
-	
 	
 }

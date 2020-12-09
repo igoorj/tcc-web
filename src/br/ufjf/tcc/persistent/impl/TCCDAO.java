@@ -9,6 +9,7 @@ import org.hibernate.Query;
 
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
+import br.ufjf.tcc.model.Sala;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 import br.ufjf.tcc.persistent.GenericoDAO;
@@ -71,6 +72,31 @@ public class TCCDAO extends GenericoDAO {
 			e.printStackTrace();
 		}
 
+		return null;
+	}
+	
+	public List<TCC> getTCCsBySala(Sala sala) {
+		try {
+			Query query = getSession().createQuery(
+						"SELECT t FROM TCC AS t " +
+						"JOIN FETCH t.aluno AS a " +
+						"JOIN FETCH t.orientador " +
+						"WHERE (t.sala = :sala) " +
+					"ORDER BY t.dataEnvioFinal DESC");
+			query.setParameter("sala", sala);
+			
+			List<TCC> resultados = query.list();
+			
+			getSession().close();
+			
+			if (resultados != null) {
+				return resultados;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 
@@ -648,7 +674,11 @@ public class TCCDAO extends GenericoDAO {
 		 try {
 		        Query query = getSession()
 		                .createQuery(
-		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a JOIN FETCH t.orientador LEFT JOIN FETCH t.participacoes LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso ORDER BY t.dataEnvioFinal DESC");
+		                          "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a "
+		                        + "JOIN FETCH t.orientador LEFT JOIN FETCH t.participacoes "
+		                        + "LEFT JOIN FETCH t.sala "
+		                        + "LEFT JOIN FETCH t.coOrientador WHERE a.curso = :curso "
+		                        + "ORDER BY t.dataEnvioFinal DESC");
 		        query.setParameter("curso", curso);
 
 		        List<TCC> resultados = query.list();

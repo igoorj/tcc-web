@@ -14,7 +14,7 @@
 					<tabs id="tabs" height="100%">
 						<tab id="A" label="Informações do Trabalho" />
 						<tab id="B" label="Preencher ficha de respostas"
-							visible="@load(vm.canAnswer ? 'true' : 'false')" />
+							if="${vm.canAnswer}" />
 					</tabs>
 					<tabpanels height="100%">
 						<tabpanel height="100%"
@@ -45,18 +45,20 @@
 									<label value="Banca Examinadora"									
 									style="font-size: 14px; font-weight: bold; margin-top: 10px;" />
 									<div style="padding-top:5px;padding-bottom:5px">
-									<grid  model="@load(vm.tcc.participacoes) @template('participacoes')" >
-									 	<columns>
-									 		<column hflex="2" />									 		
-									 		<column hflex="1" />									 		
-									 	</columns>
-										<template name="participacoes">
-											<row>
-												<label  style="color:black" value="@load(each.professor.nomeUsuario)" />
-												<label  style="color:black;" visible="@load(each.isSuplente())" value="(Suplente)" />
-											</row>
-										</template>
-									</grid>
+										<grid  model="@load(vm.tcc.participacoes) @template('participacoes')" >
+										 	<columns>
+										 		<column hflex="2" />									 		
+										 		<column hflex="1" />									 		
+										 		<column hflex="1" />									 		
+										 	</columns>
+											<template name="participacoes">
+												<row>
+													<label  style="color:black" value="@load(each.professor.nomeUsuario)" />
+													<label  style="color:black;" visible="@load(each.isSuplente())" value="(Suplente)" />
+													<label  style="color:black;" visible="@load(each.isParticipou())" value="(Participou)" />
+												</row>
+											</template>
+										</grid>
 									</div>
 								</div>
 									
@@ -117,7 +119,8 @@
 							</div>				
 						</tabpanel>
 						<tabpanel
-							visible="@load(vm.canAnswer ? 'true' : 'false')" height="100%"
+							if="${vm.canAnswer}"
+							height="100%"
 							style="overflow:scroll;">
 							<div visible="false"
 								onCreate="@command('setFicha', adiv=self)">
