@@ -1,9 +1,13 @@
 package br.ufjf.tcc.mail;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.joda.time.DateTime;
 
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
+import br.ufjf.tcc.model.Usuario;
 
 public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 
@@ -41,7 +45,14 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			emailBuilder.appendMensagem("<b>Data da apresentação:</b> "+dataFormatada).breakLine();
 			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSala().getNomeSala()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema().breakLine().breakLine();
-			inserirDestinatarios(tcc.getProfessoresParticipacoes(), emailBuilder);
+			
+			List<Usuario> destinatarios = new ArrayList<>();
+			destinatarios.addAll(tcc.getProfessoresParticipacoes());
+			destinatarios.add(tcc.getOrientador());
+			if(tcc.possuiCoorientador()) {
+				destinatarios.add(tcc.getCoOrientador());
+			}
+			inserirDestinatarios(destinatarios, emailBuilder);
 //	}
 		return emailBuilder;
 	}

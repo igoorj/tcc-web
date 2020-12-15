@@ -103,10 +103,10 @@ public class Sala implements Serializable {
 		this.nomeSala = nome;
 	}
 
-	public boolean getOnline() {
+	public boolean isOnline() {
 		return online;
 	}
-
+	
 	public void setOnline(boolean online) {
 		this.online = online;
 	}

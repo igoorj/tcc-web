@@ -190,7 +190,7 @@ public class TCCBusiness {
 			errors.add("É necessário informar a sala de apresentação\n");
 			return false;
 		}
-		if(salaBusiness.getSalaByTcc(tcc).getOnline())
+		if(salaBusiness.getSalaByTcc(tcc).isOnline())
 			return true;
 		if(tcc.getDataApresentacao() == null) {
 			return false;
@@ -199,7 +199,7 @@ public class TCCBusiness {
 		System.out.println("Encontrados: " + tccs.size());
 		for(TCC tccIt : tccs) {
 			if(tccIt.getIdTCC() != tcc.getIdTCC() && tccIt.getSala().getIdSala() == tcc.getSala().getIdSala()
-					&& !tccIt.getSala().getOnline()) {
+					&& !tccIt.getSala().isOnline()) {
 				errors.add("Já existe uma defesa marcada para essa hora nessa sala\n");
 				return false;
 			}

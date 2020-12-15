@@ -32,14 +32,12 @@ public class GerenciamentoSalaController extends CommonsController {
 	private List<Sala> filterSalas = allSalas;
 	private List<Curso> cursos = (new CursoBusiness()).getAll();	
 	private String filterString = "";
-	private boolean submitSalaListenerExists = false;
+	private boolean submitSalaListenerExists = false, editingSala = false;
 		
 	
 	
 	@Init
 	public void init() {
-		System.out.println("Teste no init");
-		
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if(tipoUsuario != Usuario.ADMINISTRADOR) {
 			redirectHome();
@@ -64,6 +62,7 @@ public class GerenciamentoSalaController extends CommonsController {
 	
 	public void setAuxSala(Sala sala) {
 		this.auxSala = sala;
+//		BindUtils.postNotifyChange(null, null, this, "auxSala");
 	}
 
 	public String getFilterString() {
@@ -77,11 +76,6 @@ public class GerenciamentoSalaController extends CommonsController {
 	@Command
 	public void confirm(@BindingParam("sala") Sala sala) {
 		if (salaBusiness.validate(sala)){
-			System.out.println("Entrou no if");
-			System.out.println("Id: " + sala.getIdSala());
-			System.out.println("Online: " + sala.getOnline());
-			System.out.println("Nome: " + sala.getNomeSala());
-//				editTemp.get(sala.getIdSala()).getNomeSala())) {
 			if (!salaBusiness.editar(sala)) {
 				System.out.println("Ocorreu erro");
 				Messagebox.show("Não foi possível editar a sala.", "Erro", Messagebox.OK, Messagebox.ERROR);
@@ -145,18 +139,18 @@ public class GerenciamentoSalaController extends CommonsController {
 		BindUtils.postNotifyChange(null, null, this, "filterSalas");
 	}
 
-	
 	@NotifyChange("auxSala")
 	@Command 
 	public void formSala(@BindingParam("window") Window window, @BindingParam("sala") Sala sala) {
 		if(sala == null) {
+			editingSala = false;
 			sala = new Sala();
 			window.setTitle("Criar sala");
 		} else {
-			System.out.println("Form sala: " + sala.getNomeSala());
+			editingSala = true;
 			window.setTitle("Editar sala");
 		}
-		setAuxSala(sala);
+		this.auxSala = sala;
 		window.doModal();
 	}
 	
@@ -171,8 +165,8 @@ public class GerenciamentoSalaController extends CommonsController {
 				@Override
 				public void onEvent(Event event) throws Exception {
 					if (salaBusiness.validate(auxSala)) {
-						if (salaBusiness.salvar(auxSala)) {
-							if(auxSala.getIdSala() != 0) {
+						if (salaBusiness.salvaOuEdita(auxSala)) {
+							if(!editingSala) {
 								allSalas.add(auxSala);
 							}
 							filterSalas = allSalas;
@@ -183,9 +177,10 @@ public class GerenciamentoSalaController extends CommonsController {
 							limpa();
 						} else {
 							Clients.clearBusy(window);
-							Messagebox.show("Sala não foi adicionada!", "Erro", Messagebox.OK,
+							Messagebox.show("Sala não foi adicionada! Ocorreu um erro no banco", "Erro", Messagebox.OK,
 									Messagebox.ERROR);
 						}
+						window.setVisible(false);
 					} else {
 						String errorMessage = "";
 						for (String error : salaBusiness.getErrors())
@@ -207,7 +202,6 @@ public class GerenciamentoSalaController extends CommonsController {
 	
 	
 	public void limpa() {
-		System.out.println("Limpando sala...");
 		this.auxSala = new Sala();
 		BindUtils.postNotifyChange(null, null, this, "auxSala");
 	}

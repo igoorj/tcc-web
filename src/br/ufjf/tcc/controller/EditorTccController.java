@@ -67,7 +67,7 @@ public class EditorTccController extends CommonsController {
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
 			canChangeParticipacao = false, canChangeBanca = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
-			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false;
+			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false, canUpdateTCC = false;
 	
 	private Logger logger = Logger.getLogger(EditorTccController.class);
 
@@ -102,7 +102,8 @@ public class EditorTccController extends CommonsController {
 			canChangeBanca = true;
 			canChangeMatricula = true;
 			canChangeOrientacao = true;
-			canSubmitTCC = true;
+			canSubmitTCC = false;
+			canUpdateTCC = true;
 			canSubmitDocs = true;
 
 		case Usuario.SECRETARIA:
@@ -163,6 +164,10 @@ public class EditorTccController extends CommonsController {
 	
 	public boolean isCanSubmitTCC() {
 		return canSubmitTCC;
+	}
+	
+	public boolean isCanUpdateTCC() {
+		return canUpdateTCC;
 	}
 	
 	public String getMensagem() {
@@ -883,14 +888,16 @@ public class EditorTccController extends CommonsController {
 		int status = tcc.getStatus();
 		if(tccAtrasado) {
 			canSubmitTCC = false;
-			if(tccBusiness.isTccReprovado(tcc) && !tccBusiness.isTccReprovadoAtrasado(tcc))
+			if(tccBusiness.isTccReprovado(tcc) && !tccBusiness.isTccReprovadoAtrasado(tcc)) {
 				canSubmitTCC = true;
+			}
 		}
 		if(status == TCC.PAA || status == TCC.TAAC || status == TCC.TAAO)
 			canSubmitTCC = false;
 		else if(status == TCC.TEPB && !verificarJaApresentou()) {
 			canSubmitTCC = false;
 		}
+		canUpdateTCC = canSubmitTCC;
 //		if(status == TCC.TEPB) {
 //			if(!verificarJaApresentou()) {
 //				canSubmitTCC = false;

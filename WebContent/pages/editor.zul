@@ -253,17 +253,17 @@
 						</hlayout>
 					</vlayout>
 				</groupbox>
-				<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitTCC}">
+				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC}">
 					<div hflex="1" align="center" style="margin:15px" >
-						<button label="Atualizar"
+						<button label="Salvar"
 							onClick="@command('updateTCC')" width="100%" height="30px"/>
 					</div>
-					<div hflex="1" align="center" style="margin:15px" >
+					<div hflex="1" align="center" style="margin:15px" if="${vm.canSubmitTCC}">
 						<button label="Submeter"
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
 				</hlayout>
-				<hlayout style="margin:5px;line-height:20px;text-align: center" unless="${vm.canSubmitTCC}">
+				<hlayout style="margin:5px;line-height:20px;text-align: center" unless="${vm.canUpdateTCC}">
 					<label value="@load(vm.getMensagem())" />
 				</hlayout>
 				

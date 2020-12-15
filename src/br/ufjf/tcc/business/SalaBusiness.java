@@ -70,22 +70,17 @@ public class SalaBusiness {
 		return salaDAO.exclui(sala);
 	}
 	
-	public boolean salvar (Sala sala) {
+	public boolean salvaOuEdita (Sala sala) {
 		return salaDAO.salvaOuEdita(sala);
 	}
 	
 	
 	public boolean validate(Sala sala) {
 		errors.clear();
-		System.out.println("Validate sala...");
-		System.out.println("Nome: " + sala.getNomeSala());
-		if(sala.getCurso() != null)
-			System.out.println("Curso: " + sala.getCurso().getNomeCurso());
-		System.out.println("Calendario: " + sala.getGoogleCalendarId());
 		if(sala.getNomeSala() != null && sala.getNomeSala().trim() == "") {
 			errors.add("É necessário informar o nome da sala.\n");
 		}
-		if(sala.getOnline() && sala.getCurso()==null) {
+		if(sala.isOnline() && sala.getCurso()==null) {
 			errors.add("É necessário informar o curso da sala online.\n");
 		}
 		return errors.size() == 0;
