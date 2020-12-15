@@ -516,42 +516,8 @@ public class VisualizaTCCController extends CommonsController {
 					
 					// Email de carta para membros da banca
 					EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
-					emailCarta.enviarEmails(tcc);
-					
-					SessionManager.setAttribute("trabalhos_semestre",true);
-					//Executions.sendRedirect("/pages/tccs-curso.zul");
-					
-					if (btnAtualizarTCC != null)
-						Events.sendEvent(new Event("onClick", btnAtualizarTCC));
-					
-					if (window != null)
-						window.detach();
-				} 
-			}
-		});
-		
-	}
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void aprovarTrabalho(@BindingParam("window") final Window window)
-	{
-		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-			public void onEvent(Event evt) throws InterruptedException {
-				if (evt.getName().equals("onYes")) {
-					java.util.Date date= new java.util.Date();
-					tcc.setDataEnvioFinal(new Timestamp(date.getTime()));
-					tcc.setCertificadoDigital(gerarCertificadoDigital());
-					UsuarioBusiness ub = new UsuarioBusiness();
-					new TCCBusiness().edit(tcc);
-					tcc.getAluno().setAtivo(false);
-					ub.editar(tcc.getAluno());
-					
-					// Email de notificação ao aluno que seu trabalho final foi aprovado
-					EnviadorEmailChain email = new EnviadorEmailAvisoTrabalhoFinalAprovado();
-					email.enviarEmail(tcc, null);
-					
-					// Email de carta para membros da banca
-					EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
-					emailCarta.enviarEmails(tcc);
+					emailCarta.enviarEmail(tcc, null);
+//					emailCarta.enviarEmails(tcc);
 					
 					SessionManager.setAttribute("trabalhos_semestre",true);
 					//Executions.sendRedirect("/pages/tccs-curso.zul");
