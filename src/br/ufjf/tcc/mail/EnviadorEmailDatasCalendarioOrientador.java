@@ -1,10 +1,9 @@
 package br.ufjf.tcc.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 
 import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.model.CalendarioSemestre;
@@ -34,12 +33,13 @@ public class EnviadorEmailDatasCalendarioOrientador extends EnviadorEmailChain {
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		CalendarioSemestre calendario = tcc.getCalendarioSemestre();
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
-		String dataLimiteSubmissaoProjeto = new DateTime(prazos.get(0).getDataFinal()).toString("dd/MM/yyyy");
-		String dataLimiteEntregaBanca = new DateTime(prazos.get(1).getDataFinal()).toString("dd/MM/yyyy");
-		String dataLimiteDefesa = new DateTime(prazos.get(2).getDataFinal()).toString("dd/MM/yyyy");
-		String dataLimiteSubmissaoTrabalhoFinal = new DateTime(prazos.get(3).getDataFinal()).toString("dd/MM/yyyy");
+		String dataLimiteSubmissaoProjeto = formatter.format(prazos.get(0).getDataFinal());
+		String dataLimiteEntregaBanca = formatter.format(prazos.get(1).getDataFinal());
+		String dataLimiteDefesa = formatter.format(prazos.get(2).getDataFinal());
+		String dataLimiteSubmissaoTrabalhoFinal = formatter.format(prazos.get(3).getDataFinal());
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Datas do calendário - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) <b>" + nomeOrientador + "</b>, ").breakLine();

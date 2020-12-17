@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import br.ufjf.tcc.business.PrazoBusiness;
+import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
@@ -30,15 +32,14 @@ public class EnviadorEmailAlertaSubmissaoTrabalhoFinal extends EnviadorEmailChai
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		Date dataApresentacao = tcc.getDataApresentacao();
-		Calendar calendario = dateToCalendar(dataApresentacao);
-		calendario.add(Calendar.DATE, 5);
+		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.ENTREGA_FINAL, tcc.getCalendarioSemestre());
+		String prazoString = formatter.format(prazo.getDataFinal());
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submissão de trabalho final - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ");
 		emailBuilder.breakLine().breakLine();
-		emailBuilder.appendMensagem("dentro de 2 dias (" + formatter.format(calendario.getTime()));
-		emailBuilder.appendMensagem(") se encerra o prazo para incluir no Sistema de Monografias a versão Final ");
+		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> se encerra o prazo ");
+		emailBuilder.appendMensagem("para incluir no Sistema de Monografias a versão Final ");
 		emailBuilder.appendMensagem("do TCC, após correções sugeridas pelos membros da Banca Examinadora. ").breakLine().breakLine();
 		emailBuilder.appendMensagem("Ainda não consta no sistema que o(a) discente realizou esta atividade ");
 		emailBuilder.appendMensagem("completamente. Por isso a Coordenação solicita que o(a) discente ");
