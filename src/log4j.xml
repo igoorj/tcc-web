@@ -12,7 +12,7 @@
 
 	<!-- Manda pro arquivo -->
 	<appender name="arquivo" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="${catalina.home}/logs/sgc/sgc.log" />
+		<param name="file" value="${catalina.home}/logs/teste/sgc/sgc.log" />
 		<param name="datePattern" value="'.'yyyy-MM-dd" />
 		<param name="append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
