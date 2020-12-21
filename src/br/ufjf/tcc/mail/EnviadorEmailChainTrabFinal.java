@@ -1,9 +1,8 @@
 package br.ufjf.tcc.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.joda.time.DateTime;
 
 import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.Participacao;
@@ -42,7 +41,8 @@ public class EnviadorEmailChainTrabFinal extends EnviadorEmailChain {
 					emailBuilder.appendMensagem("  - " + p.getProfessor().getNomeUsuario()).breakLine();
 				}
 			}
-			String dataFormatada = new DateTime(tcc.getDataApresentacao().getTime()).toString("dd/MM/yyyy - HH:mm");
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+			String dataFormatada = formatter.format(tcc.getDataApresentacao().getTime());
 			emailBuilder.appendMensagem("<b>Data da apresentação:</b> "+dataFormatada).breakLine();
 			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSalaDefesa()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema();

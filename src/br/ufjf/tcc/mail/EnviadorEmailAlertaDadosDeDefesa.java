@@ -1,9 +1,12 @@
 package br.ufjf.tcc.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.model.Participacao;
+import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
@@ -35,12 +38,18 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 				membros.add(participacao.getProfessor().getNomeUsuario());
 		}
 		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.ENTREGA_BANCA, tcc.getCalendarioSemestre());
+		String prazoString = formatter.format(prazo.getDataFinal());
+		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de inclusão dos dados da Defesa - "+nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ").breakLine();
-		emailBuilder.appendMensagem("dentro de <b>2 dias</b> se encerra o prazo para incluir ");
-		emailBuilder.appendMensagem("no Sistema de Monografias os dados da Defesa do Trabalho de Conclusão de Curso (TCC) e submeter  ");
+		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> se encerra o prazo ");
+		emailBuilder.appendMensagem("para incluir no Sistema de Monografias os dados  da Defesa ");
+		emailBuilder.appendMensagem("do Trabalho de Conclusão de Curso (TCC) e submeter ");
 		emailBuilder.appendMensagem("a versão do TCC a ser avaliado pelos membros da Banca Examinadora. ");
 		emailBuilder.breakLine().breakLine();
+		
 		emailBuilder.appendMensagem("<b>É preciso informar:</b> data, hora, local e ");
 		emailBuilder.appendMensagem("nome dos membros que farão parte da Banca Examinadora do TCC: ").breakLine(); 
 		

@@ -1,8 +1,11 @@
 package br.ufjf.tcc.mail;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufjf.tcc.business.PrazoBusiness;
+import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
@@ -26,10 +29,15 @@ public class EnviadorEmailAlertaSubmissaoProjeto extends EnviadorEmailChain{
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.PRAZO_PROJETO, tcc.getCalendarioSemestre());
+		String prazoString = formatter.format(prazo.getDataFinal());
+		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submissão de projeto - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>,");
 		emailBuilder.breakLine();
-		emailBuilder.appendMensagem("dentro de 2 dias se encerra o prazo para Submissão do Projeto ");
+		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> ");
+		emailBuilder.appendMensagem("se encerra o prazo para Submissão do Projeto ");
 		emailBuilder.appendMensagem("de Trabalho de Conclusão de Curso no Sistema de Monografias. ");
 		emailBuilder.appendMensagem("Ainda não consta no sistema que o(a) discente realizou esta atividade completamente.").breakLine();
 		emailBuilder.appendMensagem("Se essa tarefa não for cumprida dentro do prazo, não haverá como dar andamento das ");
