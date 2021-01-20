@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity
-@Table(name = "tipousuario")
+@Table(name = "tipoUsuario")
 public class TipoUsuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -57,7 +57,7 @@ public class TipoUsuario implements Serializable {
 	 * 
 	 */
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tipousuario_permissao", joinColumns = { @JoinColumn(name = "idTipoUsuario", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "idPermissao", nullable = false, updatable = false) })
+	@JoinTable(name = "tipoUsuario_Permissao", joinColumns = { @JoinColumn(name = "idTipoUsuario", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "idPermissao", nullable = false, updatable = false) })
 	private List<Permissao> permissoes = new ArrayList<Permissao>();
 
 	/**
