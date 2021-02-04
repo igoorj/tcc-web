@@ -67,7 +67,7 @@ public class EditorTccController extends CommonsController {
 	private boolean canChangeOrientacao = false, alunoEditBlock = true, canChangeMatricula = false, canEditUser = false,
 			alunoVerified = false, tccFileChanged = false, extraFileChanged = false, docFileChanged = false, hasSubtitulo = false,
 			canChangeParticipacao = false, canChangeBanca = false, hasCoOrientador = false, orientadorWindow = true, trabFinal = false,
-			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false, canUpdateTCC = false;
+			canSubmitTCC = true, canSubmitDocs = false, tccAtrasado = false, canUpdateTCC = false, alterouOrientador = false;
 	
 	private Logger logger = Logger.getLogger(EditorTccController.class);
 
@@ -87,7 +87,7 @@ public class EditorTccController extends CommonsController {
 			tcc = tempTCC;
 			statusInicialTCC = tcc.getStatusTCC();
 			
-			canChangeOrientacao = false;
+			canChangeOrientacao = true;
 			verificarAtrasado();
 			verificarCanChangeParticipacao();
 			verificarCanSubmitTCC();
@@ -132,6 +132,7 @@ public class EditorTccController extends CommonsController {
 			tempDataApresentacao = tcc.getDataApresentacao();
 			hasCoOrientador = (tcc.getCoOrientador() != null);
 			hasSubtitulo = (tcc.getSubNomeTCC() != null);
+			tccBusiness.preenchebanca(tcc);
 		}
 		departamentos = (new DepartamentoBusiness()).getAll();
 		salas = (new SalaBusiness()).getAllByCurso(tcc.getAluno().getCurso());
@@ -521,10 +522,20 @@ public class EditorTccController extends CommonsController {
 				Messagebox.show("Você escolheu um professor que já é seu Orientador.", "Inválido", Messagebox.OK,
 						Messagebox.ERROR);
 			} else {
-				if (orientadorWindow)
+				int tipoMembro = 0;
+				if (orientadorWindow) {
+					tcc.setParticipacoes(tccBusiness.removeParticipacao(tcc, tcc.getOrientador()));
 					tcc.setOrientador(tempUser);
-				else
+					tcc.getAluno().setOrientador(tempUser);
+					alterouOrientador = true;
+					tipoMembro = Participacao.ORIENTADOR;
+				}
+				else {
+					tcc.setParticipacoes(tccBusiness.removeParticipacao(tcc, tcc.getCoOrientador()));
 					tcc.setCoOrientador(tempUser);
+					tipoMembro = Participacao.COORIENTADOR;
+				}
+				tccBusiness.addParticipacao(tcc, tempUser, tipoMembro, canChangeParticipacao);
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			}
 		} else
@@ -538,7 +549,7 @@ public class EditorTccController extends CommonsController {
 		boolean find = false;
 
 		for (Participacao p : tcc.getParticipacoes())
-			if (p.getProfessor().getIdUsuario() == tempUser.getIdUsuario()) {
+			if (p.getTipo() == Participacao.BANCA && p.getProfessor().getIdUsuario() == tempUser.getIdUsuario()) {
 				find = true;
 				break;
 			}
@@ -553,12 +564,7 @@ public class EditorTccController extends CommonsController {
 			if (!participacoesContains(tempUser) && tempUser.getIdUsuario() != tcc.getOrientador().getIdUsuario()
 					&& (tcc.getCoOrientador() == null
 							|| tempUser.getIdUsuario() != tcc.getCoOrientador().getIdUsuario())) {
-				Participacao p = new Participacao();
-				p.setProfessor(tempUser);
-				p.setTcc(tcc);
-				if (tempUser.getTitulacao() != null)
-					p.setTitulacao(tempUser.getTitulacao());
-				tcc.getParticipacoes().add(p);
+				tccBusiness.addParticipacao(tcc, tempUser, Participacao.BANCA, false);
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			} else {
 				Messagebox.show("Esse professor já está na lista ou é o orientador/co-orientador do TCC", "Erro",
@@ -570,8 +576,10 @@ public class EditorTccController extends CommonsController {
 
 	@Command
 	public void removeFromBanca(@BindingParam("participacao") Participacao p) {
-		tcc.getParticipacoes().remove(p);
-		BindUtils.postNotifyChange(null, null, this, "tcc");
+		if(p.getTipo() == Participacao.BANCA) {
+			tcc.getParticipacoes().remove(p);
+			BindUtils.postNotifyChange(null, null, this, "tcc");
+		}
 	}
 
 	@Command
@@ -719,20 +727,28 @@ public class EditorTccController extends CommonsController {
 		if (!alunoEditBlock) {
 			updateTCCUser();
 		}
+		if(alterouOrientador) {
+			UsuarioBusiness ub = new UsuarioBusiness();
+			Usuario aluno = tcc.getAluno();
+			if (!ub.editar(aluno)) {
+				Messagebox.show("Devido a um erro, o Aluno não foi salvo.", "Erro", Messagebox.OK,
+						Messagebox.ERROR);
+			}
+		}
 		
 		if (tccBusiness.saveOrEdit(tcc)) {
-			String alerta;
-			if (tcc.isProjeto())
-				alerta = "Projeto salvo!\n" + "Não se esqueça de submetê-lo quando estiver concluído";
-			else
-				alerta = "Trabalho salvo!\n" + "Não se esqueça de submetê-lo quando estiver concluído";
-
 			if (!new ParticipacaoBusiness().updateList(tcc)) {
 				Messagebox.show("Não foi possível salvar as alterações da Banca Examinadora.", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 				
 				return;
 			}
+			
+			String alerta = tcc.isProjeto() ? "Projeto salvo!\n" : "Trabalho salvo!\n";
+			if (tipoUsuario == Usuario.ALUNO) {
+				alerta  = alerta + "Não se esqueça de submetê-lo quando estiver concluído.";
+			}
+			
 			Messagebox.show(alerta, "Confirmação", Messagebox.OK, Messagebox.EXCLAMATION,
 					new org.zkoss.zk.ui.event.EventListener() {
 						public void onEvent(Event evt) throws InterruptedException {
@@ -856,9 +872,6 @@ public class EditorTccController extends CommonsController {
 	
 	@Command
 	public void validarSala( ) {
-		System.out.println("Teste validar sala");
-		System.out.println("SalaId: " + tempSala.getIdSala());
-		System.out.println("Sala: " + tempSala.getNomeSala());
 		if(tcc.getStatus() >= TCC.TEPB) {
 			Messagebox.show("Não é possível alterar a sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
 					Messagebox.ERROR);
@@ -954,6 +967,11 @@ public class EditorTccController extends CommonsController {
 	 */
 	@Command
 	public void onCheckSuplente(@BindingParam("membro") Participacao p, @BindingParam("checked") boolean checked) {
+		if(p.getTipo() != Participacao.BANCA && checked) {
+			Messagebox.show("Não é possível marcar o orientador/coorientador como suplente", "Operação inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			return;
+		}
 		p.setSuplente(checked);
 	}
 

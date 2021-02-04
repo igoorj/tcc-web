@@ -46,7 +46,6 @@ import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Pergunta;
 import br.ufjf.tcc.model.Resposta;
 import br.ufjf.tcc.model.TCC;
-import br.ufjf.tcc.model.TipoUsuario;
 import br.ufjf.tcc.model.Usuario;
 
 public class VisualizaTCCController extends CommonsController {
@@ -517,7 +516,6 @@ public class VisualizaTCCController extends CommonsController {
 					// Email de carta para membros da banca
 					EnviadorEmailCartaParticipacao emailCarta = new EnviadorEmailCartaParticipacao();
 					emailCarta.enviarEmail(tcc, null);
-//					emailCarta.enviarEmails(tcc);
 					
 					SessionManager.setAttribute("trabalhos_semestre",true);
 					//Executions.sendRedirect("/pages/tccs-curso.zul");
@@ -544,16 +542,6 @@ public class VisualizaTCCController extends CommonsController {
 			aprovarTrabalhoCoordenador(window);
 		else 
 			System.out.println("Não deveria deixar aprovar");
-	}
-	
-	private void enviarEmail(EmailBuilder emailBuilder) {
-		try{
-			Email email = new Email();
-			email.enviar(emailBuilder);
-			
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public String gerarCertificadoDigital() {

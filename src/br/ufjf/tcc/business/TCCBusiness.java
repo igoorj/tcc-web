@@ -214,16 +214,24 @@ public class TCCBusiness {
 	}
 
 	public void validateBanca(List<Participacao> list) {
-		if ((list == null || list.size() < 3)) {
+		if (list == null) {
 			errors.add("É necessário informar a banca. Mínimo de 3 participantes.\n");
 			return;
 		}
-		validateSuplente(list);
-	}
-
-	public void validateSuplente(List<Participacao> list) {
-		if (!possuiSuplente(list))
+		boolean hasSuplente = false;
+		int membrosBanca = 0;
+		for(Participacao p : list) {
+			if(p.isSuplente())
+				hasSuplente = true;
+			if(p.getTipo() == Participacao.BANCA)
+				membrosBanca++;
+		}
+		if(membrosBanca < 3) {
+			errors.add("É necessário informar a banca. Mínimo de 3 participantes.\n");
+		}
+		if(!hasSuplente) {
 			errors.add("É necessário informar o suplente da banca.\n");
+		}
 	}
 	
 	
@@ -241,7 +249,7 @@ public class TCCBusiness {
 		if(participacoes != null) {
 			boolean alguemParticipou = false;
 			for(Participacao participacao : participacoes) {
-				if(participacao.isParticipou()) {
+				if(participacao.getTipo() == Participacao.BANCA && participacao.isParticipou()) {
 					alguemParticipou = true;
 					return;
 				}
@@ -250,6 +258,25 @@ public class TCCBusiness {
 				errors.add("É necessário informar quais professores participaram da defesa\n");
 			}
 		}
+	}
+	
+	public List<Participacao> removeParticipacao(TCC tcc, Usuario user) {
+		if(user == null) {
+			System.out.println("Teste 1");
+			return tcc.getParticipacoes();
+		}
+		List<Participacao> aux = new ArrayList<Participacao>();
+		for(Iterator<Participacao> i = tcc.getParticipacoes().iterator(); i.hasNext();) {
+			Participacao part = i.next();
+			System.out.println("participacao: " + part.getProfessor().getNomeUsuario());
+			if(part.getProfessor().getIdUsuario() != user.getIdUsuario()) {
+				aux.add(part);
+			}
+		}
+		for(Participacao p : aux) {
+			System.out.println("participacao: " + p.getIdParticipacao());
+		}
+		return aux;
 	}
 
 	public void validatePalavraChave(String palavraschave) {
@@ -409,16 +436,38 @@ public class TCCBusiness {
 	public List<TCC> getTrabalhosAndProjetosByCalendar(CalendarioSemestre currentCalendar) {
 		return tccDao.getTrabalhosAndProjetosByCalendar(currentCalendar);
 	}
-
-	public boolean possuiSuplente(List<Participacao> participacoes) {
-		for (Participacao p : participacoes) {
-			if (p.getSuplente())
-				return true;
-		}
-
-		return false;
-	}
 	
+	public void addParticipacao(TCC tcc, Usuario usuario, int tipo, boolean participou) {
+		if(tcc == null || usuario == null) return;
+		System.out.println("Adicionando na banca: " + tipo);
+		Participacao p = new Participacao();
+		p.setProfessor(usuario);
+		p.setTcc(tcc);
+		p.setTipo(tipo);
+		p.setParticipou(participou);
+		if (usuario.getTitulacao() != null)
+			p.setTitulacao(usuario.getTitulacao());
+		tcc.getParticipacoes().add(p);
+	}
+
+	
+	public void preenchebanca(TCC tcc) {
+		List<Participacao> participacoes= tcc.getParticipacoes();
+		boolean hasOrientador = false;
+		boolean hasCoOrientador = false;
+		for(Participacao p : participacoes) {
+			if(!hasOrientador && p.getTipo() == Participacao.ORIENTADOR)
+				hasOrientador = true;
+			if(!hasCoOrientador && p.getTipo() == Participacao.ORIENTADOR)
+				hasCoOrientador = true;
+		}
+		if(!hasOrientador) {
+			addParticipacao(tcc, tcc.getOrientador(), Participacao.ORIENTADOR, true);
+		}
+		if(!hasCoOrientador) {
+			addParticipacao(tcc, tcc.getCoOrientador(), Participacao.COORIENTADOR, true);
+		}
+	}
 	
 	public boolean isTrabalhoAtrasado(TCC tcc) {
 		if(tcc == null)

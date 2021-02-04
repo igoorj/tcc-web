@@ -26,6 +26,12 @@ import org.hibernate.annotations.GenericGenerator;
 public class Participacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	/*
+	 * BANCA	- Membro da banca
+	 * ORIENTADOR	- Orientador do tcc
+	 * COORIENTADOR	- Coorientador do tcc
+	 */
+	public static final int BANCA = 0, ORIENTADOR = 1, COORIENTADOR = 2;
 
 	/**
 	 * Campo com ID da Participacao. Relaciona com a coluna
@@ -89,6 +95,13 @@ public class Participacao implements Serializable {
 	 */
 	@Column(name = "participou", nullable = false)
 	private boolean participou;
+	
+	/**
+	 * Campo para indicar qual o tipo de paritipacao
+	 * para facilitar regras de negocio
+	 */
+	@Column(name = "tipo", nullable = false)
+	private int tipo;
 
 	public int getIdParticipacao() {
 		return idParticipacao;
@@ -149,5 +162,33 @@ public class Participacao implements Serializable {
 	public void setParticipou(boolean participou) {
 		this.participou = participou;
 	}
+
+	public int getTipo() {
+		return tipo;
+	}
+	
+	public String getTipoCorrido() {
+		String tipoCorrido = "";
+		switch (this.tipo) {
+			case Participacao.BANCA:
+				tipoCorrido = "Banca";
+				break;
+			case Participacao.ORIENTADOR:
+				tipoCorrido = "Orientador";
+				break;
+			case Participacao.COORIENTADOR:
+				tipoCorrido = "Coorientador";
+				break;
+			default:
+				break;
+		}
+		return tipoCorrido;
+	}
+
+	public void setTipo(int tipo) {
+		this.tipo = tipo;
+	}
+	
+	
 
 }
