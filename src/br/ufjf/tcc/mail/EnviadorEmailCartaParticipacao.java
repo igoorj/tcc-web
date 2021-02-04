@@ -51,8 +51,8 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 			emailBuilder.appendMensagem("Suplente: " + suplente).breakLine();
 		}
 		emailBuilder.appendMensagem("Atenciosamente,").breakLine();
-		emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
-		emailBuilder.appendMensagem("______________________________________").breakLine(); 
+//		emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
+//		emailBuilder.appendMensagem("______________________________________").breakLine(); 
 		emailBuilder.appendMensagem("Coordenação do Curso " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		

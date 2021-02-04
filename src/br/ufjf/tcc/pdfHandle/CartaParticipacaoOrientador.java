@@ -12,15 +12,15 @@ import com.lowagie.text.pdf.PdfStamper;
 import br.ufjf.tcc.library.ConfHandler;
 import br.ufjf.tcc.model.Participacao;
 
-public class CartaParticipacaoBanca {
+public class CartaParticipacaoOrientador {
 	private static final String PASTA_ARQUIVOS_TEMP = ConfHandler.getConf("FILE.PATH") + "arquivosTemporarios/";
 	private static final String PASTA_COM_TEMPLATE = ConfHandler.getConf("FILE.PATH") + "templatePDF/";
-	private static final String TEMPLATE = "CartaParticipacaoBanca";
+	private static final String TEMPLATE = "CartaParticipacaoOrientador";
 	
 	private String nomeArquivo;
 	private String camimhoArquivo;
 	
-	public CartaParticipacaoBanca() {
+	public CartaParticipacaoOrientador() {
 	}
 	
 	public void gerarCartaParticipacao(String nomeCurso, String nomeMembroDaBanca, String nomeAluno, String nomeOrientador, int idTCC,
@@ -36,7 +36,8 @@ public class CartaParticipacaoBanca {
 			AcroFields form = stamper.getAcroFields();
 			
 			form.setField("nomeCursoNoCabecalho", nomeCurso);
-			form.setField("nomeMembroDaBanca", nomeMembroDaBanca);
+			form.setField("nomeOrientadorNoTexto", nomeOrientador);
+			form.setField("nomeOrientadorNoFormulario", nomeOrientador);
 			form.setField("nomeDoCursoNoTexto", nomeCurso);
 			form.setField("nomeAluno", nomeAluno);
 			form.setField("nomeOrientador", nomeOrientador);

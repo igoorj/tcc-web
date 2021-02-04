@@ -9,6 +9,7 @@ import org.hibernate.Query;
 
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
+import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Sala;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
@@ -247,9 +248,13 @@ public class TCCDAO extends GenericoDAO {
 		try {
 			Query query = getSession()
 					.createQuery(
-							"SELECT t FROM TCC AS t JOIN FETCH t.aluno JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador LEFT JOIN FETCH t.participacoes AS p "
-							+ " WHERE p.professor = :user");
+	  					  "SELECT t FROM TCC AS t JOIN FETCH t.aluno "
+						+ "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
+						+ "LEFT JOIN FETCH t.participacoes AS p "
+						+ "WHERE p.professor = :user "
+						+ "AND p.tipo = :banca");
 			query.setParameter("user", user);
+			query.setParameter("banca", Participacao.BANCA);
 			results = query.list();
 			getSession().close();
 

@@ -49,13 +49,15 @@
 										 	<columns>
 										 		<column hflex="2" />									 		
 										 		<column hflex="1" />									 		
-										 		<column hflex="1" />									 		
+										 		<column hflex="1" />
+										 		<column hflex="1" />
 										 	</columns>
 											<template name="participacoes">
 												<row>
 													<label  style="color:black" value="@load(each.professor.nomeUsuario)" />
 													<label  style="color:black;" visible="@load(each.isSuplente())" value="(Suplente)" />
 													<label  style="color:black;" visible="@load(each.isParticipou())" value="(Participou)" />
+													<label  style="color:black;" value="@load(each.tipoCorrido)" />
 												</row>
 											</template>
 										</grid>

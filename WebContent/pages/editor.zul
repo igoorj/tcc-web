@@ -137,6 +137,7 @@
 							
 								<column label="Nome do examinador" />
 								<column label="Ação" width="60px" if="${vm.canChangeBanca}"/>
+								<column label="Tipo" width="85px" />
 								<column label="Suplente" width="60px" />
 								<column label="Participou?" width="80px" if="${vm.canChangeParticipacao}"/>
 								
@@ -148,6 +149,8 @@
 										value="@load(each.professor.nomeUsuario)" />
 									<button if="${vm.canChangeBanca}" image="/img/delete.png"
 										onClick="@command('removeFromBanca', participacao=each)" />
+									<label
+										value="@load(each.tipoCorrido)" />
 									<checkbox style="padding:10px"  checked="@load(each.isSuplente())"
 									  value="@load(each)" 
 									 onCheck="@command('onCheckSuplente', membro=self.value, checked=self.checked)" />
