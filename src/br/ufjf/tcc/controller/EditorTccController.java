@@ -265,12 +265,7 @@ public class EditorTccController extends CommonsController {
 	 */
 	public void setTempSala(Sala tempSala) {
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
-		if(tipoUsuario == Usuario.COORDENADOR) {
-			tcc.setSala(tempSala);
-			this.tempSala = tempSala;
-			return;
-		}
-		if(tcc.getStatus() >= TCC.TEPB) {
+		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
 			Messagebox.show("Não é possível alterar a sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
 					Messagebox.ERROR);
 			this.tempSala= tcc.getSala();
@@ -278,6 +273,7 @@ public class EditorTccController extends CommonsController {
 		}
 		tcc.setSala(tempSala);
 		this.tempSala = tempSala;
+		BindUtils.postNotifyChange(null, null, this, "tcc");
 	}
 	
 	/*

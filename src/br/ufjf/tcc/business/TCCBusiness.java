@@ -190,8 +190,13 @@ public class TCCBusiness {
 			errors.add("É necessário informar a sala de apresentação\n");
 			return false;
 		}
-		if(salaBusiness.getSalaByTcc(tcc).isOnline())
+		if(salaBusiness.getSalaByTcc(tcc).isOnline()) {
+			if(tcc.getLinkSala() == null || tcc.getLinkSala().equals("")) {
+				errors.add("É necessário informar o link da sala online.\n");
+				return false;
+			}
 			return true;
+		}
 		if(tcc.getDataApresentacao() == null) {
 			return false;
 		}
@@ -301,6 +306,9 @@ public class TCCBusiness {
 	}
 
 	public boolean saveOrEdit(TCC tcc) {
+		if(tcc.getSala() == null || !tcc.getSala().isOnline()) {
+			tcc.setLinkSala(null);
+		}
 		return tccDao.salvaOuEdita(tcc);
 	}
 

@@ -226,6 +226,15 @@
 								</template>
 							</combobox>
 						</hlayout>
+						
+						<hlayout style="margin:5px;line-height:20px;"
+							visible="@bind(vm.tcc.sala.online)">
+							<label value="Link da sala online: "
+								style="margin-top:5px" />
+							<textbox
+								value="@bind(vm.tcc.linkSala)"
+								hflex="1" maxlength="255" />
+						</hlayout>
 
 						<label value="Resumo: " style="margin:5px;" />
 						<textbox
