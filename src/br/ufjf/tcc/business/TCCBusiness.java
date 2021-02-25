@@ -191,7 +191,7 @@ public class TCCBusiness {
 			return false;
 		}
 		if(salaBusiness.getSalaByTcc(tcc).isOnline()) {
-			if(tcc.getLinkSala() == null || tcc.getLinkSala().equals("")) {
+			if(tcc.getLinkSala() == null || tcc.getLinkSala().trim().equals("")) {
 				errors.add("É necessário informar o link da sala online.\n");
 				return false;
 			}

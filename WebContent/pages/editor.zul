@@ -232,7 +232,7 @@
 							<label value="Link da sala online: "
 								style="margin-top:5px" />
 							<textbox
-								value="@bind(vm.tcc.linkSala)"
+								value="@bind(vm.tempLinkSala)"
 								hflex="1" maxlength="255" />
 						</hlayout>
 
