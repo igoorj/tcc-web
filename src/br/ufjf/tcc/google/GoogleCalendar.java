@@ -48,7 +48,6 @@ public class GoogleCalendar {
 		logger.debug("Obtendo credenciais...");
 		String credentialsPath = CREDENTIALS_FILE_PATH + tcc.getAluno().getCurso().getCodigoCurso() + ".json";
 		logger.debug("Caminho do arquivo de credenciais: " + credentialsPath);
-		System.out.println("Caminho: " + credentialsPath);
 		GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath));
 		credentials = credentials.createScoped(SCOPES);
 		credentials.refreshIfExpired();
@@ -69,10 +68,8 @@ public class GoogleCalendar {
 			String calendarId = tcc.getSala().getGoogleCalendarId() == null ? "primary" : tcc.getSala().getGoogleCalendarId();
 			try {
 				service.events().get(calendarId, newEvent.getId()).execute();
-				System.out.println("Update no evento");
 				newEvent = service.events().update(calendarId, newEvent.getId(), newEvent).setConferenceDataVersion(0).execute();
 			} catch (GoogleJsonResponseException e) {
-				System.out.println("Insert");
 				newEvent = service.events().insert(calendarId, newEvent).setConferenceDataVersion(0).execute();
 			}
 			logger.debug("Evento criado: " + newEvent.getHtmlLink());
@@ -87,7 +84,7 @@ public class GoogleCalendar {
 	private Event buildEvent(TCC tcc) throws IOException {
 		logger.debug("Construindo dados do evento...");
 		Event newEvent = new Event().setSummary(tcc.getNomeTCC()).setLocation(tcc.getSala().getNomeSala())
-				.setDescription(tcc.getResumoTCC());
+				.setDescription(getEventDescription(tcc));
 
 		EventDateTime start = new EventDateTime().setDateTime(new DateTime(tcc.getDataApresentacao().getTime()))
 				.setTimeZone("America/Sao_Paulo");
@@ -98,8 +95,8 @@ public class GoogleCalendar {
 				.setTimeZone("America/Sao_Paulo");
 		newEvent.setEnd(end);
 
-		System.out.println(new DateTime(tcc.getDataApresentacao().getTime()));
-		System.out.println(new DateTime(tcc.getDataApresentacao().getTime() + 3 * 3600000));
+//		System.out.println(new DateTime(tcc.getDataApresentacao().getTime()));
+//		System.out.println(new DateTime(tcc.getDataApresentacao().getTime() + 3 * 3600000));
 
 		newEvent.setConferenceData(getConferenceData());
 
@@ -159,5 +156,15 @@ public class GoogleCalendar {
 			id = "0" + id;
 		}
 		return id;
+	}
+	
+	private String getEventDescription(TCC tcc) {
+		String description = "";
+		description += tcc.getResumoTCC();
+		if(tcc.getLinkSala() != null || !tcc.getLinkSala().trim().equals("")) {
+			if(tcc.getSala().isOnline())
+				description += "\n\nLink da defesa:\n" + tcc.getLinkSala();
+		}
+		return description;
 	}
 }
