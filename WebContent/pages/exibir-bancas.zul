@@ -133,7 +133,7 @@
 					<label value="@load(each.dataEnvioFinal eq null? vm.sdf.format(each.dataEnvioBanca).toString().substring(0,16) : vm.sdf.format(each.dataEnvioFinal).toString().substring(0,16) )" />
 					<label value="@load(each.statusTCC)" />
 					<div align="center" >
-					<checkbox disabled="true" style="center" checked="@load(each.entregouDoc)"  />
+					<checkbox disabled="true" style="center" checked="@load(each.entregouDocumentacao)"  />
 					</div>
 					<div align="center" >
 					<checkbox disabled="true" style="center" checked="@load(each.trabFinal)" />

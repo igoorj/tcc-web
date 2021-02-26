@@ -418,10 +418,25 @@ public class VisualizaTCCController extends CommonsController {
 	{
 		String tipoTcc = (tcc.isProjeto() ? "Projeto" : "Trabalho");
 		if(window != null) {
-			window.setTitle("Reprovar " + tipoTcc);
+			window.setTitle("Solicitar correção de " + tipoTcc);
 			
 		}
 		window.doModal();
+	}
+	
+	@SuppressWarnings({"unchecked","rawtypes"})
+	@Command
+	public void reprovarDefinitivo(@BindingParam("window") final Window window)
+	{
+		String tipoTcc = (tcc.isProjeto() ? "Projeto" : "Trabalho");
+		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho por definitivo?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			public void onEvent(Event evt) throws InterruptedException {
+				if(evt.getName().equals("onYes")) {
+					Messagebox.show("Funcionalidade ainda não funcionando", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
+//					window.detach();
+				}
+			}
+		});
 	}
 	
 	@SuppressWarnings({"unchecked","rawtypes"})
@@ -455,7 +470,7 @@ public class VisualizaTCCController extends CommonsController {
 						}
 						new TCCBusiness().edit(tcc);
 						Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
-						window.getParent().detach();;
+						window.getParent().detach();
 						
 					}
 				}
@@ -638,6 +653,18 @@ public class VisualizaTCCController extends CommonsController {
 			return true;
 		}
 		
+		return false;
+	}
+	
+	/**
+	 * Exibe botão para reprovar trabalho por definitivo 
+	 */
+	public boolean exibirReprovacao() {
+		int status = tcc.getStatus();
+		// TAAO - orientador aprovar trabalho
+		if(status == TCC.TAAO && isOrientador()) {
+			return true;
+		}
 		return false;
 	}
 
