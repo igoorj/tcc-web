@@ -40,6 +40,7 @@ import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoReprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovado;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador;
 import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoFinalReprovado;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoTrabalhoReprovadoDefinitivo;
 import br.ufjf.tcc.mail.EnviadorEmailCartaParticipacao;
 import br.ufjf.tcc.mail.EnviadorEmailChain;
 import br.ufjf.tcc.model.Participacao;
@@ -428,12 +429,14 @@ public class VisualizaTCCController extends CommonsController {
 	@Command
 	public void reprovarDefinitivo(@BindingParam("window") final Window window)
 	{
-		String tipoTcc = (tcc.isProjeto() ? "Projeto" : "Trabalho");
-		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho por definitivo?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho por definitivo? O TCC será apagado do sistema", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if(evt.getName().equals("onYes")) {
-					Messagebox.show("Funcionalidade ainda não funcionando", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
-//					window.detach();
+					new TCCBusiness().excluirTCC(tcc);
+					EnviadorEmailChain emailTrabalhoReprovado = new EnviadorEmailAvisoTrabalhoReprovadoDefinitivo();
+					emailTrabalhoReprovado.enviarEmail(tcc, null);
+					window.detach();
+					Executions.sendRedirect("/pages/home-professor.zul");
 				}
 			}
 		});
