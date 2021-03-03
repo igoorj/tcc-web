@@ -18,6 +18,7 @@ import org.zkoss.util.media.AMedia;
 import org.zkoss.zhtml.Filedownload;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.InputEvent;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Comboitem;
@@ -58,6 +59,7 @@ public class EditorTccController extends CommonsController {
 	private Timestamp tempDataApresentacao;
 	private TCC tcc = null;
 	private String statusInicialTCC = "";
+	private String tempLinkSala = "";
 	private Iframe iframe;
 	private InputStream tccFile = null, extraFile = null, docFile = null;
 	private AMedia pdf = null;
@@ -129,6 +131,7 @@ public class EditorTccController extends CommonsController {
 		
 		if (tcc != null) {
 			tempSala = tcc.getSala();
+			tempLinkSala = tcc.getLinkSala();
 			tempDataApresentacao = tcc.getDataApresentacao();
 			hasCoOrientador = (tcc.getCoOrientador() != null);
 			hasSubtitulo = (tcc.getSubNomeTCC() != null);
@@ -209,8 +212,10 @@ public class EditorTccController extends CommonsController {
 	@NotifyChange({ "hasCoOrientador", "tcc" })
 	public void setHasCoOrientador() {
 		hasCoOrientador = !hasCoOrientador;
-		if (!hasCoOrientador)
+		if (!hasCoOrientador) {
+			tcc.setParticipacoes(tccBusiness.removeParticipacao(tcc, tcc.getCoOrientador()));
 			tcc.setCoOrientador(null);
+		}
 	}
 
 	public boolean getHasSubtitulo() {
@@ -252,11 +257,17 @@ public class EditorTccController extends CommonsController {
 	public void setTempUser(Usuario tempUser) {
 		this.tempUser = tempUser;
 	}
+	
 	public Sala getTempSala() {
 		return tempSala;
 	}
+	
 	public Timestamp getTempDataApresentacao() {
 		return tempDataApresentacao;
+	}
+	
+	public String getTempLinkSala() {
+		return tempLinkSala;
 	}
 	
 	/*
@@ -265,12 +276,7 @@ public class EditorTccController extends CommonsController {
 	 */
 	public void setTempSala(Sala tempSala) {
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
-		if(tipoUsuario == Usuario.COORDENADOR) {
-			tcc.setSala(tempSala);
-			this.tempSala = tempSala;
-			return;
-		}
-		if(tcc.getStatus() >= TCC.TEPB) {
+		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
 			Messagebox.show("Não é possível alterar a sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
 					Messagebox.ERROR);
 			this.tempSala= tcc.getSala();
@@ -278,6 +284,24 @@ public class EditorTccController extends CommonsController {
 		}
 		tcc.setSala(tempSala);
 		this.tempSala = tempSala;
+		BindUtils.postNotifyChange(null, null, this, "tcc");
+	}
+	
+	/*
+	 * Se for orientador alterando, permite alterar em qualquer momento
+	 * Se for o aluno, verifica se a defesa já foi marcada
+	 */
+	public void setTempLinkSala(String tempLinkSala) {
+		System.out.println("Teste tempLinkSala: " + tempLinkSala);
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
+			Messagebox.show("Não é possível alterar o link da sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
+					Messagebox.ERROR);
+			this.tempLinkSala= tcc.getLinkSala();
+			return;
+		}
+		tcc.setLinkSala(tempLinkSala);
+		this.tempLinkSala = tempLinkSala;
 	}
 	
 	/*
@@ -535,7 +559,7 @@ public class EditorTccController extends CommonsController {
 					tcc.setCoOrientador(tempUser);
 					tipoMembro = Participacao.COORIENTADOR;
 				}
-				tccBusiness.addParticipacao(tcc, tempUser, tipoMembro, canChangeParticipacao);
+				tccBusiness.addParticipacao(tcc, tempUser, tipoMembro, true);
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			}
 		} else
@@ -564,7 +588,7 @@ public class EditorTccController extends CommonsController {
 			if (!participacoesContains(tempUser) && tempUser.getIdUsuario() != tcc.getOrientador().getIdUsuario()
 					&& (tcc.getCoOrientador() == null
 							|| tempUser.getIdUsuario() != tcc.getCoOrientador().getIdUsuario())) {
-				tccBusiness.addParticipacao(tcc, tempUser, Participacao.BANCA, false);
+				tccBusiness.addParticipacao(tcc, tempUser, Participacao.BANCA, true);
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			} else {
 				Messagebox.show("Esse professor já está na lista ou é o orientador/co-orientador do TCC", "Erro",
@@ -883,7 +907,8 @@ public class EditorTccController extends CommonsController {
 	}
 
 	public void verificarCanChangeParticipacao() {
-		if(verificarJaApresentou()) 
+//		if(verificarJaApresentou()) 
+		if(verificarJaApresentou() && tcc.getStatus() >= TCC.TEPB) 
 			canChangeParticipacao = true;
 	}
 	
@@ -966,11 +991,24 @@ public class EditorTccController extends CommonsController {
 	 * Marca o membro da banca como suplente (ou remove)
 	 */
 	@Command
+	@NotifyChange({ "tcc" })
 	public void onCheckSuplente(@BindingParam("membro") Participacao p, @BindingParam("checked") boolean checked) {
-		if(p.getTipo() != Participacao.BANCA && checked) {
+		if(p.getTipo() != Participacao.BANCA) {
 			Messagebox.show("Não é possível marcar o orientador/coorientador como suplente", "Operação inválida", Messagebox.OK,
 					Messagebox.ERROR);
 			return;
+		}
+		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		if(tipoUsuario == Usuario.ALUNO) {
+//			if(verificarJaApresentou() && tcc.getStatus() > TCC.TI) {
+			if(tcc.getStatus() > TCC.TI) {
+				Messagebox.show("Não é possível alterar suplente depois da apresentação.", "Operação inválida", Messagebox.OK,
+						Messagebox.ERROR);
+				return;
+			}
+		}
+		if(checked) {
+			p.setParticipou(false);
 		}
 		p.setSuplente(checked);
 	}
@@ -979,7 +1017,16 @@ public class EditorTccController extends CommonsController {
 	 * Marca o membro se participou ou não da banca de defesa do tcc
 	 */
 	@Command
+	@NotifyChange({ "tcc" })
 	public void onCheckParticipou(@BindingParam("membro") Participacao p, @BindingParam("checked") boolean checked) {
+//		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+//		if(tipoUsuario == Usuario.ALUNO) {
+//			if(tcc.getStatus() > TCC.TEPB) {
+//				Messagebox.show("Não é possível alterar quem participou depois de ter submetido o trabalho.", "Operação inválida", Messagebox.OK,
+//						Messagebox.ERROR);
+//				return;
+//			}
+//		}
 		p.setParticipou(checked);
 	}
 

@@ -190,8 +190,13 @@ public class TCCBusiness {
 			errors.add("É necessário informar a sala de apresentação\n");
 			return false;
 		}
-		if(salaBusiness.getSalaByTcc(tcc).isOnline())
+		if(salaBusiness.getSalaByTcc(tcc).isOnline()) {
+			if(tcc.getLinkSala() == null || tcc.getLinkSala().trim().equals("")) {
+				errors.add("É necessário informar o link da sala online.\n");
+				return false;
+			}
 			return true;
+		}
 		if(tcc.getDataApresentacao() == null) {
 			return false;
 		}
@@ -262,7 +267,6 @@ public class TCCBusiness {
 	
 	public List<Participacao> removeParticipacao(TCC tcc, Usuario user) {
 		if(user == null) {
-			System.out.println("Teste 1");
 			return tcc.getParticipacoes();
 		}
 		List<Participacao> aux = new ArrayList<Participacao>();
@@ -272,9 +276,6 @@ public class TCCBusiness {
 			if(part.getProfessor().getIdUsuario() != user.getIdUsuario()) {
 				aux.add(part);
 			}
-		}
-		for(Participacao p : aux) {
-			System.out.println("participacao: " + p.getIdParticipacao());
 		}
 		return aux;
 	}
@@ -301,6 +302,9 @@ public class TCCBusiness {
 	}
 
 	public boolean saveOrEdit(TCC tcc) {
+		if(tcc.getSala() == null || !tcc.getSala().isOnline()) {
+			tcc.setLinkSala(null);
+		}
 		return tccDao.salvaOuEdita(tcc);
 	}
 

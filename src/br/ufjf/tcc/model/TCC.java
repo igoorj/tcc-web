@@ -260,6 +260,9 @@ public class TCC implements Serializable,Comparable<TCC> {
 	@Column(name = "status", nullable = true)
 	private int status;
 	
+	@Column(name = "linkSala", nullable = true)
+	private String linkSala;
+	
 	/**
 	 * Relacionamento N para 1 entre TCC e Sala. Mapeando {@link Sala} na
 	 * variável {@code sala} e retorno do tipo {@code LAZY} que indica que não
@@ -586,6 +589,14 @@ public class TCC implements Serializable,Comparable<TCC> {
 
 	public void setSala(Sala sala) {
 		this.sala = sala;
+	}
+	
+	public String getLinkSala() {
+		return linkSala;
+	}
+	
+	public void setLinkSala(String linkSala) {
+		this.linkSala = linkSala;
 	}
 	
 	
