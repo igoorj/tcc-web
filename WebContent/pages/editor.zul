@@ -95,8 +95,6 @@
 					<caption label="Banca Examinadora" />
 					<vlayout hflex="1" style="margin:15px">
 					
-						<radiogroup id="banca" onCheck="@command('onCheckBanca',suplente=self.selectedItem.value)"  />
-						
 						<grid model="@load(vm.tcc.participacoes)"
 							emptyMessage="Nenhum examinador adicionado"
 							style="margin-left:5px; margin-right:5px; margin-top:5px;">
@@ -151,8 +149,8 @@
 										onClick="@command('removeFromBanca', participacao=each)" />
 									<label
 										value="@load(each.tipoCorrido)" />
-									<checkbox style="padding:10px"  checked="@load(each.isSuplente())"
-									  value="@load(each)" 
+									<checkbox style="padding:10px"  checked="@load(each.suplente)"
+									  value="@load(each)" disabled="@load(!vm.canChangeBanca)" 
 									 onCheck="@command('onCheckSuplente', membro=self.value, checked=self.checked)" />
 									<checkbox style="padding:10px"  checked="@load(each.isParticipou())"
 									value="@load(each)" if="${vm.canChangeParticipacao}"

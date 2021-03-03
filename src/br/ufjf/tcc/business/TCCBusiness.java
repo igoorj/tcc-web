@@ -267,7 +267,6 @@ public class TCCBusiness {
 	
 	public List<Participacao> removeParticipacao(TCC tcc, Usuario user) {
 		if(user == null) {
-			System.out.println("Teste 1");
 			return tcc.getParticipacoes();
 		}
 		List<Participacao> aux = new ArrayList<Participacao>();
@@ -277,9 +276,6 @@ public class TCCBusiness {
 			if(part.getProfessor().getIdUsuario() != user.getIdUsuario()) {
 				aux.add(part);
 			}
-		}
-		for(Participacao p : aux) {
-			System.out.println("participacao: " + p.getIdParticipacao());
 		}
 		return aux;
 	}
