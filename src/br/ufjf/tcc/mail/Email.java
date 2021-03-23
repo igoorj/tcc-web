@@ -70,7 +70,7 @@ public class Email {
 				bodyPart = new MimeBodyPart();
 				this.dataSource = new FileDataSource(builder.getCaminhoArquivo());
 				bodyPart.setDataHandler(new DataHandler(this.dataSource));
-				bodyPart.setFileName("Carta de participacao");
+				bodyPart.setFileName("CartaDeParticipacao.pdf");
 				multipart.addBodyPart(bodyPart);
 			}
 			
