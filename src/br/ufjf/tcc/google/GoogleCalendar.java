@@ -3,6 +3,7 @@ package br.ufjf.tcc.google;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 //import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 
 import br.ufjf.tcc.library.ConfHandler;
+import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 
 public class GoogleCalendar {
@@ -83,7 +85,8 @@ public class GoogleCalendar {
 
 	private Event buildEvent(TCC tcc) throws IOException {
 		logger.debug("Construindo dados do evento...");
-		Event newEvent = new Event().setSummary(tcc.getNomeTCC()).setLocation(tcc.getSala().getNomeSala())
+        String title = "TCC - " + tcc.getAluno().getNomeUsuario();
+		Event newEvent = new Event().setSummary(title).setLocation(tcc.getSala().getNomeSala())
 				.setDescription(getEventDescription(tcc));
 
 		EventDateTime start = new EventDateTime().setDateTime(new DateTime(tcc.getDataApresentacao().getTime()))
@@ -160,11 +163,34 @@ public class GoogleCalendar {
 	
 	private String getEventDescription(TCC tcc) {
 		String description = "";
-		description += tcc.getResumoTCC();
-		if(tcc.getLinkSala() != null || !tcc.getLinkSala().trim().equals("")) {
-			if(tcc.getSala().isOnline())
-				description += "\n\nLink da defesa:\n" + tcc.getLinkSala();
+		description += "Título: " + tcc.getNomeTCC() + "\n";
+		if(tcc.getSubNomeTCC() !=null && !tcc.getSubNomeTCC().trim().equals("")) {
+			description += "Subtítulo: " + tcc.getSubNomeTCC() + "\n";
 		}
+        if(tcc.getLinkSala() != null && !tcc.getLinkSala().trim().equals("")) {
+            if(tcc.getSala().isOnline())
+            description += "Link da defesa: " + tcc.getLinkSala();
+		}
+		description += "\nOrientador: " + tcc.getOrientador().getNomeUsuario() + "\n";
+        if(tcc.getCoOrientador() != null) {
+            description += "Co-orientador: " + tcc.getCoOrientador().getNomeUsuario() + "\n";
+        }
+        description += "\nBanca examinadora:\n";
+		List<String> suplentes = new ArrayList<String>();
+		List<String> membros = new ArrayList<String>();
+		for(Participacao participacao : tcc.getParticipacoes()) {
+            if(participacao.isSuplente())
+            suplentes.add(participacao.getProfessor().getNomeUsuario());
+			else
+            membros.add(participacao.getProfessor().getNomeUsuario());
+		}
+		for(String membro : membros) {
+            description += "Membro: " + membro + "\n";
+		}
+		for(String suplente : suplentes) {
+            description += "Suplente: " + suplente + "\n";
+		}
+		description += "\nResumo:\n" + tcc.getResumoTCC();
 		return description;
 	}
 }
