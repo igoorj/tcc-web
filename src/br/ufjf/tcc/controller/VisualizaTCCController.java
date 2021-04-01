@@ -429,7 +429,7 @@ public class VisualizaTCCController extends CommonsController {
 	@Command
 	public void reprovarDefinitivo(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho por definitivo? O TCC será apagado do sistema", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho em definitivo? O TCC será apagado do sistema.", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if(evt.getName().equals("onYes")) {
 					new TCCBusiness().excluirTCC(tcc);
@@ -450,14 +450,14 @@ public class VisualizaTCCController extends CommonsController {
 		
 		final String justificativa = justificativaReprovacao.getValue();
 		if(justificativa != "") {
-			Messagebox.show("Você tem certeza que deseja reprovar esse " + tipoTcc + "?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			Messagebox.show("Você tem certeza que deseja solicitar correção desse " + tipoTcc + "?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 				public void onEvent(Event evt) throws InterruptedException {
 					if(evt.getName().equals("onYes")) {
 						tcc.setJustificativaReprovacao(justificativa);
 						int status = tcc.getStatus();
+						// Envio de emails de reprovação do trabalho, solicitando correção 
 						if (status == TCC.PAA) {
 							tcc.setStatus(TCC.PR);
-							// Envio de email avisando que projeto foi reprovado
 							EnviadorEmailChain emailPorjetoReprovado = new EnviadorEmailAvisoProjetoReprovado();
 							emailPorjetoReprovado.enviarEmail(tcc, null);
 						}
@@ -472,7 +472,7 @@ public class VisualizaTCCController extends CommonsController {
 							emailTrabalhoReprovado.enviarEmail(tcc, null);
 						}
 						new TCCBusiness().edit(tcc);
-						Messagebox.show("O aluno receberá uma notificação sobre a reprovação.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
+						Messagebox.show("O aluno receberá uma notificação sobre a solicitação de correção.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
 						window.getParent().detach();
 						
 					}

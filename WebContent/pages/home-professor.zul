@@ -8,7 +8,7 @@
 		<hlayout spacing="10px" height="100%" style="margin-top:10px">
 			<div hflex="1">
 				<grid
-					visible="@load(vm.usuario.tipoUsuario.idTipoUsuario eq 3 and (not vm.currentCalendarExists or not vm.currentQuestionaryExists or not vm.currentQuestionaryUsed ? 'true' : 'false'))">
+					if="${vm.usuario.tipoUsuario.idTipoUsuario eq 3 and (not vm.currentCalendarExists or not vm.currentQuestionaryExists or not vm.currentQuestionaryUsed ? 'true' : 'false')}">
 					<columns>
 						<column label="Funções de coordenador"
 							style="font-weight:bold;text-align:center" />
@@ -82,7 +82,7 @@
 				</grid>
 						
 				<grid 
-					visible="@load(vm.usuario.tipoUsuario.idTipoUsuario gt 2)"
+					if="${vm.usuario.tipoUsuario.idTipoUsuario gt 2}"
 					model="@load(vm.avisos)"
 					emptyMessage="Nenhum mensagem"
 					style="margin-top:10px;">
@@ -115,6 +115,28 @@
 								onClick="@command('deleteAviso', aviso=each)" />
 						</row>
 					</template>
+				</grid>
+				
+				<grid style="margin-top:20px;" 
+					if="${vm.usuario.tipoUsuario.idTipoUsuario eq 4 or 
+					vm.usuario.tipoUsuario.idTipoUsuario eq 3}">
+					<columns>
+						<column label="Envio de E-mail em Massa"
+							style="font-weight:bold;text-align:center" />
+					</columns>
+					<rows>
+						<row>
+							<div align="center">
+								<label
+									value="Você pode enviar um e-mail a todos alunos e 
+										orientadores, com a mensagem que você escrever." />
+								<hlayout style="margin:5px 0px; line-height:20px;">
+									<button label="Enviar e-mail" 
+										onClick="emailEmMassa.doModal()"/>
+								</hlayout>
+							</div>
+						</row>
+					</rows>
 				</grid>
 			</div>
 			<grid hflex="3"
@@ -172,5 +194,37 @@
 				</template>
 			</grid>
 		</hlayout>
+		<window id="emailEmMassa" title="Envio de E-mail em Massa"
+			visible="false" width="450px" border="normal"
+			if="${vm.usuario.tipoUsuario.idTipoUsuario eq 4 or 
+				vm.usuario.tipoUsuario.idTipoUsuario eq 3}"
+			position="center,center" closable="true"
+			onClose="self.setVisible(false); event.stopPropagation();">
+			<label value="Título do E-mail: " style="margin:5px;" />
+			<textbox id="tituloEmail" 
+				value="@load(vm.usuario.tipoUsuario.idTipoUsuario eq 4 ? 
+					'Mensagem do Administrador do Sistema' :
+					'Mensagem do Coordenador de Curso')" 
+				rows="1" width="98%" style="margin:5px;" />
+			<label value="Corpo do E-mail: " style="margin:5px;" />
+			<textbox id="corpoEmail" value=""
+				rows="12" width="98%" style="margin:5px;" />
+			<hlayout style="margin:5px;line-height:20px;">
+				<div hflex="1" style="margin-top:15px" >
+					<checkbox label="Enviar para alunos?" style="padding:10px" id="enviarParaAlunos"/>
+				</div>
+				<div hflex="1" style="margin-top:15px">
+					<checkbox label="Enviar para orientadores?" style="padding:10px" id="enviarParaOrientadores"/>
+				</div>
+			</hlayout>
+			<div align="center" style="margin:15px" >
+				<button label="Enviar"
+					onClick="@command('envarEmailEmMassa', window=emailEmMassa, corpoEmail=corpoEmail,
+						tituloEmail=tituloEmail, enviarParaAlunos=enviarParaAlunos, 
+						enviarParaOrientadores=enviarParaOrientadores )"
+				 	width="100%" height="30px"
+				 />
+			</div>
+		</window>
 	</div>
 </zk>

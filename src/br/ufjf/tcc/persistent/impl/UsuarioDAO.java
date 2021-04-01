@@ -320,4 +320,55 @@ public class UsuarioDAO extends GenericoDAO {
 
 		return null;
 	}
+
+	public List<Usuario> getAlunosAtivosByCurso(Curso curso) {
+		try {
+			List<Usuario> alunos = new ArrayList<Usuario>();
+			Query query = getSession()
+					.createQuery(
+							  "SELECT u FROM Usuario AS u "
+							+ "LEFT JOIN FETCH u.curso LEFT JOIN FETCH u.orientador "
+							+ "LEFT JOIN FETCH u.participacoes JOIN FETCH u.tipoUsuario tp "
+							+ "WHERE u.curso = :curso AND tp.idTipoUsuario = :tipo "
+							+ "AND u.ativo = 1");
+			query.setParameter("curso", curso);
+			query.setParameter("tipo", Usuario.ALUNO);
+
+			alunos = query.list();
+			getSession().close();
+
+			if (alunos != null)
+				return alunos;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public List<Usuario> getAlunosAtivos() {
+		try {
+			List<Usuario> alunos = new ArrayList<Usuario>();
+			Query query = getSession()
+					.createQuery(
+							"SELECT u FROM Usuario AS u "
+									+ "LEFT JOIN FETCH u.curso LEFT JOIN FETCH u.orientador "
+									+ "LEFT JOIN FETCH u.participacoes JOIN FETCH u.tipoUsuario tp "
+									+ "WHERE tp.idTipoUsuario = :tipo "
+									+ "AND u.ativo = 1");
+			query.setParameter("tipo", Usuario.ALUNO);
+			
+			alunos = query.list();
+			getSession().close();
+			
+			if (alunos != null)
+				return alunos;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 }
