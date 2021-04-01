@@ -304,6 +304,14 @@ public class UsuarioBusiness {
 	public List<Usuario> getAllByCurso(Curso curso) {
 		return usuarioDAO.getAllByCurso(curso);
 	}
+	
+	public List<Usuario> getAlunosAtivosByCurso(Curso curso) {
+		return usuarioDAO.getAlunosAtivosByCurso(curso);
+	}
+	
+	public List<Usuario> getAlunosAtivos() {
+		return usuarioDAO.getAlunosAtivos();
+	}
 
 	public List<Permissao> getPermissoes(Usuario usuario) {
 		return usuarioDAO.getPermissoes(usuario);
