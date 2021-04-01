@@ -17,8 +17,13 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.South;
+import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.AvisoBusiness;
@@ -28,6 +33,10 @@ import br.ufjf.tcc.business.PrazoBusiness;
 import br.ufjf.tcc.business.QuestionarioBusiness;
 import br.ufjf.tcc.business.SalaBusiness;
 import br.ufjf.tcc.business.TCCBusiness;
+import br.ufjf.tcc.library.SessionManager;
+import br.ufjf.tcc.mail.EnviadorEmailAvisoProjetoAprovado;
+import br.ufjf.tcc.mail.EnviadorEmailChain;
+import br.ufjf.tcc.mail.EnviadorEmailEmMassa;
 import br.ufjf.tcc.model.Aviso;
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
@@ -135,6 +144,48 @@ public class HomeProfessorController extends CommonsController {
 
 	public Aviso getAviso() {
 		return aviso;
+	}
+	
+	@SuppressWarnings({"unchecked","rawtypes"})
+	@Command
+	public void envarEmailEmMassa(@BindingParam("window") final Window window, 
+				@BindingParam("corpoEmail") Textbox corpoEmail, 
+				@BindingParam("tituloEmail") Textbox tituloEmail, 
+				@BindingParam("enviarParaAlunos") Checkbox enviarParaAlunos,
+				@BindingParam("enviarParaOrientadores") Checkbox enviarParaOrientadores) {
+		boolean fromAdmin = getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR;
+		if(!enviarParaAlunos.isChecked() && !enviarParaOrientadores.isChecked()) {
+			Messagebox.show("É necessário informar para quem o e-mail será enviado.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		if(corpoEmail == null || corpoEmail.getValue().equals("")) {
+			Messagebox.show("É necessário informar o corpo do e-mail.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
+		Messagebox.show("Você tem certeza que deseja enviar o e-mail?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		    public void onEvent(Event evt) throws InterruptedException {
+		        if (evt.getName().equals("onYes")) {
+		        	String titulo = tituloEmail.getValue();
+		        	if(titulo == null || titulo.equals("")) {
+		        		titulo = fromAdmin ? 
+	        				"Mensagem do Administrador do Sistema" :
+	    					"Mensagem do Coordenador de Curso";
+		        	}
+		        	EnviadorEmailEmMassa emailEmMassa = new EnviadorEmailEmMassa();
+		        	emailEmMassa.setEnviarParaAlunos(enviarParaAlunos.isChecked());
+		        	emailEmMassa.setEnviarParaOrientadores(enviarParaOrientadores.isChecked());
+		        	emailEmMassa.setCorpoEmail(corpoEmail.getValue());
+		        	emailEmMassa.setCurso(getUsuario().getCurso());
+		        	emailEmMassa.setCalendario(getCurrentCalendar());
+		        	emailEmMassa.setFromAdmin(fromAdmin);
+		        	emailEmMassa.setTitulo(titulo);
+		        	emailEmMassa.enviarEmail(null, null);
+		        	if (window != null)
+						window.detach();
+		        	Executions.sendRedirect("/pages/home-professor.zul");
+		        }
+		    }
+		});
 	}
 
 	@Command
