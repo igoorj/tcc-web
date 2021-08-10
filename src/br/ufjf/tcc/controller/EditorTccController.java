@@ -44,6 +44,8 @@ import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioAluno;
 import br.ufjf.tcc.mail.EnviadorEmailDatasCalendarioOrientador;
 import br.ufjf.tcc.mail.EnviadorEmailInformesDadosDefesa;
 import br.ufjf.tcc.mail.EnviadorEmailProjetoCriado;
+import br.ufjf.tcc.model.CalendarioSemestre;
+import br.ufjf.tcc.model.Curso;
 import br.ufjf.tcc.model.Departamento;
 import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.Sala;
@@ -79,6 +81,9 @@ public class EditorTccController extends CommonsController {
 			redirectHome();
 		String tccId = Executions.getCurrent().getParameter("id");
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		Curso cursoOrigem = getUsuario().getCurso(); //add
+		int idCursoOrigem = cursoOrigem.getIdCurso(); // add
+		
 		switch (tipoUsuario) {
 		case Usuario.ALUNO:
 			TCC tempTCC = tccBusiness.getCurrentNotFinishedTCCByAuthor(getUsuario(), getCurrentCalendar());
@@ -107,12 +112,13 @@ public class EditorTccController extends CommonsController {
 			canSubmitTCC = false;
 			canUpdateTCC = true;
 			canSubmitDocs = true;
-
+			
 		case Usuario.SECRETARIA:
 			canEditUser = true;
 			canChangeOrientacao = true;
 			canSubmitDocs = true;
-
+			canUpdateTCC = true; // added
+			
 		default:
 			if (tccId != null && tccId.trim().length() > 0) {
 				tcc = tccBusiness.getTCCById(Integer.parseInt(tccId.trim()));
@@ -123,10 +129,12 @@ public class EditorTccController extends CommonsController {
 					tcc.getAluno().setCurso(getUsuario().getCurso());
 				canChangeMatricula = true;
 			}
-			if (tcc == null || !canEdit())
+			if (tcc == null || !canEdit()) 
 				redirectHome();
-			verificarAtrasado();
-
+			
+			 else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forçado
+					verificarAtrasado();
+			 }
 		}
 		
 		if (tcc != null) {
@@ -921,6 +929,7 @@ public class EditorTccController extends CommonsController {
 		if(tccBusiness.isTrabalhoAtrasado(tcc))
 			tccAtrasado = true;
 	}
+	
 	
 	public void verificarCanSubmitTCC() {
 		int status = tcc.getStatus();

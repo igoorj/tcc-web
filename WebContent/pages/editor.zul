@@ -232,7 +232,7 @@
 							<textbox
 								value="@bind(vm.tempLinkSala)"
 								hflex="1" maxlength="255" />
-						</hlayout>
+						</hlayout> 
 
 						<label value="Resumo: " style="margin:5px;" />
 						<textbox
@@ -258,9 +258,12 @@
 						</hlayout>
 						<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitDocs()}">
 							<button hflex="1"
-								label="Selecionar arquivo de documentação..." upload="true,maxsize=204800"
+								label="Selecionar ARquivo de documentação..." upload="true,maxsize=204800"
 								onUpload="@command('uploadDocumentacao', button=self, evt=event)" />
+								
 						</hlayout>
+				
+					
 					</vlayout>
 				</groupbox>
 				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC}">
@@ -286,14 +289,7 @@
 					</span>
 				</hlayout>
 				
-				<hlayout if="${vm.exibirBaixarArquivoExtra()}">
-					<label value="Arquivo extra: " style="font-size: 14px; font-weight: bold; margin-top: 10px" />
-					<span 
-						style="cursor: pointer;display:inline;position:relative"
-						onClick="@command('downloadArquivoExtra')">
-						<image src="/img/rar.png" />
-					</span>
-				</hlayout>
+		<!-- -->
 
 			</div>
 			<div style="float: left;width: 65%; height: 100%;">

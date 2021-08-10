@@ -24,7 +24,7 @@ public class HomeSecretariaController extends CommonsController {
 	@Init
 	public void init() {
 		CalendarioSemestre currentCalendar = getCurrentCalendar();
-		
+
 		if (currentCalendar != null) {			
 			prazos = getCurrentCalendar().getPrazos();
 

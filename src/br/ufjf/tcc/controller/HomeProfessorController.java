@@ -149,11 +149,11 @@ public class HomeProfessorController extends CommonsController {
 	@SuppressWarnings({"unchecked","rawtypes"})
 	@Command
 	public void envarEmailEmMassa(@BindingParam("window") final Window window, 
-				@BindingParam("corpoEmail") Textbox corpoEmail, 
-				@BindingParam("tituloEmail") Textbox tituloEmail, 
-				@BindingParam("enviarParaAlunos") Checkbox enviarParaAlunos,
-				@BindingParam("enviarParaOrientadores") Checkbox enviarParaOrientadores) {
-		boolean fromAdmin = getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR;
+				@BindingParam("corpoEmail") final Textbox corpoEmail, 
+				@BindingParam("tituloEmail") final Textbox tituloEmail, 
+				@BindingParam("enviarParaAlunos") final Checkbox enviarParaAlunos,
+				@BindingParam("enviarParaOrientadores") final Checkbox enviarParaOrientadores) {
+		final boolean fromAdmin = getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR;
 		if(!enviarParaAlunos.isChecked() && !enviarParaOrientadores.isChecked()) {
 			Messagebox.show("É necessário informar para quem o e-mail será enviado.", "Aviso", Messagebox.OK, Messagebox.ERROR);
 			return;

@@ -23,8 +23,8 @@ import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
 
-@Startup
-@Singleton
+//@Startup
+//@Singleton
 public class EmailListener {
 	TCCBusiness tccBusiness;
 	CalendarioSemestreBusiness calendarioBusiness;

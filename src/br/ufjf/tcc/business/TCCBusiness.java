@@ -473,14 +473,23 @@ public class TCCBusiness {
 		}
 	}
 	
+	
 	public boolean isTrabalhoAtrasado(TCC tcc) {
 		if(tcc == null)
 			return false;
 		int status = tcc.getStatus();
 		if(tcc == null || status == TCC.APROVADO)
-			return false;
+			return false; 
+		
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
+		
+		if(calendario != null) {
+			throw new IllegalArgumentException("Calendario presente");
+		}
+		
 		List <Prazo> prazos = calendario.getPrazos();
+	
+		
 		for (Prazo prazo : prazos) {
 			switch (prazo.getTipo()) {
 			case Prazo.PRAZO_PROJETO:
@@ -499,9 +508,8 @@ public class TCCBusiness {
 			default:
 				break;
 			}
-		}
+		} 
 		return false;
-		
 	}
 	
 	/*
