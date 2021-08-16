@@ -482,11 +482,6 @@ public class TCCBusiness {
 			return false; 
 		
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
-		
-		if(calendario != null) {
-			throw new IllegalArgumentException("Calendario presente");
-		}
-		
 		List <Prazo> prazos = calendario.getPrazos();
 	
 		
