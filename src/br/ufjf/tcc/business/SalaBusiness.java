@@ -78,10 +78,10 @@ public class SalaBusiness {
 	public boolean validate(Sala sala) {
 		errors.clear();
 		if(sala.getNomeSala() != null && sala.getNomeSala().trim() == "") {
-			errors.add("√â necess√°rio informar o nome da sala.\n");
+			errors.add("… necess·rio informar o nome da sala.\n");
 		}
 		if(sala.isOnline() && sala.getCurso()==null) {
-			errors.add("√â necess√°rio informar o curso da sala online.\n");
+			errors.add("… necess·rio informar o curso da sala online.\n");
 		}
 		return errors.size() == 0;
 	}

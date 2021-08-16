@@ -78,7 +78,7 @@ public class HomeAlunoController extends CommonsController {
 
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-			gridTitle = "CalendÃ¡rio "
+			gridTitle = "Calendário "
 					+ currentCalendar.getNomeCalendarioSemestre()
 					+ " (Fim do semestre: "
 					+ dateFormat.format(currentCalendar.getFinalSemestre())
@@ -100,15 +100,15 @@ public class HomeAlunoController extends CommonsController {
 		}
 		if (tcc != null) {
 			if (tcc.getStatus() == TCC.PR) {
-				infos.add("Seu projeto foi reprovado, faÃ§a as respectivas correÃ§Ãµes conforme a justificativa: "
+				infos.add("Seu projeto foi reprovado, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
 			else if (tcc.getStatus() == TCC.TRO) {
-				infos.add("Seu trabalho foi reprovado pelo orientador, faÃ§a as respectivas correÃ§Ãµes conforme a justificativa: "
+				infos.add("Seu trabalho foi reprovado pelo orientador, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
 			else if (tcc.getStatus() == TCC.TRC) {
-				infos.add("Seu trabalho foi reprovado pelo coordenador de curso, faÃ§a as respectivas correÃ§Ãµes conforme a justificativa: "
+				infos.add("Seu trabalho foi reprovado pelo coordenador de curso, faça as respectivas correções conforme a justificativa: "
 						+ tcc.getJustificativaReprovacao());
 			}
 		}
@@ -176,7 +176,7 @@ public class HomeAlunoController extends CommonsController {
 			if (tccBusiness.save(newTcc))
 				Executions.sendRedirect("/pages/editor.zul");
 			else {
-				Messagebox.show("Devido a um erro, o TCC nÃ£o foi criado.",
+				Messagebox.show("Devido a um erro, o TCC não foi criado.",
 						"Erro", Messagebox.OK, Messagebox.ERROR);
 			}
 		} else {

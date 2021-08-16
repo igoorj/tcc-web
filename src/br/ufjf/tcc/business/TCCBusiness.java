@@ -129,20 +129,20 @@ public class TCCBusiness {
 		if(nome != null) {
 			nome = nome.trim().toUpperCase();
 			if(nome.length() == 0)
-				errors.add("√â necess√°rio informar o nome do seu Trabalho\n");
+				errors.add("… necess·rio informar o nome do seu Trabalho\n");
 			return;
 		}
-		errors.add("√â necess√°rio informar o nome do seu Trabalho\n");
+		errors.add("… necess·rio informar o nome do seu Trabalho\n");
 	}
 
 	public void validateOrientador(Usuario orientador) {
 		if (orientador == null)
-			errors.add("√â necess√°rio informar o orientador\n");
+			errors.add("… necess·rio informar o orientador\n");
 	}
 
 	public void validateResumo(String resumo) {
 		if (resumo == null || resumo.trim().length() == 0)
-			errors.add("√â necess√°rio informar o resumo do TCC\n");
+			errors.add("… necess·rio informar o resumo do TCC\n");
 	}
 	
 	/*
@@ -154,7 +154,7 @@ public class TCCBusiness {
 			validateSalaApresentacao(tcc);
 			return true;
 		}
-		errors.add("√â necess√°rio informar o tcc.\n");
+		errors.add("… necess·rio informar o tcc.\n");
 		return false;
 	}
 	
@@ -165,20 +165,20 @@ public class TCCBusiness {
 		if(data != null && calendario != null) {
 			Prazo prazoDefesa = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.DEFESA, calendario);
 			if(prazoDefesa == null) {
-				System.out.println("N√£o existe prazo pra defesa\n");
+				System.out.println("N„o existe prazo pra defesa\n");
 				return false;
 			}
 			// 0 se for igual, negativo se for antes
 			int comparacao = data.compareTo(prazoDefesa.getDataFinal());
 			if(comparacao > 0) {
 				System.out.println("Erro na comparacao\n");
-				errors.add("A data da sua aprensenta√ß√£o est√° fora dos limites de prazo\n");
+				errors.add("A data da sua apresentaÁ„o est· fora dos limites de prazo\n");
 				return false;
 			}
 			return true;
 		}
 		System.out.println("Passou tudo\n");
-		errors.add("√â necess√°rio informar o a data de apresenta√ß√£o e o calend√°rio.\n");
+		errors.add("… necess·rio informar o a data de apresentaÁ„o e o calend·rio.\n");
 		return false;
 	}
 	/*
@@ -187,12 +187,12 @@ public class TCCBusiness {
 	public boolean validateSalaApresentacao(TCC tcc) {
 		SalaBusiness salaBusiness = new SalaBusiness();
 		if(tcc.getSala() == null) {
-			errors.add("√â necess√°rio informar a sala de apresenta√ß√£o\n");
+			errors.add("… necess·rio informar a sala de apresentaÁ„o\n");
 			return false;
 		}
 		if(salaBusiness.getSalaByTcc(tcc).isOnline()) {
 			if(tcc.getLinkSala() == null || tcc.getLinkSala().trim().equals("")) {
-				errors.add("√â necess√°rio informar o link da sala online.\n");
+				errors.add("… necess·rio informar o link da sala online.\n");
 				return false;
 			}
 			return true;
@@ -205,7 +205,7 @@ public class TCCBusiness {
 		for(TCC tccIt : tccs) {
 			if(tccIt.getIdTCC() != tcc.getIdTCC() && tccIt.getSala().getIdSala() == tcc.getSala().getIdSala()
 					&& !tccIt.getSala().isOnline()) {
-				errors.add("J√° existe uma defesa marcada para essa hora nessa sala\n");
+				errors.add("J· existe uma defesa marcada para essa hora nessa sala\n");
 				return false;
 			}
 		}
@@ -215,12 +215,12 @@ public class TCCBusiness {
 	public void validateSala(String sala, TCC tcc) {
 		if (tcc != null)
 			if ((sala == null || sala.trim().length() == 0))
-				errors.add("√â necess√°rio informar a sala de apresenta√ß√£o\n");
+				errors.add("… necess·rio informar a sala de apresenta√ß√£o\n");
 	}
 
 	public void validateBanca(List<Participacao> list) {
 		if (list == null) {
-			errors.add("√â necess√°rio informar a banca. M√≠nimo de 3 participantes.\n");
+			errors.add("… necess·rio informar a banca. M√≠nimo de 3 participantes.\n");
 			return;
 		}
 		boolean hasSuplente = false;
@@ -232,22 +232,22 @@ public class TCCBusiness {
 				membrosBanca++;
 		}
 		if(membrosBanca < 3) {
-			errors.add("√â necess√°rio informar a banca. M√≠nimo de 3 participantes.\n");
+			errors.add("… necess·rio informar a banca. MÌnimo de 3 participantes.\n");
 		}
 		if(!hasSuplente) {
-			errors.add("√â necess√°rio informar o suplente da banca.\n");
+			errors.add("… necess·rio informar o suplente da banca.\n");
 		}
 	}
 	
 	
 	public void validateArquivo(String arquivo) {
 		if (arquivo == null || arquivo.trim().length() == 0)
-			errors.add("√â necess√°rio fazer o upload do seu trabalho\n");
+			errors.add("… necess·rio fazer o upload do seu trabalho\n");
 	}
 	
 	public void validateArquivoDocumentacao(String arquivo) {
 		if (arquivo == null || arquivo.trim().length() == 0)
-			errors.add("√â necess√°rio fazer o upload da documenta√ß√£o\n");
+			errors.add("… necess·rio fazer o upload da documentaÁ„o\n");
 	}
 	
 	public void validateParticipacao(List<Participacao> participacoes) {
@@ -260,7 +260,7 @@ public class TCCBusiness {
 				}
 			}
 			if(!alguemParticipou) {
-				errors.add("√â necess√°rio informar quais professores participaram da defesa\n");
+				errors.add("… necess·rio informar quais professores participaram da defesa\n");
 			}
 		}
 	}
@@ -282,7 +282,7 @@ public class TCCBusiness {
 
 	public void validatePalavraChave(String palavraschave) {
 		if ((palavraschave == null || palavraschave.trim().length() == 0))
-			errors.add("√â necess√°rio informar a as palavras chave\n");
+			errors.add("… necess·rio informar as palavras chave\n");
 	}
 
 	public List<TCC> getAll() {
@@ -483,12 +483,7 @@ public class TCCBusiness {
 		
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
 		
-		if(calendario != null) {
-			throw new IllegalArgumentException("Calendario presente");
-		}
-		
 		List <Prazo> prazos = calendario.getPrazos();
-	
 		
 		for (Prazo prazo : prazos) {
 			switch (prazo.getTipo()) {
@@ -543,8 +538,6 @@ public class TCCBusiness {
 		}
 		return false;
 	}
-	
-	
 
 	public boolean isProjetoAguardandoAprovacao(TCC tcc) {
 		if(tcc.isProjeto() && tcc.getStatus() == TCC.PAA)
@@ -744,7 +737,7 @@ public class TCCBusiness {
 		case TCC.PR:
 			return "Projeto reprovado";
 		case TCC.PAA:
-			return "Projeto aguardando aprova√ß√£o";
+			return "Projeto aguardando aprovaÁ„o";
 		case TCC.TI:
 			return "Trabalho incompleto";
 		case TCC.TEPB:
@@ -752,9 +745,9 @@ public class TCCBusiness {
 		case TCC.TRO:
 			return "Trabalho reprovado por orientador";
 		case TCC.TAAO:
-			return "Trabalho aguardando aprova√ß√£o de orientador";
+			return "Trabalho aguardando aprovaÁ„o de orientador";
 		case TCC.TAAC:
-			return "Trabalho aguardando aprova√ß√£o de coordenador";
+			return "Trabalho aguardando aprovaÁ„o de coordenador";
 		case TCC.TRC:
 			return "Trabalho reprovado por coordenador";
 		case TCC.APROVADO:

@@ -32,14 +32,14 @@ public class DepartamentoBusiness {
 
 	public void validateCode(String codigoCurso, String oldCodigo) {
 		if (codigoCurso == null || codigoCurso.trim().length() == 0)
-			errors.add("√â necess√°rio informar o c√≥digo do curso;\n");
+			errors.add("… necess·rio informar o cÛdigo do curso;\n");
 		else
 			jaExiste(codigoCurso, oldCodigo);
 	}
 
 	public void validateName(String nomeCurso) {
 		if (nomeCurso == null || nomeCurso.trim().length() == 0)
-			errors.add("√â necess√°rio informar o nome do curso;\n");
+			errors.add("… necess·rio informar o nome do curso;\n");
 	}
 
 	// comunica√ß√£o com o DepartamentoDAO
@@ -71,7 +71,7 @@ public class DepartamentoBusiness {
 	public boolean jaExiste(String codigoDepartamento, String oldCodigo) {
 		errors.clear();
 		if (departamentoDAO.jaExiste(codigoDepartamento, oldCodigo)){
-			errors.add("J√° existe um departamento com este c√≥digo.\n");
+			errors.add("J· existe um departamento com este cÛdigo.\n");
 			return true;
 		}
 		return false;

@@ -78,7 +78,7 @@ public class GerenciamentoSalaController extends CommonsController {
 		if (salaBusiness.validate(sala)){
 			if (!salaBusiness.editar(sala)) {
 				System.out.println("Ocorreu erro");
-				Messagebox.show("NÃ£o foi possÃ­vel editar a sala.", "Erro", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("Não foi possível editar a sala.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			}
 			editTemp.remove(sala.getIdSala());
 			sala.setEditingStatus(false);
@@ -87,7 +87,7 @@ public class GerenciamentoSalaController extends CommonsController {
 			String errorMessage = "";
 			for (String error : salaBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / invÃ¡lidos", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(errorMessage, "Dados insuficientes / inválidos", Messagebox.OK, Messagebox.ERROR);
 		}
 	}
 
@@ -95,18 +95,18 @@ public class GerenciamentoSalaController extends CommonsController {
 	@Command
 	public void delete(@BindingParam("sala") final Sala sala) {
 		Messagebox.show(
-				"VocÃª tem certeza que deseja deletar a sala: " + sala.getNomeSala() + "?",
-				"ConfirmaÃ§Ã£o", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
+				"Você tem certeza que deseja deletar a sala: " + sala.getNomeSala() + "?",
+				"Confirmação", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event e) {
 						if (Messagebox.ON_OK.equals(e.getName())) {
 
 							if (salaBusiness.exclui(sala)) {
 								removeFromList(sala);
-								Messagebox.show("A sala foi excluÃ­da com sucesso.", "Sucesso", Messagebox.OK,
+								Messagebox.show("A sala foi excluída com sucesso.", "Sucesso", Messagebox.OK,
 										Messagebox.INFORMATION);
 							} else {
-								String errorMessage = "A sala nÃ£o pÃ´de ser excluÃ­da.\n";
+								String errorMessage = "A sala não pôde ser excluída.\n";
 								for (String error : salaBusiness.getErrors())
 									errorMessage += error;
 								Messagebox.show(errorMessage, "Erro", Messagebox.OK, Messagebox.ERROR);

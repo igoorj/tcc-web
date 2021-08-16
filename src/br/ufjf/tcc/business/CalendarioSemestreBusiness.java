@@ -37,12 +37,12 @@ public class CalendarioSemestreBusiness {
 
 	public void validateName(String name) {
 		if (name == null || name.trim().length() == 0)
-			errors.add("√â necess√°rio informar o nome do calend√°rio;\n");
+			errors.add("… necess·rio informar o nome do calend·rio;\n");
 	}
 
 	public void validateDates(CalendarioSemestre calendario) {
 		if (calendario.getFinalSemestre() == null)
-			errors.add("√â necess√°rio informar a data final;\n");
+			errors.add("… necess·rio informar a data final;\n");
 		else if (new DateTime(calendario.getFinalSemestre()).isBeforeNow())
 			errors.add("O final do semestre deve ser em uma data futura;\n");
 		Calendar dataFinal = Calendar.getInstance();
