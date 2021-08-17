@@ -89,7 +89,6 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			
 			currentCalendar = (CalendarioSemestre) query.uniqueResult();
 			
-			
 			getSession().close();
 			return currentCalendar;
 		} catch (Exception e) {

@@ -33,9 +33,9 @@ public class AvisoBusiness {
 
 	public void validarMensagem(String mensagem) {
 		if (mensagem == null || mensagem.length() == 0)
-			errors.add("Ã‰ necessÃ¡rio informar a mensagem;\n");
+			errors.add("É necessário informar a mensagem;\n");
 		else if (mensagem.length() > 255)
-			errors.add("A mensagem nÃ£o deve conter mais de 255 caracteres;\n");
+			errors.add("A mensagem não deve conter mais de 255 caracteres;\n");
 	}
 
 	public boolean save(Aviso aviso) {

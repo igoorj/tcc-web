@@ -32,14 +32,14 @@ public class CursoBusiness {
 
 	public void validateCode(String codigoCurso, String oldCodigo) {
 		if (codigoCurso == null || codigoCurso.trim().length() == 0)
-			errors.add("Ã‰ necessÃ¡rio informar o cÃ³digo do curso;\n");
+			errors.add("É necessário informar o código do curso;\n");
 		else
 			jaExiste(codigoCurso, oldCodigo);
 	}
 
 	public void validateName(String nomeCurso) {
 		if (nomeCurso == null || nomeCurso.trim().length() == 0)
-			errors.add("Ã‰ necessÃ¡rio informar o nome do curso;\n");
+			errors.add("É necessário informar o nome do curso;\n");
 	}
 
 	// comunicaÃ§Ã£o com o CursoDAO
@@ -62,7 +62,7 @@ public class CursoBusiness {
 	public boolean exclui(Curso curso) {
 		errors.clear();
 		if(new UsuarioBusiness().getAllByCurso(curso).size() > 0) {
-			errors.add("O curso possui usuÃ¡rios cadastrados.");
+			errors.add("O curso possui usuários cadastrados.");
 			return false;
 		}
 		if (new TCCBusiness().getTCCsByCurso(curso).size() > 0) {
@@ -75,7 +75,7 @@ public class CursoBusiness {
 	public boolean jaExiste(String codigoCurso, String oldCodigo) {
 		errors.clear();
 		if (cursoDAO.jaExiste(codigoCurso, oldCodigo)){
-			errors.add("JÃ¡ existe um curso com este cÃ³digo.\n");
+			errors.add("Já existe um curso com este código.\n");
 			return true;
 		}
 		return false;

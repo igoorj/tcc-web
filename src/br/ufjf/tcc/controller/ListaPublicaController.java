@@ -183,7 +183,6 @@ public class ListaPublicaController extends CommonsController {
 								.toLowerCase().contains(filter))))
 					temp.add(tcc);
 			}
-			System.out.println("\n\n\n\nENtrei aqui");
 			filterTccs = temp;
 		} else {
 			filterTccs = tccsByCurso;

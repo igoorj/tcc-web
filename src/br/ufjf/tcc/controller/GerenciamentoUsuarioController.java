@@ -274,8 +274,8 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	public void delete(@BindingParam("usuario") final Usuario usuario) {
-		Messagebox.show("Voc√™ tem certeza que deseja deletar o usu√°rio: "
-				+ usuario.getNomeUsuario() + "?", "Confirma√ß√£o", Messagebox.OK
+		Messagebox.show("VocÍ tem certeza que deseja deletar o usu·rio: "
+				+ usuario.getNomeUsuario() + "?", "ConfirmaÁ„o", Messagebox.OK
 				| Messagebox.CANCEL, Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event e) {
@@ -284,11 +284,11 @@ public class GerenciamentoUsuarioController extends CommonsController {
 							if (usuarioBusiness.exclui(usuario)) {
 								removeFromList(usuario);
 								Messagebox.show(
-										"O usu√°rio foi exclu√≠do com sucesso.",
+										"O usu·rio foi excluÌdo com sucesso.",
 										"Sucesso", Messagebox.OK,
 										Messagebox.INFORMATION);
 							} else {
-								String errorMessage = "O usu√°rio n√£o p√¥de ser exclu√≠do.\n";
+								String errorMessage = "O usu·rio n„o pÙde ser excluÌdo.\n";
 								for (String error : usuarioBusiness.getErrors())
 									errorMessage += error;
 								Messagebox.show(errorMessage, "Erro",
@@ -417,14 +417,14 @@ public class GerenciamentoUsuarioController extends CommonsController {
 								notifyFilterUsuarios();
 								Clients.clearBusy(window);
 								Messagebox.show(
-										"Usu√°rio adicionado com sucesso!",
+										"Usu·rio adicionado com sucesso!",
 										"Sucesso", Messagebox.OK,
 										Messagebox.INFORMATION);
 								limpa();
 							} else {
 								Clients.clearBusy(window);
 								Messagebox.show(
-										"Usu√°rio n√£o foi adicionado!",
+										"Usu·rio n„o foi adicionado!",
 										"Erro", Messagebox.OK,
 										Messagebox.ERROR);
 							}
@@ -434,7 +434,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 								errorMessage += error;
 							Clients.clearBusy(window);
 							Messagebox.show(errorMessage,
-									"Dados insuficientes / inv√°lidos",
+									"Dados insuficientes / inv·lidos",
 									Messagebox.OK, Messagebox.ERROR);
 						}
 					}
@@ -463,8 +463,8 @@ public class GerenciamentoUsuarioController extends CommonsController {
 							Media media = ((UploadEvent) event.getData())
 									.getMedia();
 							if (!media.getName().contains(".csv")) {
-								Messagebox.show("Apenas CSV s√£o aceitos.",
-										"Arquivo inv√°lido", Messagebox.OK,
+								Messagebox.show("Apenas CSV s„o aceitos.",
+										"Arquivo inv·lido", Messagebox.OK,
 										Messagebox.EXCLAMATION);
 								return;
 							}
@@ -549,7 +549,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@NotifyChange("filterUsuarios")
 	@Command
 	public void submitCSV(@BindingParam("window") final Window window) {
-		Clients.showBusy(window, "Cadastrando usu√°rios...");
+		Clients.showBusy(window, "Cadastrando usu·rios...");
 
 		if (!submitCSVListenerExists) {
 			submitCSVListenerExists = true;
@@ -646,7 +646,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	 */
 	private TCC createTCC(Usuario user) {
 		if(getCurrentCalendar() == null) {
-			Messagebox.show("N√£o √© poss√≠vel ativar o aluno pois n√£o h√° calend√°rio ativo.", "Erro ao ativar aluno", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel ativar o aluno pois n„o h· calend·rio ativo.", "Erro ao ativar aluno", Messagebox.OK,
 					Messagebox.ERROR);
 			user.setAtivo(false);
 			return null;
@@ -864,7 +864,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 							}
 						}
 						if(!usuarioBusiness.editar(usuario)) {
-							Messagebox.show("Erro ao ativar usu√°rio!", "Erro", Messagebox.OK,
+							Messagebox.show("Erro ao ativar usu·rio!", "Erro", Messagebox.OK,
 									Messagebox.ERROR);
 							return;
 						}
@@ -888,9 +888,9 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			        }
 		    	}
 		    	catch (Exception e) {
-		    		Messagebox.show("Erro ao ativar usu√°rio", "Erro", Messagebox.OK,
+		    		Messagebox.show("Erro ao ativar usu·rio", "Erro", Messagebox.OK,
 							Messagebox.ERROR);
-		    		logger.error("Erro ao ativar usu√°rio");
+		    		logger.error("Erro ao ativar usu·rio");
 		    		logger.error(e.getMessage());
 		    	}
 		    	finally {

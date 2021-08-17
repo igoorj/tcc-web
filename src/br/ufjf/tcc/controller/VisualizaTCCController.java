@@ -559,7 +559,7 @@ public class VisualizaTCCController extends CommonsController {
 		else if (status == TCC.TAAC)
 			aprovarTrabalhoCoordenador(window);
 		else 
-			System.out.println("NÃ£o deveria deixar aprovar");
+			System.out.println("Não deveria deixar aprovar");
 	}
 	
 	public String gerarCertificadoDigital() {
