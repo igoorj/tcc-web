@@ -131,7 +131,7 @@ public class EditorTccController extends CommonsController {
 			}
 			if (tcc == null || !canEdit()) 
 				redirectHome();
-			
+
 			 else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forçado
 					verificarAtrasado();
 			 }

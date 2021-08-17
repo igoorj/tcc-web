@@ -230,7 +230,7 @@
 						<label value="Departamento:" />
 						<combobox id="comboDepartamento" width="100%"
 							readonly="true" model="@load(vm.departamentos)"
-							value="@load(vm.newUsuario.departamento.nomeDepartamento ne null ? vm.newUsuario.departamento.nomeDepartamento : 'Nenhum')"
+						    value="@load(vm.newUsuario.departamento.nomeDepartamento ne null ? vm.newUsuario.departamento.nomeDepartamento : 'Nenhum')"
 							selectedItem="@bind(vm.newUsuario.departamento)"
 							disabled="true">
 							<template name="model">
