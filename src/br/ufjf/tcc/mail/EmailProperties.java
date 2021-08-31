@@ -10,7 +10,6 @@ public class EmailProperties {
 		if(propriedades==null) {
 			propriedades = new Properties();
 //			propriedades.put("mail.smtp.host", "smtp.mailtrap.io");
-//			propriedades.put("mail.smtp.socketFactory.port", "465");
 //			propriedades.put("mail.smtp.auth", "true");
 //			propriedades.put("mail.smtp.starttls.enable", "true");
 			

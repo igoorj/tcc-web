@@ -97,9 +97,23 @@ public abstract class Ata {
 		}
 		
 		for (Participacao p : tcc.getParticipacoes()) {
-			if (!p.getSuplente()) {
-				part.add(p);
+			if(tcc.getCoOrientador() != null){
+				if(!p.getProfessor().getNomeUsuario().equals(orientador.getProfessor().getNomeUsuario()) &&
+						!p.getProfessor().getNomeUsuario().equals(coorientador.getProfessor().getNomeUsuario())) {
+					if (!p.getSuplente()) {
+						part.add(p);
+					}
+				}
+			} else {
+				if(!p.getProfessor().getNomeUsuario().equals(orientador.getProfessor().getNomeUsuario())) {
+					if (!p.getSuplente()) {
+						part.add(p);
+					}
+				}
 			}
+
+			
+	
 		}
 		inicializarParticipacoes(part);
 		
@@ -109,15 +123,30 @@ public abstract class Ata {
 	protected abstract String getPathTemplate() throws Exception;
 
 	public void inicializarParticipacoes(List<Participacao> ps) {
-		int qt = ps.size();
-
+		
+		/*
+		 * Logica adicionada para evitar elementos repetidos
+		 * Nesse caso para evitar que um Orientador que seja tambem avaliador seja repetido
+		 * sem necessidade
+		 * */
+		
+		List<Participacao> listaSemRepeticao = new ArrayList<Participacao>();
+		for(Participacao item: ps) {
+			if(!listaSemRepeticao.contains(item)) {
+				listaSemRepeticao.add(item);
+			}
+		}
+				
+		//int qt = ps.size();		
+		int qt = listaSemRepeticao.size();
+		
 		qtAvaliador = qt;
 		avaliadores = new String[qtAvaliador];
 		if (qtAvaliador != 0) {
 			for (int i = 0; i < qtAvaliador; i++) {
-				avaliadores[i] = ps.get(i).getProfessor().getNomeUsuario();
-
-			}
+				// avaliadores[i] = ps.get(i).getProfessor().getNomeUsuario();
+				avaliadores[i] = listaSemRepeticao.get(i).getProfessor().getNomeUsuario();
+			} 			
 		}
 
 	}
@@ -137,12 +166,35 @@ public abstract class Ata {
 	
 	protected void preencherFichasAvaliacaoIndividual() {
 		try {
-
-			for (int i = 0; i < avaliadores.length; i++) {
-				PreenchimentoPDF.preencherFichaAvaliacaoIndividual(tcc.getAluno().getNomeUsuario(), avaliadores[i], dia, mes, ano,
-						i, idAluno,PASTA_COM_TEMPLATE_ATAS,tcc);
-
+			
+			/*
+			 * Codigo para evitar repetição das listas de avaliação individual
+			 * */
+			/*List<String> avaliadoresSemRepeticao = new ArrayList<String>();
+			
+			for(int i = 0; i < avaliadores.length; i++) {
+				if(!avaliadoresSemRepeticao.contains(avaliadores[i])) {
+					avaliadoresSemRepeticao.add(avaliadores[i]);
+				}
 			}
+			
+			int counter = 0;
+			for(String avaliador: avaliadoresSemRepeticao) {
+				PreenchimentoPDF.preencherFichaAvaliacaoIndividual(tcc.getAluno().getNomeUsuario(), avaliador, dia, mes, ano,
+						counter , idAluno,PASTA_COM_TEMPLATE_ATAS,tcc);
+				counter++;
+			}
+			/*
+			 * Fim do Codigo para evitar repetição das listas de avaliação individual
+			 * */
+			
+			
+			
+			 for (int i = 0; i < avaliadores.length; i++) {
+					PreenchimentoPDF.preencherFichaAvaliacaoIndividual(tcc.getAluno().getNomeUsuario(), avaliadores[i], dia, mes, ano,
+						i, idAluno,PASTA_COM_TEMPLATE_ATAS,tcc); 
+
+			} 
 
 		} catch (Exception e) {
 			e.printStackTrace();

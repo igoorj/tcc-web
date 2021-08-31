@@ -3,6 +3,7 @@ package br.ufjf.tcc.pdfHandle;
 import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -126,7 +127,28 @@ public class PreenchimentoPDF {
 		
 		String avaliadores = "";
 		String suplente = "";
-		List<Participacao> participacoes = new ParticipacaoBusiness().getParticipacoesUsuarioByTCC(tcc);
+		List<Participacao> participacoes2 = new ParticipacaoBusiness().getParticipacoesUsuarioByTCC(tcc);
+		
+		 // codigo adicionado para evitar repeticao entre os avaliadores 
+		List<Participacao> participacoes = new ArrayList<Participacao>(); // added
+		
+		
+		if(tcc.getCoOrientador() != null) {
+			for(Participacao avaliador: participacoes2) {
+				if(!avaliador.getProfessor().getNomeUsuario().equals(tcc.getOrientador().getNomeUsuario()) &&
+						!avaliador.getProfessor().getNomeUsuario().equals(tcc.getCoOrientador().getNomeUsuario())) {
+					participacoes.add(avaliador);
+				}
+			}
+		} else {
+			for(Participacao avaliador: participacoes2) {
+				if(!avaliador.getProfessor().getNomeUsuario().equals(tcc.getOrientador().getNomeUsuario())) {
+					participacoes.add(avaliador);
+				}
+			}
+		}
+	
+	    // fim do codigo adicionado 
 		
 		avaliadores += tcc.getOrientador().getNomeUsuario()+" - Orientador(a)";
 		avaliadores += "\n"+retirarNull(tcc.getOrientador().getTitulacao());

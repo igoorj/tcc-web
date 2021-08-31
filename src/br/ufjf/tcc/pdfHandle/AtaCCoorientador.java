@@ -28,7 +28,7 @@ public class AtaCCoorientador extends Ata {
 		over = stamper.getOverContent(leitor.getNumberOfPages()-1);
 		over.beginText();
 		over.setFontAndSize(bfTextoSimples, 12);
-		inserirTabelaDinamica();
+		//inserirTabelaDinamica();
 		inserirDadosPrimeiraPagina();
 		inserirDadosSegundaPagina();
 		fecharFluxos();
@@ -70,20 +70,25 @@ public class AtaCCoorientador extends Ata {
 		form.setField("titulo2_3", DivisorString.dividirTitulo(tcc.getNomeTCC())[2]);
 
 		// EXAMINADORES
+		
 		form.setField("orientador3", "1. "+tcc.getOrientador().getNomeUsuario());
 
 		form.setField("coorientador2", "2. "+tcc.getCoOrientador().getNomeUsuario());
+	
 		
 		form.setField("avaliador1_2", "3. "+avaliadores[2]);
 		
 		form.setField("avaliador2_2", "4. "+avaliadores[3]);
 		
 		form.setField("nomeAvaliador1_3", "(" + avaliadores[2] + ")");
-		
-		form.setField("nomeAvaliador2_3", "(" + avaliadores[3] + ")");
 
+		form.setField("nomeAvaliador2_3", "(" + avaliadores[3] + ")"); 
+		
+		
+			
 		if (qtAvaliador >= 5) {
-			form.setField("avaliador3_2", "5. "+avaliadores[4]);
+
+				form.setField("avaliador3_2", "5. "+avaliadores[4]);
 
 			// ASSINATURA
 			over.setTextMatrix(118, 128);
@@ -92,7 +97,7 @@ public class AtaCCoorientador extends Ata {
 			over.showText("(" + avaliadores[4] + ")");
 
 			if (qtAvaliador >= 6) {
-				form.setField("avaliador4_2", "6. "+avaliadores[5]);
+					form.setField("avaliador4_2", "6. "+avaliadores[5]);
 
 				// ASSINATURA
 				over.setTextMatrix(358, 128);
@@ -168,7 +173,14 @@ public class AtaCCoorientador extends Ata {
 
 	private void inserirTabelaDinamica()
 			throws BadElementException, MalformedURLException, IOException, DocumentException {
+		
 		Image tabela = null;
+		tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec3.png");
+		tabela.setAbsolutePosition(98, 417);
+		over.addImage(tabela);
+		over.setTextMatrix(102, 424);
+		over.showText("Avaliador(a) 3");
+		/*
 		if (qtAvaliador == 5) {
 			tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec3.png");
 			tabela.setAbsolutePosition(98, 417);
@@ -185,7 +197,8 @@ public class AtaCCoorientador extends Ata {
 			over.showText(avaliadores[4]);
 			over.setTextMatrix(102, 404);
 			over.showText(avaliadores[5]);
-		}
+		}*/
+		
 	}
 	
 }

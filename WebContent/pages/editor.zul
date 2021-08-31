@@ -259,7 +259,7 @@
 						</hlayout>
 						<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitDocs()}">
 							<button hflex="1"
-								label="Selecionar ARquivo de documentação..." upload="true,maxsize=204800"
+								label="Selecionar arquivo de documentação..." upload="true,maxsize=204800"
 								onUpload="@command('uploadDocumentacao', button=self, evt=event)" />
 								
 						</hlayout>

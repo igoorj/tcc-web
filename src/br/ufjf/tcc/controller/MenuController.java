@@ -85,17 +85,17 @@ public class MenuController extends CommonsController {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Command
 	public void gerarAta(){
-		if (getUsuario() != null && getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
-			if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0) {
+		if (getUsuario() != null && getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) { // verificando se o usuario eh do tipo aluno
+			if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0) { // verificando se o usuario possui um tcc cadastrado
 				TCCBusiness tccBusiness = new TCCBusiness();
-				TCC tcc = getUsuario().getTcc().get(0);
+				TCC tcc = getUsuario().getTcc().get(0); // recuperando o tcc cadastrado pelo aluno
 				if (!tccBusiness.getMissing(tcc, true)) {
 							String mensagem = "A ata será gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
 							
 							Messagebox.show(mensagem, "Confirmação", Messagebox.OK, Messagebox.INFORMATION , new org.zkoss.zk.ui.event.EventListener() {
 							    public void onEvent(Event evt) throws InterruptedException {
 						        if (evt.getName().equals("onOK")) {
-									generate();
+									generate(); // metodo que gera o documento
 						        } 
 						    }
 						});

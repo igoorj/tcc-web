@@ -1,3 +1,4 @@
+
 package br.ufjf.tcc.controller;
 
 import java.io.IOException;
@@ -303,7 +304,7 @@ public class EditorTccController extends CommonsController {
 		System.out.println("Teste tempLinkSala: " + tempLinkSala);
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
-			Messagebox.show("Não é possível alterar o link da sala depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
+			Messagebox.show("NÃ£o Ã© possÃ­vel alterar o link da sala depois de ter marcado a defesa", "OperaÃ§Ã£o invÃ¡lida", Messagebox.OK,
 					Messagebox.ERROR);
 			this.tempLinkSala= tcc.getLinkSala();
 			return;
@@ -325,12 +326,12 @@ public class EditorTccController extends CommonsController {
 			return;
 		}
 		if(!tccBusiness.validateDataApresentacao(tempDataApresentacao, tcc.getCalendarioSemestre())) {
-			Messagebox.show("A data informada está fora do prazo de apresentação", "Data inválida", Messagebox.OK,
+			Messagebox.show("A data informada estÃ¡ fora do prazo de apresentaÃ§Ã£o", "Data invÃ¡lida", Messagebox.OK,
 					Messagebox.ERROR);
 			tcc.setDataApresentacao(null);
 		}
 		if(tcc.getStatus() >= TCC.TEPB) {
-			Messagebox.show("Não é possível alterar a data de apresentação depois de ter marcado a defesa", "Operação inválida", Messagebox.OK,
+			Messagebox.show("NÃ£o Ã© possÃ­vel alterar a data de apresentaÃ§Ã£o depois de ter marcado a defesa", "OperaÃ§Ã£o invÃ¡lida", Messagebox.OK,
 					Messagebox.ERROR);
 			tempDataApresentacao = tcc.getDataApresentacao();
 			return;
