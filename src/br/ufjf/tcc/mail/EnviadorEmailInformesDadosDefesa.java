@@ -51,11 +51,11 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Informes dos Dados de Defesa - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados, ").breakLine();
-		emailBuilder.appendMensagem("no dia " + dataApresentacaoString + " √†s " + horaApresentacao + " na(o) " + tcc.getSala().getNomeSala() + " acontecer√° a ");
-		emailBuilder.appendMensagem("Defesa do Trabalho de Conclus√£o de Curso " + titulo);
+		emailBuilder.appendMensagem("no dia " + dataApresentacaoString + " ‡s " + horaApresentacao + " na(o) " + tcc.getSala().getNomeSala() + " acontecer· a ");
+		emailBuilder.appendMensagem("Defesa do Trabalho de Conclus„o de Curso " + titulo);
 		emailBuilder.appendMensagem(" do(a) discente ");
 		emailBuilder.appendHtmlTextBold( nomeAluno ).appendMensagem(".").breakLine();
-		emailBuilder.appendMensagem("A Banca Examinadora ser√° composta por: ").breakLine().breakLine(); 
+		emailBuilder.appendMensagem("A Banca Examinadora ser· composta por: ").breakLine().breakLine(); 
 		emailBuilder.appendMensagem("<b>Orientador(a):</b> " + nomeOrientador).breakLine();
 		if(tcc.possuiCoorientador())
 			emailBuilder.appendMensagem("<b>Coorientador(a):</b> " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
@@ -66,7 +66,7 @@ public class EnviadorEmailInformesDadosDefesa extends EnviadorEmailChain{
 			emailBuilder.appendMensagem("<b>Suplente:</b> " + suplente).breakLine();
 		}
 		emailBuilder.breakLine();
-		emailBuilder.appendMensagem("A Coordena√ß√£o do Curso " + curso.getNomeCurso() + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
+		emailBuilder.appendMensagem("A CoordenaÁ„o do Curso " + curso.getNomeCurso() + " convida todos os interessados a participarem desta Defesa de TCC.").breakLine(); 
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + curso.getNomeCurso()).breakLine();

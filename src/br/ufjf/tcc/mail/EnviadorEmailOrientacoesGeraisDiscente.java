@@ -25,72 +25,72 @@ public class EnviadorEmailOrientacoesGeraisDiscente extends EnviadorEmailChain{
 		
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] OrientaÃ§Ãµes Gerais");
-		emailBuilder.appendMensagem("ORIENTAÃ‡Ã•ES GERAIS PARA AVALIAÃ‡ÃƒO DOS TRABALHOS DE CONCLUSÃƒO DE CURSO").breakLine(); 
-		emailBuilder.appendMensagem("InstruÃ§Ãµes para defesa de TCC com o tÃ­tulo <tÃ­tulo do trabalho> : ").breakLine(); 
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Orientações Gerais");
+		emailBuilder.appendMensagem("ORIENTAÇÕES GERAIS PARA AVALIAÇÃO DOS TRABALHOS DE CONCLUSÃO DE CURSO").breakLine(); 
+		emailBuilder.appendMensagem("Instruções para defesa de TCC com o título <título do trabalho> : ").breakLine(); 
 		
-		emailBuilder.appendMensagem("1. O(a) discente serÃ¡ avaliado em duas modalidades - avaliaÃ§Ã£o da apresentaÃ§Ã£o oral ");
-		emailBuilder.appendMensagem("e anÃ¡lise do trabalho escrito - por uma Banca Examinadora composta por ao ");
-		emailBuilder.appendMensagem("menos dois membros que nÃ£o participaram do trabalho (nem orientador(a) e nem co-orientador(a)), ");
-		emailBuilder.appendMensagem("que atribuirÃ£o, individualmente, nota ao trabalho nos documentos destinados Ã  avaliaÃ§Ã£o;").breakLine();
+		emailBuilder.appendMensagem("1. O(a) discente será avaliado em duas modalidades - avaliação da apresentação oral ");
+		emailBuilder.appendMensagem("e análise do trabalho escrito - por uma Banca Examinadora composta por ao ");
+		emailBuilder.appendMensagem("menos dois membros que não participaram do trabalho (nem orientador(a) e nem co-orientador(a)), ");
+		emailBuilder.appendMensagem("que atribuirão, individualmente, nota ao trabalho nos documentos destinados à avaliação;").breakLine();
 		
-		emailBuilder.appendMensagem("2. No trabalho escrito, cada membro deve avaliar: organizaÃ§Ã£o sequencial, argumentaÃ§Ã£o, ");
-		emailBuilder.appendMensagem("profundidade do tema, relevÃ¢ncia e contribuiÃ§Ã£o acadÃªmica da pesquisa ou sistema ");
-		emailBuilder.appendMensagem("desenvolvido, correÃ§Ã£o gramatical, clareza, apresentaÃ§Ã£o estÃ©tica e adequaÃ§Ã£o aos ");
-		emailBuilder.appendMensagem("aspectos formais e Ã s normas da ABNT;").breakLine();
+		emailBuilder.appendMensagem("2. No trabalho escrito, cada membro deve avaliar: organização sequencial, argumentação, ");
+		emailBuilder.appendMensagem("profundidade do tema, relevância e contribuição acadêmica da pesquisa ou sistema ");
+		emailBuilder.appendMensagem("desenvolvido, correção gramatical, clareza, apresentação estática e adequação aos ");
+		emailBuilder.appendMensagem("aspectos formais e às normas da ABNT;").breakLine();
 		
-		emailBuilder.appendMensagem("3. Na apresentaÃ§Ã£o oral, cada membro deve avaliar: domÃ­nio do conteÃºdo, organizaÃ§Ã£o da ");
-		emailBuilder.appendMensagem("apresentaÃ§Ã£o, habilidades de comunicaÃ§Ã£o e expressÃ£o, capacidade de argumentaÃ§Ã£o, uso ");
-		emailBuilder.appendMensagem("dos recursos audiovisuais, correÃ§Ã£o gramatical e apresentaÃ§Ã£o estÃ©tica do trabalho;").breakLine();
+		emailBuilder.appendMensagem("3. Na apresentação oral, cada membro deve avaliar: domínio do conteúdo, organização da ");
+		emailBuilder.appendMensagem("apresentação, habilidades de comunicação e expressão, capacidade de argumentação, uso ");
+		emailBuilder.appendMensagem("dos recursos audiovisuais, correção gramatical e apresentação estática do trabalho;").breakLine();
 		
-		emailBuilder.appendMensagem("4. Recomenda-se que a defesa do TCC siga a seguinte sequÃªncia:").breakLine();
-		emailBuilder.appendMensagem("a) O(a) discente tem 35 (trinta e cinco minutos) para apresentaÃ§Ã£o oral do trabalho;").breakLine();
-		emailBuilder.appendMensagem("b) Logo apÃ³s, o trabalho Ã© arguido pelos membros da banca examinadora.").breakLine();
+		emailBuilder.appendMensagem("4. Recomenda-se que a defesa do TCC siga a seguinte sequência:").breakLine();
+		emailBuilder.appendMensagem("a) O(a) discente tem 35 (trinta e cinco minutos) para apresentação oral do trabalho;").breakLine();
+		emailBuilder.appendMensagem("b) Logo após, o trabalho é arguido pelos membros da banca examinadora.").breakLine();
 		
-		emailBuilder.appendMensagem("5. A nota de cada examinador (totalizando valores de 0 (zero) a 100 (cem) ) serÃ¡ a soma ");
+		emailBuilder.appendMensagem("5. A nota de cada examinador (totalizando valores de 0 (zero) a 100 (cem) ) será a soma ");
 		emailBuilder.appendMensagem("da nota do trabalho escrito (com valores de 0 (zero) a 70 (setenta) ) com a nota da ");
-		emailBuilder.appendMensagem("apresentaÃ§Ã£o oral (com valor de 0 (zero) a 30 (trinta)).").breakLine();
+		emailBuilder.appendMensagem("apresentação oral (com valor de 0 (zero) a 30 (trinta)).").breakLine();
 		
-		emailBuilder.appendMensagem("6. A avaliaÃ§Ã£o serÃ¡ documentada em uma Ficha de AvaliaÃ§Ã£o Final e Fichas Individuais de ");
+		emailBuilder.appendMensagem("6. A avaliação será documentada em uma Ficha de Avaliação Final e Fichas Individuais de ");
 		emailBuilder.appendMensagem("cada membro da banca, onde devem constar as notas que cada examinador ");
 		emailBuilder.appendMensagem("atribuiu ao aluno (vide documento em anexo).").breakLine();
 		
-		emailBuilder.appendMensagem("7. Ao tÃ©rmino da defesa, o(a) discente ou o(a) orientador(a) deverÃ¡ entregar a Ata de Defesa ");
-		emailBuilder.appendMensagem("devidamente assinada e as Fichas de AvaliaÃ§Ã£o (final e individuais) Ã  CoordenaÃ§Ã£o do Curso.\n");
+		emailBuilder.appendMensagem("7. Ao término da defesa, o(a) discente ou o(a) orientador(a) deverá entregar a Ata de Defesa ");
+		emailBuilder.appendMensagem("devidamente assinada e as Fichas de Avaliação (final e individuais) à Coordenação do Curso.\n");
 		
-		emailBuilder.appendMensagem("8. O(a) discente tem o prazo mÃ¡ximo de 7 (sete) dias corridos apÃ³s a defesa, ");
-		emailBuilder.appendMensagem("desde que nÃ£o ultrapasse o Ãºltimo dia letivo do semestre, para submeter a ");
-		emailBuilder.appendMensagem("versÃ£o final do Trabalho de ConclusÃ£o de Curso no Sistema de Monografias, ");
-		emailBuilder.appendMensagem("com as correÃ§Ãµes sugeridas pela banca.").breakLine();
+		emailBuilder.appendMensagem("8. O(a) discente tem o prazo máximo de 7 (sete) dias corridos após a defesa, ");
+		emailBuilder.appendMensagem("desde que não ultrapasse o último dia letivo do semestre, para submeter a ");
+		emailBuilder.appendMensagem("versão final do Trabalho de Conclusão de Curso no Sistema de Monografias, ");
+		emailBuilder.appendMensagem("com as correções sugeridas pela banca.").breakLine();
 		
-		emailBuilder.appendMensagem("9. O(a) orientador(a) tem o prazo mÃ¡ximo de 2 (dois) dias apÃ³s a ");
-		emailBuilder.appendMensagem("submissÃ£o da versÃ£o final do TCC, desde que nÃ£o ultrapasse o Ãºltimo ");
-		emailBuilder.appendMensagem("dia letivo do semestre, para verificar se a versÃ£o final contÃ©m as correÃ§Ãµes ");
+		emailBuilder.appendMensagem("9. O(a) orientador(a) tem o prazo máximo de 2 (dois) dias após a ");
+		emailBuilder.appendMensagem("submissão da versão final do TCC, desde que não ultrapasse o último ");
+		emailBuilder.appendMensagem("dia letivo do semestre, para verificar se a versão final contém as correções ");
 		emailBuilder.appendMensagem("sugeridas pela Banca Examinadora. Se estiver tudo correto o(a) orientador(a) ");
-		emailBuilder.appendMensagem("deve Aprovar essa versÃ£o final no Sistema de Monografias e lanÃ§ar ");
+		emailBuilder.appendMensagem("deve Aprovar essa versão final no Sistema de Monografias e lançar ");
 		emailBuilder.appendMensagem("o resultado: Aprovado no SIGA. ").breakLine();
 		
-		emailBuilder.appendMensagem("10. Caso o(a) orientador(a) nÃ£o concorde com a versÃ£o final ");
+		emailBuilder.appendMensagem("10. Caso o(a) orientador(a) não concorde com a versão final ");
 		emailBuilder.appendMensagem("submetida pelo(a) discente, o(a) mesmo(a) deve Reprovar a ");
-		emailBuilder.appendMensagem("VersÃ£o Final informando o(s) motivo(s). O(a) discente tem o prazo ");
-		emailBuilder.appendMensagem("mÃ¡ximo de 2 (dois) dias, desde que nÃ£o ultrapasse o Ãºltimo dia letivo ");
-		emailBuilder.appendMensagem("do semestre, para corrigir o TCC e submeter a versÃ£o corrigida no ");
+		emailBuilder.appendMensagem("Versão Final informando o(s) motivo(s). O(a) discente tem o prazo ");
+		emailBuilder.appendMensagem("máximo de 2 (dois) dias, desde que não ultrapasse o último dia letivo ");
+		emailBuilder.appendMensagem("do semestre, para corrigir o TCC e submeter a versão corrigida no ");
 		emailBuilder.appendMensagem("sistema para ser avaliada.").breakLine();
 		
-		emailBuilder.appendMensagem("11. Uma vez Aprovada a versÃ£o final do TCC pelo(a) orientador(a) ");
-		emailBuilder.appendMensagem("e entregue toda a documentaÃ§Ã£o de Defesa do TCC, a CoordenaÃ§Ã£o do ");
-		emailBuilder.appendMensagem("Curso deve avaliar se a formataÃ§Ã£o do TCC no sistema atende aos ");
-		emailBuilder.appendMensagem("padrÃµes de monografia estabelecidos no PPC do curso. Se estiver ");
-		emailBuilder.appendMensagem("tudo correto, a CoordenaÃ§Ã£o Aprova o TCC e o torna pÃºblico para ");
-		emailBuilder.appendMensagem("leitura no Sistema de Monografias. Caso contrÃ¡rio, a CoordenaÃ§Ã£o ");
-		emailBuilder.appendMensagem("Reprova o TCC informando o(s) motivo(s) e o(a) discente terÃ¡ o prazo ");
-		emailBuilder.appendMensagem("mÃ¡ximo de 2 (dois) dias, desde que nÃ£o ultrapasse o Ãºltimo dia letivo ");
-		emailBuilder.appendMensagem("do semestre, para corrigir a formataÃ§Ã£o do TCC e submeter a versÃ£o ");
+		emailBuilder.appendMensagem("11. Uma vez Aprovada a versão final do TCC pelo(a) orientador(a) ");
+		emailBuilder.appendMensagem("e entregue toda a documentação de Defesa do TCC, a Coordenação do ");
+		emailBuilder.appendMensagem("Curso deve avaliar se a formatação do TCC no sistema atende aos ");
+		emailBuilder.appendMensagem("padrões de monografia estabelecidos no PPC do curso. Se estiver ");
+		emailBuilder.appendMensagem("tudo correto, a Coordenação Aprova o TCC e o torna público para ");
+		emailBuilder.appendMensagem("leitura no Sistema de Monografias. Caso contrário, a Coordenação ");
+		emailBuilder.appendMensagem("Reprova o TCC informando o(s) motivo(s) e o(a) discente terá o prazo ");
+		emailBuilder.appendMensagem("máximo de 2 (dois) dias, desde que não ultrapasse o último dia letivo ");
+		emailBuilder.appendMensagem("do semestre, para corrigir a formatação do TCC e submeter a versão ");
 		emailBuilder.appendMensagem("corrigida no sistema para ser avaliada.").breakLine(); 
 		
-		emailBuilder.appendMensagem("12. A identificaÃ§Ã£o de qualquer tipo de plÃ¡gio ou a nÃ£o adoÃ§Ã£o ");
-		emailBuilder.appendMensagem("do padrÃ£o de monografia disponibilizado no PPC do curso resulta ");
-		emailBuilder.appendMensagem("em ReprovaÃ§Ã£o do Trabalho de ConclusÃ£o do Curso com nota 0 (zero).").breakLine();
+		emailBuilder.appendMensagem("12. A identificação de qualquer tipo de plágio ou a não adoção ");
+		emailBuilder.appendMensagem("do padrão de monografia disponibilizado no PPC do curso resulta ");
+		emailBuilder.appendMensagem("em Reprovação do Trabalho de Conclusão do Curso com nota 0 (zero).").breakLine();
 		
 		emailBuilder.appendMensagem("Att.,").breakLine();
 		//emailBuilder.appendMensagem(nomeCoordenador).breakLine();

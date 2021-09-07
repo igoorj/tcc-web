@@ -67,7 +67,7 @@ class HeaderFooter extends PdfPageEventHelper {
 		}
 		ColumnText.showTextAligned(writer.getDirectContent(),
 				Element.ALIGN_CENTER,
-				new Phrase("Campus Universit√°rio, Bairro Martelos, 36.036-330, Juiz de Fora, MG, Brasil tel.: +55 +32 2102-3311 e +55 +32 2102-3316; fax +55 +32 2102 -3319"),
+				new Phrase("Campus Universit·rio, Bairro Martelos, 36.036-330, Juiz de Fora, MG, Brasil tel.: +55 +32 2102-3311 e +55 +32 2102-3316; fax +55 +32 2102 -3319"),
 				(rect.getLeft() + rect.getRight()) / 2, rect.getBottom() - 18,
 				0);
 	}

@@ -177,7 +177,7 @@ public class GerenciamentoSalaController extends CommonsController {
 							limpa();
 						} else {
 							Clients.clearBusy(window);
-							Messagebox.show("Sala n√£o foi adicionada! Ocorreu um erro no banco", "Erro", Messagebox.OK,
+							Messagebox.show("Sala n„o foi adicionada! Ocorreu um erro no banco", "Erro", Messagebox.OK,
 									Messagebox.ERROR);
 						}
 						window.setVisible(false);
@@ -186,7 +186,7 @@ public class GerenciamentoSalaController extends CommonsController {
 						for (String error : salaBusiness.getErrors())
 							errorMessage += error;
 						Clients.clearBusy(window);
-						Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos", Messagebox.OK,
+						Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos", Messagebox.OK,
 								Messagebox.ERROR);
 					}
 				}

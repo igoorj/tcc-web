@@ -108,7 +108,7 @@ public class SendMail {
 					.getConf("MAIL.FROM")));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(user.getEmail()));
-			message.setSubject("RecuperaÃ§Ã£o de senha");
+			message.setSubject("Recuperação de senha");
 			message.setText("Prezado(a) "
 					+ user.getNomeUsuario()
 					+ ",\n\n"
@@ -136,11 +136,11 @@ public class SendMail {
 					.getConf("MAIL.FROM")));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(user.getEmail()));
-			message.setSubject("ConfirmaÃ§Ã£o de e-mail");
+			message.setSubject("Confirmação de e-mail");
 			message.setText("Prezado(a) "
 					+ user.getNomeUsuario()
 					+ ",\n\n"
-					+ "Por favor clique no link abaixo para confirmar seu endereÃ§o de e-mail:\n"
+					+ "Por favor clique no link abaixo para confirmar seu endereço de e-mail:\n"
 					+ ConfHandler.getConf("GENERAL.URL")
 					+ "/pages/confirmacao.zul?data="
 					+ EncryptionUtil.encode(user.getMatricula() + ";"

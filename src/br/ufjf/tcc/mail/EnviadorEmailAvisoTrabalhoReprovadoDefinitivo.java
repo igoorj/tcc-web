@@ -28,12 +28,12 @@ public class EnviadorEmailAvisoTrabalhoReprovadoDefinitivo extends EnviadorEmail
 		String titulo = tcc.getNomeTCC();
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Final Reprovado por Definitivo - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezada Coordena√ß√£o e " + nomeOrientador + ", ").breakLine();
-		emailBuilder.appendMensagem("a Vers√£o Final do Trabalho de Conclus√£o de Curso ");
-		emailBuilder.appendMensagem("do(a) discente <b>" + nomeAluno + "</b>, com o t√≠tulo ");
+		emailBuilder.appendMensagem("Prezada CoordenaÁ„o e " + nomeOrientador + ", ").breakLine();
+		emailBuilder.appendMensagem("a Vers„o Final do Trabalho de Conclus„o de Curso ");
+		emailBuilder.appendMensagem("do(a) discente <b>" + nomeAluno + "</b>, com o tÌtulo ");
 		emailBuilder.appendHtmlTextBold( titulo );
 		emailBuilder.appendMensagem( ", foi reprovada por definitivo pelo(a) orientador(a) <b>" + nomeOrientador + "</b>.").breakLine();
-		emailBuilder.appendMensagem("O TCC foi exclu√≠do do sistema, junto de seus arquivos e ");
+		emailBuilder.appendMensagem("O TCC foi excluÌdo do sistema, junto de seus arquivos e ");
 		emailBuilder.appendMensagem("o aluno foi desativado.");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendLinkSistema();

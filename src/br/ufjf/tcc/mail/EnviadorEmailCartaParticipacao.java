@@ -32,16 +32,16 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 		EmailBuilder emailBuilder = null;
 		String nomeMembro = membro.getProfessor().getNomeUsuario();
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Carta de participaÃ§Ã£o da banca - " + nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Carta de participação da banca - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) " + nomeMembro + ", ").breakLine(); 
-		emailBuilder.appendMensagem("GostarÃ­amos de agradecer, em nome do Curso " + nomeCurso + ", ");
-		emailBuilder.appendMensagem("a sua participaÃ§Ã£o como Membro em Banca Examinadora do ");
-		emailBuilder.appendMensagem("Trabalho de ConclusÃ£o de Curso, conforme as especificaÃ§Ãµes:").breakLine(); 
+		emailBuilder.appendMensagem("Gostaríamos de agradecer, em nome do Curso " + nomeCurso + ", ");
+		emailBuilder.appendMensagem("a sua participação como Membro em Banca Examinadora do ");
+		emailBuilder.appendMensagem("Trabalho de Conclusão de Curso, conforme as especificações:").breakLine(); 
 		emailBuilder.appendMensagem("Candidato(a): " + nomeAluno).breakLine();
 		emailBuilder.appendMensagem("Orientador(a): " + nomeOrientador).breakLine();
 		if(tcc.possuiCoorientador())
 			emailBuilder.appendMensagem("Co-orientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();
-		emailBuilder.appendMensagem("TÃ­tulo: " + titulo).breakLine();
+		emailBuilder.appendMensagem("Título: " + titulo).breakLine();
 		emailBuilder.appendMensagem("Data da Defesa: " + dataDefesa).breakLine();
 		emailBuilder.appendMensagem("Banca Examinadora:").breakLine();
 		for(String m : membros) {
@@ -53,7 +53,7 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("Atenciosamente,").breakLine();
 //		emailBuilder.appendMensagem("(assinatura digital do Coordenador)").breakLine(); 
 //		emailBuilder.appendMensagem("______________________________________").breakLine(); 
-		emailBuilder.appendMensagem("CoordenaÃ§Ã£o do Curso " + nomeCurso).breakLine();
+		emailBuilder.appendMensagem("Coordenação do Curso " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 		
 		List<Usuario> destinatarios = new ArrayList<>();
@@ -100,7 +100,7 @@ public class EnviadorEmailCartaParticipacao extends EnviadorEmailChain{
 				builder.appendArquivo(cartaParticipacao.getCaminhoArquivo());
 				
 			} catch(Exception e) {
-				System.out.println("ExceÃ§Ã£o capturada ao gerar carta de participacao - EnviadorEmailCartaParticipacao");
+				System.out.println("Exceção capturada ao gerar carta de participacao - EnviadorEmailCartaParticipacao");
 				e.printStackTrace();
 			}
 			Email email = new Email();

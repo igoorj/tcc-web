@@ -42,7 +42,7 @@ public class DownloadController extends CommonsController {
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC());
 			Executions.getCurrent().sendRedirect("index5.jsp");
 		} else
-			Messagebox.show("O PDF n√£o foi encontrado!", "Erro", Messagebox.OK,
+			Messagebox.show("O PDF n„o foi encontrado!", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 	}
 
@@ -56,7 +56,7 @@ public class DownloadController extends CommonsController {
 						tcc.getNomeTCC() + ".rar");
 				Executions.getCurrent().sendRedirect("index5.jsp");
 			} else
-				Messagebox.show("O RAR n√£o foi encontrado!", "Erro",
+				Messagebox.show("O RAR n„o foi encontrado!", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 		}
 	}

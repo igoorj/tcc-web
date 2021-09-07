@@ -90,8 +90,8 @@ public class GerenciamentoCursoController extends CommonsController {
 	@Command
 	public void delete(@BindingParam("curso") final Curso curso) {
 		Messagebox.show(
-				"Voc√™ tem certeza que deseja deletar o curso: "
-						+ curso.getNomeCurso() + "?", "Confirma√ß√£o",
+				"VocÍ tem certeza que deseja deletar o curso: "
+						+ curso.getNomeCurso() + "?", "ConfirmaÁ„o",
 				Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event e) {
@@ -100,11 +100,11 @@ public class GerenciamentoCursoController extends CommonsController {
 							if (cursoBusiness.exclui(curso)) {
 								removeFromList(curso);
 								Messagebox.show(
-										"O curso foi exclu√≠do com sucesso.",
+										"O curso foi excluÌdo com sucesso.",
 										"Sucesso", Messagebox.OK,
 										Messagebox.INFORMATION);
 							} else {
-								String errorMessage = "O curso n√£o p√¥de ser exclu√≠do.\n";
+								String errorMessage = "O curso n„o pÙde ser excluÌdo.\n";
 								for (String error : cursoBusiness.getErrors())
 									errorMessage += error;
 								Messagebox.show(errorMessage, "Erro",
@@ -180,7 +180,7 @@ public class GerenciamentoCursoController extends CommonsController {
 								} else {
 									Clients.clearBusy(window);
 									Messagebox.show(
-											"Curso n√£o foi adicionado!",
+											"Curso n„o foi adicionado!",
 											"Erro", Messagebox.OK,
 											Messagebox.ERROR);
 								}
@@ -190,7 +190,7 @@ public class GerenciamentoCursoController extends CommonsController {
 									errorMessage += error;
 								Clients.clearBusy(window);
 								Messagebox.show(errorMessage,
-										"Dados insuficientes / inv√°lidos",
+										"Dados insuficientes / inv·lidos",
 										Messagebox.OK, Messagebox.ERROR);
 							}
 						}

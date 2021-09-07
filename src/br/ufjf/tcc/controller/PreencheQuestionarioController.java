@@ -53,7 +53,7 @@ public class PreencheQuestionarioController extends CommonsController {
 				String errorMessage = "";
 				for (String error : respostaBusiness.getErrors())
 					errorMessage += error;
-				Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos",
+				Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos",
 						Messagebox.OK, Messagebox.ERROR);
 				return;
 			}

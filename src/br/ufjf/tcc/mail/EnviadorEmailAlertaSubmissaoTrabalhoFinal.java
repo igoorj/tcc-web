@@ -35,19 +35,19 @@ public class EnviadorEmailAlertaSubmissaoTrabalhoFinal extends EnviadorEmailChai
 		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.ENTREGA_FINAL, tcc.getCalendarioSemestre());
 		String prazoString = formatter.format(prazo.getDataFinal());
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss√£o de trabalho final - " + nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss„o de trabalho final - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> se encerra o prazo ");
-		emailBuilder.appendMensagem("para incluir no Sistema de Monografias a vers√£o Final ");
-		emailBuilder.appendMensagem("do TCC, ap√≥s corre√ß√µes sugeridas pelos membros da Banca Examinadora. ").breakLine().breakLine();
-		emailBuilder.appendMensagem("Ainda n√£o consta no sistema que o(a) discente realizou esta atividade ");
-		emailBuilder.appendMensagem("completamente. Por isso a Coordena√ß√£o solicita que o(a) discente ");
-		emailBuilder.appendMensagem("preencha todas as informa√ß√µes no sistema para esta atividade se tornar completa.");
+		emailBuilder.appendMensagem("para incluir no Sistema de Monografias a vers„o Final ");
+		emailBuilder.appendMensagem("do TCC, apÛs correÁıes sugeridas pelos membros da Banca Examinadora. ").breakLine().breakLine();
+		emailBuilder.appendMensagem("Ainda n„o consta no sistema que o(a) discente realizou esta atividade ");
+		emailBuilder.appendMensagem("completamente. Por isso a CoordenaÁ„o solicita que o(a) discente ");
+		emailBuilder.appendMensagem("preencha todas as informaÁıes no sistema para esta atividade se tornar completa.");
 		emailBuilder.breakLine().breakLine();
-		emailBuilder.appendMensagem("Se essa tarefa n√£o for cumprida dentro do prazo, ");
-		emailBuilder.appendMensagem("n√£o haver√° como dar andamento das demais atividades. ");
-		emailBuilder.appendMensagem("Desta forma n√£o ser√° poss√≠vel deixar esse TCC P√∫blico no Sistema de Monografias.").breakLine();
+		emailBuilder.appendMensagem("Se essa tarefa n„o for cumprida dentro do prazo, ");
+		emailBuilder.appendMensagem("n„o haver· como dar andamento das demais atividades. ");
+		emailBuilder.appendMensagem("Desta forma n„o ser· possÌvel deixar esse TCC P˙blico no Sistema de Monografias.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

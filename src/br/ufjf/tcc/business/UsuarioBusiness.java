@@ -52,7 +52,7 @@ public class UsuarioBusiness {
 
 	public void validarMatricula(String matricula, String oldMatricula) {
 		if (matricula == null || matricula.trim().length() == 0)
-			errors.add("… necess·rio informar a matr√≠cula;\n");
+			errors.add("… necess·rio informar a matrÌcula;\n");
 		else
 			jaExiste(matricula, oldMatricula);
 	}
@@ -353,7 +353,7 @@ public class UsuarioBusiness {
 	public boolean jaExiste(String matricula, String oldMatricula) {
 		errors.clear();
 		if (usuarioDAO.jaExiste(matricula, oldMatricula)) {
-			errors.add("J√° existe um usu√°rio com a matr√≠cula informada.");
+			errors.add("J· existe um usu·rio com a matrÌcula informada.");
 			return true;
 		} else
 			return false;

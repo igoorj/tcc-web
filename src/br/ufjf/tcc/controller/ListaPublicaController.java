@@ -196,7 +196,7 @@ public class ListaPublicaController extends CommonsController {
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		
 		else
-			Messagebox.show("O PDF n√£o foi encontrado!", "Erro", Messagebox.OK,
+			Messagebox.show("O PDF n„o foi encontrado!", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 	}
 	
@@ -209,7 +209,7 @@ public class ListaPublicaController extends CommonsController {
 				Filedownload.save(is, "application/x-rar-compressed",
 						tcc.getNomeTCC() + ".rar");
 			else
-				Messagebox.show("O RAR n√£o foi encontrado!", "Erro",
+				Messagebox.show("O RAR n„o foi encontrado!", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 		}
 	}

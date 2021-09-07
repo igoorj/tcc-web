@@ -169,7 +169,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 		if (usuarioBusiness.validate(usuario,
 				editTemp.get(usuario.getIdUsuario()).getMatricula(), true)) {
 			if (!usuarioBusiness.editar(usuario))
-				Messagebox.show("N√£o foi poss√≠vel editar o usu√°rio.", "Erro",
+				Messagebox.show("N„o foi possÌvel editar o usu·rio.", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 			editTemp.remove(usuario.getIdUsuario());
 			usuario.setEditingStatus(false);
@@ -178,7 +178,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			String errorMessage = "";
 			for (String error : usuarioBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos",
+			Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos",
 					Messagebox.OK, Messagebox.ERROR);
 		}
 	}
@@ -597,21 +597,21 @@ public class GerenciamentoUsuarioController extends CommonsController {
 									// new SendMail().onSubmitCSV(usuariosCSV);
 									String msgNaoCadastrados="";
 									if(usuariosNaoCadastrados==1){
-										msgNaoCadastrados = "1 usu√°rio n√£o foi cadastrado.";
+										msgNaoCadastrados = "1 usu·rio n„o foi cadastrado.";
 									}else if(usuariosNaoCadastrados>1){
-										msgNaoCadastrados = usuariosNaoCadastrados+" usu√°rio n√£o foram cadastrados.";
+										msgNaoCadastrados = usuariosNaoCadastrados+" usu·rio n„o foram cadastrados.";
 									}
 									
 									Messagebox.show(
 											usuariosCSV.size()
-													+ " usu√°rios foram cadastrados/atualizados com sucesso.\n"+msgNaoCadastrados,
-											"Conclu√≠do", Messagebox.OK,
+													+ " usu·rios foram cadastrados/atualizados com sucesso.\n"+msgNaoCadastrados,
+											"ConcluÌdo", Messagebox.OK,
 											Messagebox.INFORMATION);
 
 								} else {
 									Clients.clearBusy(window);
 									Messagebox
-											.show("Os usu√°rios n√£o puderam ser cadastrados",
+											.show("Os usu·rios n„o puderam ser cadastrados",
 													"Erro", Messagebox.OK,
 													Messagebox.ERROR);
 									window.setVisible(false);
@@ -619,14 +619,14 @@ public class GerenciamentoUsuarioController extends CommonsController {
 							} else {
 								Clients.clearBusy(window);
 								Messagebox
-										.show("Matr√≠culas j√° cadastradas.",
+										.show("MatrÌculas j· cadastradas.",
 												"Erro", Messagebox.OK,
 												Messagebox.ERROR);
 							}
 						}else{
 							Clients.clearBusy(window);
 							Messagebox
-									.show("A lista est√° vazia. Nenhum usu√°rio foi cadastrado.",
+									.show("A lista est· vazia. Nenhum usu·rio foi cadastrado.",
 											"Lista vazia", Messagebox.OK,
 											Messagebox.INFORMATION);
 						}
@@ -844,9 +844,9 @@ public class GerenciamentoUsuarioController extends CommonsController {
 		String mensagem;
 		
 		if(check.isChecked())
-			mensagem = "Tem certeza que deseja ativar o usu√°rio?";
+			mensagem = "Tem certeza que deseja ativar o usu·rio?";
 		else
-			mensagem = "Tem certeza que deseja desativar o usu√°rio?";
+			mensagem = "Tem certeza que deseja desativar o usu·rio?";
 			
 		Messagebox.show(mensagem, "Confirma√ß√£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			    public void onEvent(Event evt) throws InterruptedException {

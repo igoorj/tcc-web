@@ -18,12 +18,12 @@ public class EnviadorEmailChainPAA extends EnviadorEmailChain {
 		EmailBuilder emailBuilder = null;
 		if(statusFoiAlteradoPara(tcc, statusInicial, "PAA")){
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
-			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Projeto aguardando aprova√ß√£o - "+nomeAluno);
+			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Projeto aguardando aprovaÁ„o - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) coordenador(a) de curso, ").breakLine().breakLine();
-			emailBuilder.appendMensagem("O projeto de TCC do aluno(a) <b>" + nomeAluno + "</b> est√° aguardando sua aprova√ß√£o no sistema de monografias.");
-			emailBuilder.appendMensagem(" Ap√≥s a aprova√ß√£o do projeto o discente poder√° dar in√≠cio ao seu TCC e informar os dados de defesa,");
-			emailBuilder.appendMensagem(" banca avaliadora e deixar dispon√≠vel no sistema o TCC para a banca. ").breakLine().breakLine();
-			emailBuilder.appendMensagem("T√≠tulo do projeto: "+tcc.getNomeTCC()).breakLine();
+			emailBuilder.appendMensagem("O projeto de TCC do aluno(a) <b>" + nomeAluno + "</b> est· aguardando sua aprovaÁ„o no sistema de monografias.");
+			emailBuilder.appendMensagem(" ApÛs a aprovaÁ„o do projeto o discente poder· dar inÌcio ao seu TCC e informar os dados de defesa,");
+			emailBuilder.appendMensagem(" banca avaliadora e deixar disponÌvel no sistema o TCC para a banca. ").breakLine().breakLine();
+			emailBuilder.appendMensagem("TÌtulo do projeto: "+tcc.getNomeTCC()).breakLine();
 			emailBuilder.appendMensagem("Orientador(a): "+tcc.getOrientador().getNomeUsuario()).breakLine();
 			if(tcc.possuiCoorientador()){
 				emailBuilder.appendMensagem("Coorientador(a): " + tcc.getCoOrientador().getNomeUsuario()).breakLine();

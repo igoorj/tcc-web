@@ -34,22 +34,22 @@ public class PerguntaBusiness {
 		if (questions.size() > 0)
 			for (Pergunta p : questions) {
 				if (p.getTitulo() == null || p.getTitulo().trim().length() == 0) {
-					errors.add("VocÃª nÃ£o pode deixar perguntas em branco;\n");
+					errors.add("Você não pode deixar perguntas em branco;\n");
 					break;
 				}
 				if (p.getValor() <= 0) {
-					errors.add("VocÃª nÃ£o pode criar perguntas com valor zero;\n");
+					errors.add("Você não pode criar perguntas com valor zero;\n");
 					break;
 				}
 			}
 		else
-			errors.add("VocÃª deve criar ao menos uma pergunta;\n");
+			errors.add("Você deve criar ao menos uma pergunta;\n");
 
 		int total = 0;
 		for (Pergunta q : questions)
 			total += q.getValor();
 		if (total != 100)
-			errors.add("Os valores das perguntas tÃªm que totalizar 100 pontos. O total atual Ã© de "
+			errors.add("Os valores das perguntas têm que totalizar 100 pontos. O total atual é de "
 					+ total + ";\n");
 	}
 

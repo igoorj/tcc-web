@@ -33,7 +33,7 @@ public class QuestionarioBusiness {
 
 	public void validateCurso(Curso curso) {
 		if (curso == null)
-			errors.add("É necessário selecionar um curso;\n");
+			errors.add("� necess�rio selecionar um curso;\n");
 	}
 
 	// comunicação com o QuestionarioDAO

@@ -57,7 +57,7 @@ public class ShowPdfServlet extends HttpServlet {
 			cal.setTimeInMillis(tcc.getDataEnvioFinal().getTime());
 			return "" + cal.get(Calendar.YEAR);
 		} else
-			return "NÃ£o finalizada";
+			return "Não finalizada";
 	}
 	
 	public String getTccDate(TCC tcc) {
@@ -68,7 +68,7 @@ public class ShowPdfServlet extends HttpServlet {
 			month = month + 1;
 			return "" +cal.get(Calendar.YEAR)+"/"+ month +"/"+cal.get(Calendar.DAY_OF_MONTH) ;
 		} else
-			return "NÃ£o finalizada";
+			return "Não finalizada";
 	}
 
 

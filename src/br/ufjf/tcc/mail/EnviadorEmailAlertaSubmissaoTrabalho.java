@@ -27,16 +27,16 @@ public class EnviadorEmailAlertaSubmissaoTrabalho extends EnviadorEmailChain{
 		String nomeOrientador = tcc.getOrientador().getNomeUsuario();
 		String nomeCurso = tcc.getAluno().getCurso().getNomeCurso();
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss√£o de trabalho - " + nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss„o de trabalho - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador +"</b>,");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("dentro de 2 dias se encerra o prazo para incluir no Sistema de Monografias");
-		emailBuilder.appendMensagem("a vers√£o do TCC a ser avaliado pelos membros da Banca Examinadora. ").breakLine();
-		emailBuilder.appendMensagem("√â necess√°rio preencher todas as informa√ß√µes no sistema para esta atividade se tornar completa, ");
-		emailBuilder.appendMensagem("pois ainda n√£o consta que o(a) discente realizou esta atividade completamente.").breakLine();
-		emailBuilder.appendMensagem("Se n√£o cumprir essa tarefa dentro do prazo, n√£o haver√° como dar andamento das");
-		emailBuilder.appendMensagem("demais atividades, e desta forma n√£o ser√° poss√≠vel gerar");
-		emailBuilder.appendMensagem("a documenta√ß√£o necess√°ria para a Defesa do TCC.").breakLine();
+		emailBuilder.appendMensagem("a vers„o do TCC a ser avaliado pelos membros da Banca Examinadora. ").breakLine();
+		emailBuilder.appendMensagem("… necess·rio preencher todas as informaÁıes no sistema para esta atividade se tornar completa, ");
+		emailBuilder.appendMensagem("pois ainda n„o consta que o(a) discente realizou esta atividade completamente.").breakLine();
+		emailBuilder.appendMensagem("Se n„o cumprir essa tarefa dentro do prazo, n„o haver· como dar andamento das");
+		emailBuilder.appendMensagem("demais atividades, e desta forma n„o ser· possÌvel gerar");
+		emailBuilder.appendMensagem("a documentaÁ„o necess·ria para a Defesa do TCC.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

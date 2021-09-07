@@ -79,7 +79,7 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 		if (departamentoBusiness.validate(departamento,
 				editTemp.get(departamento.getIdDepartamento()).getCodigoDepartamento())) {
 			if (!departamentoBusiness.editar(departamento))
-				Messagebox.show("N√£o foi poss√≠vel editar o departamento.", "Erro", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("N„o foi possÌvel editar o departamento.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			editTemp.remove(departamento.getIdDepartamento());
 			departamento.setEditingStatus(false);
 			refreshRowTemplate(departamento);
@@ -87,7 +87,7 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 			String errorMessage = "";
 			for (String error : departamentoBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos", Messagebox.OK, Messagebox.ERROR);
 		}
 	}
 
@@ -95,18 +95,18 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 	@Command
 	public void delete(@BindingParam("departamento") final Departamento departamento) {
 		Messagebox.show(
-				"Voc√™ tem certeza que deseja deletar o departamento: " + departamento.getNomeDepartamento() + "?",
-				"Confirma√ß√£o", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
+				"VocÍ tem certeza que deseja deletar o departamento: " + departamento.getNomeDepartamento() + "?",
+				"ConfirmaÁ„o", Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event e) {
 						if (Messagebox.ON_OK.equals(e.getName())) {
 
 							if (departamentoBusiness.exclui(departamento)) {
 								removeFromList(departamento);
-								Messagebox.show("O departamento foi exclu√≠do com sucesso.", "Sucesso", Messagebox.OK,
+								Messagebox.show("O departamento foi excluÌdo com sucesso.", "Sucesso", Messagebox.OK,
 										Messagebox.INFORMATION);
 							} else {
-								String errorMessage = "O departamento n√£o p√¥de ser exclu√≠do.\n";
+								String errorMessage = "O departamento n„o pÙde ser excluÌdo.\n";
 								for (String error : departamentoBusiness.getErrors())
 									errorMessage += error;
 								Messagebox.show(errorMessage, "Erro", Messagebox.OK, Messagebox.ERROR);
@@ -165,7 +165,7 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 							limpa();
 						} else {
 							Clients.clearBusy(window);
-							Messagebox.show("Departamento n√£o foi adicionado!", "Erro", Messagebox.OK,
+							Messagebox.show("Departamento n„o foi adicionado!", "Erro", Messagebox.OK,
 									Messagebox.ERROR);
 						}
 					} else {
@@ -173,7 +173,7 @@ public class GerenciamentoDepartamentoController extends CommonsController {
 						for (String error : departamentoBusiness.getErrors())
 							errorMessage += error;
 						Clients.clearBusy(window);
-						Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos", Messagebox.OK,
+						Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos", Messagebox.OK,
 								Messagebox.ERROR);
 					}
 				}

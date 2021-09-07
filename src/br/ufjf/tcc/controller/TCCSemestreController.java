@@ -38,7 +38,7 @@ public class TCCSemestreController extends CommonsController {
 	@Command("submit")
 	public void submit() {
 		if (getCurrentCalendar() == null) {
-			Messagebox.show("√â necess√°rio criar o calend√°rio primeiro.", "Erro", Messagebox.OK,
+			Messagebox.show("… necess·rio criar o calend·rio primeiro.", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 			return;
 		}
@@ -58,12 +58,12 @@ public class TCCSemestreController extends CommonsController {
 			if (userTemp.getCurso().getIdCurso() != getUsuario().getCurso()
 					.getIdCurso()) {
 				Messagebox
-						.show("Matricula de usu√°rio j√° existe e pertence a um curso diferente.",
+						.show("MatrÌcula de usu·rio j· existe e pertence a um curso diferente.",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
 				return;
 			} else if (userTemp.getTipoUsuario().getIdTipoUsuario() != Usuario.ALUNO) {
 				Messagebox
-						.show("Matricula de usu√°rio j√° existe e n√£o √© de aluno.",
+						.show("MatrÌcula de usu·rio j· existe e n„o È de aluno.",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
 				return;
 			} else {
@@ -71,7 +71,7 @@ public class TCCSemestreController extends CommonsController {
 					if (tcc.getAluno().getMatricula()
 							.equals(userTemp.getMatricula())) {
 						Messagebox
-								.show("Usuario j√° possui um Trabalho no Semestre Atual",
+								.show("Usu·rio j· possui um Trabalho no Semestre Atual",
 										"Erro", Messagebox.OK, Messagebox.ERROR);
 						return;
 					}
@@ -89,7 +89,7 @@ public class TCCSemestreController extends CommonsController {
 			tipo.setIdTipoUsuario(Usuario.ALUNO);
 			newTcc.getAluno().setTipoUsuario(tipo);
 			if (!usuarioBusiness.salvar(newTcc.getAluno())) {
-				Messagebox.show("Erro ao salvar usu√°rio!", "Erro",
+				Messagebox.show("Erro ao salvar usu·rio!", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 				return;
 			}

@@ -269,7 +269,7 @@ public class VisualizaTCCController extends CommonsController {
 			cal.setTimeInMillis(tcc.getDataEnvioFinal().getTime());
 			lbl.setValue("" + cal.get(Calendar.YEAR));
 		} else
-			lbl.setValue("NÃ£o finalizada");
+			lbl.setValue("Não finalizada");
 	}
 	
 
@@ -281,7 +281,7 @@ public class VisualizaTCCController extends CommonsController {
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		else
-			Messagebox.show("O PDF nÃ£o foi encontrado!", "Erro", Messagebox.OK,
+			Messagebox.show("O PDF não foi encontrado!", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 	}
 
@@ -296,7 +296,7 @@ public class VisualizaTCCController extends CommonsController {
 			Filedownload.save(is, "application/x-rar-compressed",
 					tcc.getNomeTCC() + "_complemento.zip");
 		else
-			Messagebox.show("O ZIP nÃ£o foi encontrado!", "Erro",
+			Messagebox.show("O ZIP não foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 	
@@ -311,7 +311,7 @@ public class VisualizaTCCController extends CommonsController {
 			Filedownload.save(is, "application/x-rar-compressed",
 					tcc.getNomeTCC() + "_documentacao.pdf");
 		else
-			Messagebox.show("O PDF nÃ£o foi encontrado!", "Erro",
+			Messagebox.show("O PDF não foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 
@@ -328,14 +328,14 @@ public class VisualizaTCCController extends CommonsController {
 			if (respostaBusiness.validate(a)) {
 				sum += a.getNota();
 				if (!respostaBusiness.save(a))
-					Messagebox.show("Respostas nÃ£o salvas.", "Erro",
+					Messagebox.show("Respostas não salvas.", "Erro",
 							Messagebox.OK, Messagebox.ERROR);
 			} else {
 				String errorMessage = "";
 				for (String error : respostaBusiness.getErrors())
 					errorMessage += error;
 				Messagebox.show(errorMessage,
-						"Dados insuficientes / invÃ¡lidos", Messagebox.OK,
+						"Dados insuficientes / inválidos", Messagebox.OK,
 						Messagebox.ERROR);
 				return;
 			}
@@ -383,7 +383,7 @@ public class VisualizaTCCController extends CommonsController {
 	@Command
 	public void aprovarProjeto(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("VocÃª tem certeza que deseja validar esse projeto?", "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja validar esse projeto?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
 					if(isProjetoAguardandoAprovacao())
@@ -419,7 +419,7 @@ public class VisualizaTCCController extends CommonsController {
 	{
 		String tipoTcc = (tcc.isProjeto() ? "Projeto" : "Trabalho");
 		if(window != null) {
-			window.setTitle("Solicitar correÃ§Ã£o de " + tipoTcc);
+			window.setTitle("Solicitar correção de " + tipoTcc);
 			
 		}
 		window.doModal();
@@ -429,7 +429,7 @@ public class VisualizaTCCController extends CommonsController {
 	@Command
 	public void reprovarDefinitivo(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("VocÃª tem certeza que deseja reprovar esse trabalho em definitivo? O TCC serÃ¡ apagado do sistema.", "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja reprovar esse trabalho em definitivo? O TCC será apagado do sistema.", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.EXCLAMATION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if(evt.getName().equals("onYes")) {
 					new TCCBusiness().excluirTCC(tcc);
@@ -450,7 +450,7 @@ public class VisualizaTCCController extends CommonsController {
 		
 		final String justificativa = justificativaReprovacao.getValue();
 		if(justificativa != "") {
-			Messagebox.show("VocÃª tem certeza que deseja solicitar correÃ§Ã£o desse " + tipoTcc + "?", "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+			Messagebox.show("Você tem certeza que deseja solicitar correção desse " + tipoTcc + "?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 				public void onEvent(Event evt) throws InterruptedException {
 					if(evt.getName().equals("onYes")) {
 						tcc.setJustificativaReprovacao(justificativa);
@@ -472,7 +472,7 @@ public class VisualizaTCCController extends CommonsController {
 							emailTrabalhoReprovado.enviarEmail(tcc, null);
 						}
 						new TCCBusiness().edit(tcc);
-						Messagebox.show("O aluno receberÃ¡ uma notificaÃ§Ã£o sobre a solicitaÃ§Ã£o de correÃ§Ã£o.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
+						Messagebox.show("O aluno receberá uma notificação sobre a solicitação de correção.", "Aviso", Messagebox.OK, Messagebox.INFORMATION);
 						window.getParent().detach();
 						
 					}
@@ -480,14 +480,14 @@ public class VisualizaTCCController extends CommonsController {
 			});
 		}
 		else {
-			Messagebox.show("Ã‰ necessÃ¡rio inserir uma justificativa.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("É necessério inserir uma justificativa.", "Aviso", Messagebox.OK, Messagebox.ERROR);
 		}
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void aprovarTrabalhoOrientador(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("VocÃª tem certeza que deseja aprovar esse Trabalho?", "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja aprovar esse Trabalho?", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
 		        	if(new TCCBusiness().isTrabalhoAguardandoAprovacaoDeOrientador(tcc))
@@ -505,7 +505,7 @@ public class VisualizaTCCController extends CommonsController {
 							window.detach();
 		        	}
 		        	else
-						Messagebox.show("O trabalho nÃ£o estÃ¡ completo");
+						Messagebox.show("O trabalho não está completo");
 		        } 
 		    }
 		});
@@ -514,7 +514,7 @@ public class VisualizaTCCController extends CommonsController {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void aprovarTrabalhoCoordenador(@BindingParam("window") final Window window)
 	{
-		Messagebox.show("VocÃª tem certeza que deseja finalizar esse Trabalho?\nApÃ³s a aprovaÃ§Ã£o, o trabalho serÃ¡ publicado para acesso pÃºblico", "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("Você tem certeza que deseja finalizar esse Trabalho?\nApós a aprovação, o trabalho será publicado para acesso público", "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			public void onEvent(Event evt) throws InterruptedException {
 				if (evt.getName().equals("onYes")) {
 					java.util.Date date= new java.util.Date();

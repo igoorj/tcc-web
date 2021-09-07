@@ -56,7 +56,7 @@ public class CommonsController {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void paginaProibida() {
-		Messagebox.show("VocÃª nÃ£o tem permissÃ£o para acessar esta pÃ¡gina. ",
+		Messagebox.show("Você não tem permissão para acessar esta página. ",
 				"Acesso negado", Messagebox.OK, Messagebox.EXCLAMATION,
 				new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event e) {

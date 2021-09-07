@@ -53,20 +53,20 @@ public class MenuController extends CommonsController {
 						getUsuario(), getCurrentCalendar());
 				if(getUsuario().isAtivo()) {
 					if(tccUsuario != null && tccUsuario.getStatus() == TCC.APROVADO) {
-						Messagebox.show("Voc√™ j√° enviou a vers√£o final de seu trabalho, portanto n√£o pode modifica-lo.",
+						Messagebox.show("VocÍ j· enviou a vers„o final de seu trabalho, portanto n„o pode modific·-lo.",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
 						return;
 					}
 				}
 				else {
 					Messagebox
-					.show("Voc√™ n√£o pode iniciar ou modificar um projeto.\n Entre em contato com o coordenador do curso.",
+					.show("VocÍ n„o pode iniciar ou modificar um projeto.\n Entre em contato com o coordenador do curso.",
 							"Erro", Messagebox.OK, Messagebox.ERROR);
 					return;
 				}
 			} else {
 				Messagebox.show(
-						"N√£o h√° nenhum Calend√°rio cadastrado no Sistema!",
+						"N„o h· nenhum Calend·rio cadastrado no Sistema!",
 						"Erro", Messagebox.OK, Messagebox.ERROR);
 				return;
 			}
@@ -90,9 +90,9 @@ public class MenuController extends CommonsController {
 				TCCBusiness tccBusiness = new TCCBusiness();
 				TCC tcc = getUsuario().getTcc().get(0); // recuperando o tcc cadastrado pelo aluno
 				if (!tccBusiness.getMissing(tcc, true)) {
-							String mensagem = "A ata ser√° gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
+							String mensagem = "A ata ser· gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
 							
-							Messagebox.show(mensagem, "Confirma√ß√£o", Messagebox.OK, Messagebox.INFORMATION , new org.zkoss.zk.ui.event.EventListener() {
+							Messagebox.show(mensagem, "ConfirmaÁ„o", Messagebox.OK, Messagebox.INFORMATION , new org.zkoss.zk.ui.event.EventListener() {
 							    public void onEvent(Event evt) throws InterruptedException {
 						        if (evt.getName().equals("onOK")) {
 									generate(); // metodo que gera o documento
@@ -101,11 +101,11 @@ public class MenuController extends CommonsController {
 						});
 				} else
 					Messagebox
-							.show("Para gerar a Ata voc√™ deve preencher todas informa√ß√µes do seu Trabalho.\n",
+							.show("Para gerar a Ata vocÍ deve preencher todas informaÁıes do seu Trabalho.\n",
 									"Aviso", Messagebox.OK, Messagebox.EXCLAMATION);
 			} else
 				Messagebox
-						.show("Voc√™ ainda n√£o possui um trabalho cadastrado no semestre atual.\n",
+						.show("VocÍ ainda n„o possui um trabalho cadastrado no semestre atual.\n",
 								"Aviso", Messagebox.OK, Messagebox.EXCLAMATION);
 		}
 	}
@@ -124,7 +124,7 @@ public class MenuController extends CommonsController {
 			if (ata.existe())
 				ata.preencherPDF();
 			else {
-				Messagebox.show("Seu curso n√£o possui Ata cadastrada.\n", "Aviso", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("Seu curso n„o possui Ata cadastrada.\n", "Aviso", Messagebox.OK, Messagebox.ERROR);
 				return;
 			}
 			
@@ -272,16 +272,16 @@ public class MenuController extends CommonsController {
 		// Verfica se o usu√°rio realmente existe
 		if (email == null || matricula == null || email.trim().length() == 0
 				|| matricula.trim().length() == 0) {
-			Messagebox.show("Digite as informa√ß√µes solicitadas",
-					"Dados inv√°lidos", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Digite as informaÁıes solicitadas",
+					"Dados inv·lidos", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		usuarioBusiness = new UsuarioBusiness();
 		Usuario user = usuarioBusiness.getByEmailAndMatricula(email, matricula);
 		if (user == null) {
 			Messagebox
-					.show("N√£o existe um usu√°rio em nosso sistema com os dados informados.",
-							"Dados inv√°lidos", Messagebox.OK,
+					.show("N„o existe um usu·rio em nosso sistema com os dados informados.",
+							"Dados inv·lidos", Messagebox.OK,
 							Messagebox.EXCLAMATION);
 			return;
 		}
@@ -383,11 +383,11 @@ public class MenuController extends CommonsController {
 								window.onClose();
 								
 							}else{
-								errorLbl.setValue("Senha Atual inv√°lida");
+								errorLbl.setValue("Senha Atual inv·lida");
 								errorLbl.setVisible(true);
 							}
 						}else{
-							errorLbl.setValue("Novas senhas n√£o s√£o iguals!");
+							errorLbl.setValue("Novas senhas n„o s„o iguals!");
 							errorLbl.setVisible(true);
 						}
 						
@@ -396,7 +396,7 @@ public class MenuController extends CommonsController {
 						errorLbl.setVisible(true);
 					}
 				}else{
-					errorLbl.setValue("Senha deve ter no minimo 6 caracteres");
+					errorLbl.setValue("Senha deve ter no mÌnimo 6 caracteres");
 					errorLbl.setVisible(true);
 				}
 			}else{

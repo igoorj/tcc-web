@@ -24,19 +24,19 @@ public class EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador extends Enviad
 		String titulo = tcc.getNomeTCC();
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho Final Aprovado pelo Orientador - " + nomeAluno);
-		emailBuilder.appendMensagem("Prezada Coordena√ß√£o, ").breakLine();
-		emailBuilder.appendMensagem("a Vers√£o Final do Trabalho de Conclus√£o de Curso do(a) discente <b>" + nomeAluno + "</b>, com o t√≠tulo ");
+		emailBuilder.appendMensagem("Prezada CoordenaÁ„o, ").breakLine();
+		emailBuilder.appendMensagem("a Vers„o Final do Trabalho de Conclus„o de Curso do(a) discente <b>" + nomeAluno + "</b>, com o tÌtulo ");
 		emailBuilder.appendHtmlTextBold( titulo );
 		emailBuilder.appendMensagem( ", foi aprovada pelo(a) orientador(a) <b>" + nomeOrientador + "</b>.").breakLine();
-		emailBuilder.appendMensagem("A Coordena√ß√£o/bolsista da Coordena√ß√£o precisa avaliar ");
-		emailBuilder.appendMensagem("a formata√ß√£o do TCC, conferir a documenta√ß√£o de Defesa e confirmar ");
+		emailBuilder.appendMensagem("A CoordenaÁ„o/bolsista da CoordenaÁ„o precisa avaliar ");
+		emailBuilder.appendMensagem("a formataÁ„o do TCC, conferir a documentaÁ„o de Defesa e confirmar ");
 		emailBuilder.appendMensagem("no Sistema de Monografias os membros que efetivamente participaram da Banca. ").breakLine();
-		emailBuilder.appendMensagem("No caso de Reprova√ß√£o, descrever o(s) motivo(s) para ");
-		emailBuilder.appendMensagem("ser(em) enviado(s) para o(a) discente que ter√° o prazo m√°ximo ");
-		emailBuilder.appendMensagem("de 2 (dois) dias depois do √∫ltimo dia letivo do ");
-		emailBuilder.appendMensagem("semestre, para submeter uma nova vers√£o final, que tamb√©m dever√° receber a ");
-		emailBuilder.appendMensagem("sua avalia√ß√£o. Caso contr√°rio, deve-se aprovar o Trabalho de ");
-		emailBuilder.appendMensagem("Conclus√£o de Curso para se tornar P√∫blico no Sistema de Monografias.");
+		emailBuilder.appendMensagem("No caso de ReprovaÁ„o, descrever o(s) motivo(s) para ");
+		emailBuilder.appendMensagem("ser(em) enviado(s) para o(a) discente que ter· o prazo m·ximo ");
+		emailBuilder.appendMensagem("de 2 (dois) dias depois do ˙ltimo dia letivo do ");
+		emailBuilder.appendMensagem("semestre, para submeter uma nova vers„o final, que tambÈm dever· receber a ");
+		emailBuilder.appendMensagem("sua avaliaÁ„o. Caso contr·rio, deve-se aprovar o Trabalho de ");
+		emailBuilder.appendMensagem("Conclus„o de Curso para se tornar P˙blico no Sistema de Monografias.");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendLinkSistema();
 		

@@ -42,33 +42,33 @@ public class PDFHandler {
 			document.add(image);
 
 			paragraph = new Paragraph(
-					"AVALIAÃ‡ÃƒO FINAL DO TRABALHO DE BACHARELADO", titleFont);
+					"AVALIAÇÃO FINAL DO TRABALHO DE BACHARELADO", titleFont);
 			paragraph.setAlignment(Element.ALIGN_CENTER);
 			paragraph.setSpacingAfter(35);
 			document.add(paragraph);
 
 			phrase = new Phrase("");
-			phrase.add(new Phrase("AcadÃªmico (a): ", infoFont));
+			phrase.add(new Phrase("Acadêmico (a): ", infoFont));
 			phrase.add(new Phrase(tcc.getAluno().getNomeUsuario(), defaultFont));
 			paragraph = new Paragraph(phrase);
 			paragraph.setSpacingAfter(15);
 			document.add(paragraph);
 
 			phrase = new Phrase("");
-			phrase.add(new Phrase("NÃºmero de MatrÃ­cula: ", infoFont));
+			phrase.add(new Phrase("Número de Matrícula: ", infoFont));
 			phrase.add(new Phrase(tcc.getAluno().getMatricula(), defaultFont));
 			paragraph = new Paragraph(phrase);
 			paragraph.setSpacingAfter(15);
 			document.add(paragraph);
 
 			phrase = new Phrase("");
-			phrase.add(new Phrase("TÃ­tulo da Monografia: ", infoFont));
+			phrase.add(new Phrase("Título da Monografia: ", infoFont));
 			phrase.add(new Phrase(tcc.getNomeTCC(), defaultFont));
 			paragraph = new Paragraph(phrase);
 			paragraph.setSpacingAfter(15);
 			document.add(paragraph);
 
-			paragraph = new Paragraph("APRESENTAÃ‡ÃƒO DO TRABALHO:", infoFont);
+			paragraph = new Paragraph("APRESENTAÇÃO DO TRABALHO:", infoFont);
 			paragraph.setSpacingAfter(15);
 			document.add(paragraph);
 
@@ -79,7 +79,7 @@ public class PDFHandler {
 			phrase.add(new Phrase("Data: ", infoFont));
 			phrase.add(new Phrase(date.format(tcc.getDataApresentacao()),
 					defaultFont));
-			phrase.add(new Phrase("  HorÃ¡rio: ", infoFont));
+			phrase.add(new Phrase("  Horário: ", infoFont));
 			phrase.add(new Phrase(hour.format(tcc.getDataApresentacao()),
 					defaultFont));
 			phrase.add(new Phrase("  Local: ", infoFont));

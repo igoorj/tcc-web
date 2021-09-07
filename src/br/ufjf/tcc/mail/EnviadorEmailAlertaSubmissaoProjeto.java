@@ -33,16 +33,16 @@ public class EnviadorEmailAlertaSubmissaoProjeto extends EnviadorEmailChain{
 		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.PRAZO_PROJETO, tcc.getCalendarioSemestre());
 		String prazoString = formatter.format(prazo.getDataFinal());
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss√£o de projeto - " + nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de submiss„o de projeto - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>,");
 		emailBuilder.breakLine();
 		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> ");
-		emailBuilder.appendMensagem("se encerra o prazo para Submiss√£o do Projeto ");
-		emailBuilder.appendMensagem("de Trabalho de Conclus√£o de Curso no Sistema de Monografias. ");
-		emailBuilder.appendMensagem("Ainda n√£o consta no sistema que o(a) discente realizou esta atividade completamente.").breakLine();
-		emailBuilder.appendMensagem("Se essa tarefa n√£o for cumprida dentro do prazo, n√£o haver√° como dar andamento das ");
-		emailBuilder.appendMensagem("demais atividades, e desta forma n√£o ser√° poss√≠vel ");
-		emailBuilder.appendMensagem("gerar a documenta√ß√£o necess√°ria para a Defesa do TCC.").breakLine().breakLine();
+		emailBuilder.appendMensagem("se encerra o prazo para Submiss„o do Projeto ");
+		emailBuilder.appendMensagem("de Trabalho de Conclus„o de Curso no Sistema de Monografias. ");
+		emailBuilder.appendMensagem("Ainda n„o consta no sistema que o(a) discente realizou esta atividade completamente.").breakLine();
+		emailBuilder.appendMensagem("Se essa tarefa n„o for cumprida dentro do prazo, n„o haver· como dar andamento das ");
+		emailBuilder.appendMensagem("demais atividades, e desta forma n„o ser· possÌvel ");
+		emailBuilder.appendMensagem("gerar a documentaÁ„o necess·ria para a Defesa do TCC.").breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine(); 
 		emailBuilder.appendMensagem("Coordenador(a) do Curso de " + nomeCurso).breakLine();

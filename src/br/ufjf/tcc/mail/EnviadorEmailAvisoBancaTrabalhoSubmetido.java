@@ -39,19 +39,19 @@ public class EnviadorEmailAvisoBancaTrabalhoSubmetido extends EnviadorEmailChain
 
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso TCC submetido - " + this.nomeAluno);
 		emailBuilder.appendMensagem("Prezado <b>" + nomeMembro + "</b>, ").breakLine().breakLine();
-		emailBuilder.appendMensagem("o Trabalho de Conclus√£o de Curso do(a) discente " + this.nomeAluno + ", ");
-		emailBuilder.appendMensagem("com o t√≠tulo <b>" + this.titulo + "</b>, do qual voc√™ ser√° membro da Banca ");
-		emailBuilder.appendMensagem("Examinadora de defesa, se encontra dispon√≠vel no Sistema de Monografias.");
+		emailBuilder.appendMensagem("o Trabalho de Conclus„o de Curso do(a) discente " + this.nomeAluno + ", ");
+		emailBuilder.appendMensagem("com o tÌtulo <b>" + this.titulo + "</b>, do qual vocÍ ser· membro da Banca ");
+		emailBuilder.appendMensagem("Examinadora de defesa, se encontra disponÌvel no Sistema de Monografias.");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder
-				.appendMensagem("A Defesa do TCC est√° marcada para dia <b>" + dataApresentacaoString + "</b>, √†s  <b>");
+				.appendMensagem("A Defesa do TCC est· marcada para dia <b>" + dataApresentacaoString + "</b>, ‡s  <b>");
 		emailBuilder
 				.appendMensagem(horaApresentacao + "</b>, a ser realizado na(o) <b>" + tcc.getSalaDefesa() + "</b>.")
 				.breakLine();
 
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //				emailBuilder.appendMensagem(nomeCoordenador).breakLine();
-		emailBuilder.appendMensagem("Coordena√ß√£o do Curso de " + nomeCurso).breakLine();
+		emailBuilder.appendMensagem("CoordenaÁ„o do Curso de " + nomeCurso).breakLine();
 		emailBuilder.appendLinkSistema();
 
 		List<Usuario> destinatarios = new ArrayList<>();

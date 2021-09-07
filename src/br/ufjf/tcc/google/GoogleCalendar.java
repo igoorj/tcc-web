@@ -163,9 +163,9 @@ public class GoogleCalendar {
 	
 	private String getEventDescription(TCC tcc) {
 		String description = "";
-		description += "TÃ­tulo: " + tcc.getNomeTCC() + "\n";
+		description += "Título: " + tcc.getNomeTCC() + "\n";
 		if(tcc.getSubNomeTCC() !=null && !tcc.getSubNomeTCC().trim().equals("")) {
-			description += "SubtÃ­tulo: " + tcc.getSubNomeTCC() + "\n";
+			description += "Subtítulo: " + tcc.getSubNomeTCC() + "\n";
 		}
         if(tcc.getLinkSala() != null && !tcc.getLinkSala().trim().equals("")) {
             if(tcc.getSala().isOnline())

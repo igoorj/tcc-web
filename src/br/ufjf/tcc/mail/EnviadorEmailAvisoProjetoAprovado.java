@@ -26,13 +26,13 @@ public class EnviadorEmailAvisoProjetoAprovado extends EnviadorEmailChain{
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Projeto Aprovado - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezado(a) <b>" + nomeAluno + "</b>, ").breakLine();
-		emailBuilder.appendMensagem("O seu projeto de TCC foi aprovado pela Coordena√ß√£o de Curso.").breakLine();
-		emailBuilder.appendMensagem("Atente-se ao calend√°rio definido pela sua Coordena√ß√£o como prazo ");
-		emailBuilder.appendMensagem("m√°ximo para envio dos dados da sua defesa e ");
-		emailBuilder.appendMensagem("envio da vers√£o digital do seu trabalho. ");
+		emailBuilder.appendMensagem("O seu projeto de TCC foi aprovado pela CoordenaÁ„o de Curso.").breakLine();
+		emailBuilder.appendMensagem("Atente-se ao calend·rio definido pela sua CoordenaÁ„o como prazo ");
+		emailBuilder.appendMensagem("m·ximo para envio dos dados da sua defesa e ");
+		emailBuilder.appendMensagem("envio da vers„o digital do seu trabalho. ");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
-		emailBuilder.appendMensagem("Coordena√ß√£o do Curso de " + nomeCurso).breakLine();
+		emailBuilder.appendMensagem("CoordenaÁ„o do Curso de " + nomeCurso).breakLine();
 		
 		List<Usuario> alunos = new ArrayList<>();
 		alunos.add(tcc.getAluno());

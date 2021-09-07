@@ -133,7 +133,7 @@ public class TCCsCursoController extends CommonsController {
 			cal.setTimeInMillis(tcc.getDataEnvioFinal().getTime());
 			lbl.setValue("" + cal.get(Calendar.YEAR));
 		} else
-			lbl.setValue("N√£o finalizada");
+			lbl.setValue("N„o finalizada");
 	}
 
 	public List<TCC> getXmlTccs() {
@@ -158,7 +158,7 @@ public class TCCsCursoController extends CommonsController {
 			filterTccs = tccs;
 		}
 
-		emptyMessage = "N√£o foram encontrados trabalhos cadastrados.";
+		emptyMessage = "N„o foram encontrados trabalhos cadastrados.";
 		BindUtils.postNotifyChange(null, null, null, "emptyMessage");
 	}
 	
@@ -189,7 +189,7 @@ public class TCCsCursoController extends CommonsController {
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		else
-			Messagebox.show("O PDF n√£o foi encontrado!", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("O PDF n„o foi encontrado!", "Erro", Messagebox.OK, Messagebox.ERROR);
 //		InputStream is = FileManager.getFileInputSream(tcc.getArquivoTCCFinal());
 //		if (is != null)
 //			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
@@ -204,7 +204,7 @@ public class TCCsCursoController extends CommonsController {
 			if (is != null)
 				Filedownload.save(is, "application/x-rar-compressed", tcc.getNomeTCC() + ".rar");
 			else
-				Messagebox.show("O RAR n√£o foi encontrado!", "Erro", Messagebox.OK, Messagebox.ERROR);
+				Messagebox.show("O RAR n„o foi encontrado!", "Erro", Messagebox.OK, Messagebox.ERROR);
 		}
 //		if (tcc.getArquivoExtraTCCFinal() != null && tcc.getArquivoExtraTCCFinal() != "") {
 //			InputStream is = FileManager.getFileInputSream(tcc.getArquivoExtraTCCFinal());
@@ -222,7 +222,7 @@ public class TCCsCursoController extends CommonsController {
 			SessionManager.setAttribute("projeto", false);
 			Executions.sendRedirect("/pages/editor.zul");
 		} else
-			Messagebox.show("√â necessario cadastrar um calendario antes");
+			Messagebox.show("… necess·rio cadastrar um calend·rio antes");
 	}
 
 	@Command
@@ -232,7 +232,7 @@ public class TCCsCursoController extends CommonsController {
 			SessionManager.setAttribute("projeto", true);
 			Executions.sendRedirect("/pages/editor.zul");
 		} else
-			Messagebox.show("√â necessario cadastrar um calendario antes");
+			Messagebox.show("… necess·rio cadastrar um calend·rio antes");
 	}
 
 	@NotifyChange("filterTccs")
@@ -344,9 +344,9 @@ public class TCCsCursoController extends CommonsController {
 		final String mensagem;
 		final String mensagem2;
 		if (tcc.isProjeto())
-			mensagem = "Projeto exclu√≠do com sucesso!";
+			mensagem = "Projeto excluÌdo com sucesso!";
 		else
-			mensagem = "Trabalho exclu√≠do com sucesso!";
+			mensagem = "Trabalho excluÌdo com sucesso!";
 
 		if (tcc.isProjeto())
 			mensagem2 = "projeto";

@@ -114,7 +114,7 @@ public class CadastroQuestionarioController extends CommonsController {
 			CalendarioSemestre currentCalendar = new CalendarioSemestreBusiness()
 					.getCurrentCalendarByCurso(curso);
 			if (currentCalendar != null) {
-				title = "QuestionÃ¡rio - "
+				title = "Questionário - "
 						+ currentCalendar.getNomeCalendarioSemestre()
 						+ " (Fim do semestre: "
 						+ dateFormat.format(currentCalendar.getFinalSemestre())
@@ -123,7 +123,7 @@ public class CadastroQuestionarioController extends CommonsController {
 				return;
 			}
 		}
-		title = "QuestionÃ¡rio - ?";
+		title = "Questionário - ?";
 		this.currentCalendar = null;
 	}
 
@@ -198,14 +198,14 @@ public class CadastroQuestionarioController extends CommonsController {
 			if (editing) {
 				if (perguntaBusiness.deleteList(oldQuestions)) {
 					if (perguntaBusiness.saveList(questions)) {
-						Messagebox.show("QuestionÃ¡rio atualizado.", "Sucesso",
+						Messagebox.show("Questionário atualizado.", "Sucesso",
 								Messagebox.OK, Messagebox.INFORMATION);
 						window.detach();
 					} else
-						Messagebox.show("QuestionÃ¡rio nÃ£o foi atualizado!",
+						Messagebox.show("Questionário não foi atualizado!",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
 				} else {
-					Messagebox.show("QuestionÃ¡rio nÃ£o foi atualizado 2!",
+					Messagebox.show("Questionário não foi atualizado 2!",
 							"Erro", Messagebox.OK, Messagebox.ERROR);
 				}
 
@@ -216,8 +216,8 @@ public class CadastroQuestionarioController extends CommonsController {
 				if (questionarioBusiness.save(questionary)) {
 
 					if (perguntaBusiness.saveList(questions)) {
-						Messagebox.show("QuestionÃ¡rio cadastrado com sucesso.",
-								"ConcluÃ­do", Messagebox.OK,
+						Messagebox.show("Questionário cadastrado com sucesso.",
+								"Concluído", Messagebox.OK,
 								Messagebox.INFORMATION, new EventListener() {
 									public void onEvent(Event evt)
 											throws InterruptedException {
@@ -229,7 +229,7 @@ public class CadastroQuestionarioController extends CommonsController {
 
 					limpa();
 				} else {
-					Messagebox.show("QuestionÃ¡rio nÃ£o foi adicionado!", "Erro",
+					Messagebox.show("Questionário não foi adicionado!", "Erro",
 							Messagebox.OK, Messagebox.ERROR);
 				}
 			}
@@ -240,7 +240,7 @@ public class CadastroQuestionarioController extends CommonsController {
 			errors.addAll(perguntaBusiness.getErrors());
 			for (String error : errors)
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / invÃ¡lidos",
+			Messagebox.show(errorMessage, "Dados insuficientes / inválidos",
 					Messagebox.OK, Messagebox.ERROR);
 		}
 

@@ -28,7 +28,7 @@ public class UsuarioDAOTest {
 	@Test
 	public void testTrueUser() throws HibernateException, Exception {
 		Usuario usuario = usuarioDao.retornaUsuario("201235027", usuarioBusiness.encripta("teste"));
-		assertNotNull("retornaUsuario n√£o deve ser null", usuario);
+		assertNotNull("retornaUsuario n„o deve ser null", usuario);
 	}
 	
 }

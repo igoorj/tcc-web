@@ -29,15 +29,15 @@ public class EnviadorEmailAvisoTrabalhoFinalSubmetido extends EnviadorEmailChain
 		
 		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de TCC submetido - "+nomeAluno);
 		emailBuilder.appendMensagem("Prezado <b>" + nomeOrientador + "</b>, ").breakLine();
-		emailBuilder.appendMensagem("a VersÃ£o Final do Trabalho de ConclusÃ£o de Curso do(a) discente ");
+		emailBuilder.appendMensagem("a Versão Final do Trabalho de Conclusão de Curso do(a) discente ");
 		emailBuilder.appendHtmlTextBold( nomeAluno );
-		emailBuilder.appendMensagem(", com o tÃ­tulo <b>" + titulo + "</b>, que vocÃª orientou, ");
-		emailBuilder.appendMensagem("se encontra disponÃ­vel no Sistema de Monografias aguardando a ");
-		emailBuilder.appendMensagem("sua avaliaÃ§Ã£o: AprovaÃ§Ã£o ou ReprovaÃ§Ã£o.").breakLine(); 
-		emailBuilder.appendMensagem("No caso de <b>ReprovaÃ§Ã£o</b>, descrever o(s) motivo(s) para ");
-		emailBuilder.appendMensagem("ser(em) enviado(s) para o(a) discente. O(a) mesmo(a) terÃ¡ o prazo ");
-		emailBuilder.appendMensagem("de 2 (dois) dias apÃ³s o prazo final para corrigir o(s) problema(s) e submeter uma nova ");
-		emailBuilder.appendMensagem("VersÃ£o Final, que tambÃ©m deverÃ¡ receber a sua avaliaÃ§Ã£o.");
+		emailBuilder.appendMensagem(", com o título <b>" + titulo + "</b>, que você orientou, ");
+		emailBuilder.appendMensagem("se encontra disponível no Sistema de Monografias aguardando a ");
+		emailBuilder.appendMensagem("sua avaliação: Aprovação ou Reprovação.").breakLine(); 
+		emailBuilder.appendMensagem("No caso de <b>Reprovação</b>, descrever o(s) motivo(s) para ");
+		emailBuilder.appendMensagem("ser(em) enviado(s) para o(a) discente. O(a) mesmo(a) terá o prazo ");
+		emailBuilder.appendMensagem("de 2 (dois) dias após o prazo final para corrigir o(s) problema(s) e submeter uma nova ");
+		emailBuilder.appendMensagem("Versão Final, que também deverá receber a sua avaliação.");
 		
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();

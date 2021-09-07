@@ -126,7 +126,7 @@ public class ExibirBancasController extends CommonsController {
 			cal.setTimeInMillis(tcc.getDataEnvioFinal().getTime());
 			lbl.setValue("" + cal.get(Calendar.YEAR));
 		} else
-			lbl.setValue("N√£o finalizada");
+			lbl.setValue("N„o finalizada");
 	}
 
 	public List<TCC> getXmlTccs() {
@@ -170,7 +170,7 @@ public class ExibirBancasController extends CommonsController {
 			filterTccs = tccs;
 		}
 
-		emptyMessage = "N√£o foram encontrados trabalhos cadastrados.";
+		emptyMessage = "N„o foram encontrados trabalhos cadastrados.";
 		BindUtils.postNotifyChange(null, null, null, "emptyMessage");
 	}
 
@@ -180,7 +180,7 @@ public class ExibirBancasController extends CommonsController {
 		if (is != null)
 			Filedownload.save(is, "application/pdf", tcc.getNomeTCC() + ".pdf");
 		else
-			Messagebox.show("O PDF n√£o foi encontrado!", "Erro", Messagebox.OK,
+			Messagebox.show("O PDF n„o foi encontrado!", "Erro", Messagebox.OK,
 					Messagebox.ERROR);
 	}
 	
@@ -193,7 +193,7 @@ public class ExibirBancasController extends CommonsController {
 				Filedownload.save(is, "application/x-rar-compressed",
 						tcc.getNomeTCC() + ".rar");
 			else
-				Messagebox.show("O RAR n√£o foi encontrado!", "Erro",
+				Messagebox.show("O RAR n„o foi encontrado!", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 		}
 	}
@@ -207,7 +207,7 @@ public class ExibirBancasController extends CommonsController {
 		    Executions.sendRedirect("/pages/editor.zul");
 		}
 		else
-			Messagebox.show("√â necessario cadastrar um calendario antes");
+			Messagebox.show("… necessario cadastrar um calend·rio antes");
 	}
 
 	@Command
@@ -219,7 +219,7 @@ public class ExibirBancasController extends CommonsController {
 		    Executions.sendRedirect("/pages/editor.zul");
 		}
 		else
-			Messagebox.show("√â necessario cadastrar um calendario antes");
+			Messagebox.show("… necessario cadastrar um calend·rio antes");
 	}
 
 	
@@ -277,8 +277,8 @@ public class ExibirBancasController extends CommonsController {
 	@Command
 	public void gerarPDFBancas(){
 		if(!trabalhosMarcados.isEmpty()){
-			String mensagem = "A ata ser√° gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
-			Messagebox.show(mensagem, "Confirma√ß√£o", Messagebox.OK, Messagebox.INFORMATION,
+			String mensagem = "A ata ser· gerada em uma nova janela. Verifique se o seu navegador permite a abertura de novas janelas";
+			Messagebox.show(mensagem, "ConfirmaÁ„o", Messagebox.OK, Messagebox.INFORMATION,
 					new org.zkoss.zk.ui.event.EventListener() {
 						public void onEvent(Event evt) throws InterruptedException {
 							if (evt.getName().equals("onOK")) {
@@ -289,7 +289,7 @@ public class ExibirBancasController extends CommonsController {
 						}
 					});
 		}else{
-			Messagebox.show("√â necessario marcar pelo menos um trabalho.");
+			Messagebox.show("… necess·rio marcar pelo menos um trabalho.");
 		}
 	}
 	

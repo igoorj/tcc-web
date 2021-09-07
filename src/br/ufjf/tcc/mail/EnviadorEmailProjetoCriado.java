@@ -20,9 +20,9 @@ public class EnviadorEmailProjetoCriado extends EnviadorEmailChain {
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
 			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Projeto Criado - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado coordenador de curso, ").breakLine().breakLine();
-			emailBuilder.appendMensagem("O aluno <b>"+nomeAluno+"</b> iniciou a cria√ß√£o do projeto de TCC. ");
-			emailBuilder.appendMensagem("Por enquanto o projeto ainda est√° incompleto. ");
-			emailBuilder.appendMensagem("Voc√™ ser√° notificado quando o discente completar o cadastro do projeto de TCC.").breakLine().breakLine();
+			emailBuilder.appendMensagem("O aluno <b>"+nomeAluno+"</b> iniciou a criaÁ„o do projeto de TCC. ");
+			emailBuilder.appendMensagem("Por enquanto o projeto ainda est· incompleto. ");
+			emailBuilder.appendMensagem("Voc‚ ser· notificado quando o discente completar o cadastro do projeto de TCC.").breakLine().breakLine();
 			emailBuilder.appendLinkSistema();
 			
 			UsuarioBusiness ub = new UsuarioBusiness();

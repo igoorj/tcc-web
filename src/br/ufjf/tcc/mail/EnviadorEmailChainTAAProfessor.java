@@ -21,10 +21,10 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
 			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho com defesa agendada - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) professor(a), ").breakLine().breakLine();
-			emailBuilder.appendMensagem("O aluno(a) <b>" + nomeAluno + "</b> informou os dados da sua defesa de trabalho de conclus√£o de curso.");
-			emailBuilder.appendMensagem(" O texto do trabalho est√° dispon√≠vel no sistema de acompanhamento de monografias. Para ter acesso ao trabalho, basta logar no sistema.").breakLine().breakLine();
-			emailBuilder.appendHtmlTopico("Informa√ß√µes do trabalho:").breakLine();
-			emailBuilder.appendHtmlTextBold("T√≠tulo: ");
+			emailBuilder.appendMensagem("O aluno(a) <b>" + nomeAluno + "</b> informou os dados da sua defesa de trabalho de conclus„o de curso.");
+			emailBuilder.appendMensagem(" O texto do trabalho est· disponÌvel no sistema de acompanhamento de monografias. Para ter acesso ao trabalho, basta logar no sistema.").breakLine().breakLine();
+			emailBuilder.appendHtmlTopico("InformaÁıes do trabalho:").breakLine();
+			emailBuilder.appendHtmlTextBold("TÌtulo: ");
 			emailBuilder.appendMensagem(tcc.getNomeTCC()).breakLine();
 			emailBuilder.appendHtmlTextBold("Resumo: ");
 			emailBuilder.appendMensagem(tcc.getResumoTCC()).breakLine();
@@ -42,7 +42,7 @@ public class EnviadorEmailChainTAAProfessor extends EnviadorEmailChain {
 			}
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 			String dataFormatada = formatter.format(tcc.getDataApresentacao().getTime());
-			emailBuilder.appendMensagem("<b>Data da apresenta√ß√£o:</b> "+dataFormatada).breakLine();
+			emailBuilder.appendMensagem("<b>Data da apresentaÁ„o:</b> "+dataFormatada).breakLine();
 			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSala().getNomeSala()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema().breakLine().breakLine();
 			

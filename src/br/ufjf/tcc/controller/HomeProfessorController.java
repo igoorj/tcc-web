@@ -155,14 +155,14 @@ public class HomeProfessorController extends CommonsController {
 				@BindingParam("enviarParaOrientadores") final Checkbox enviarParaOrientadores) {
 		final boolean fromAdmin = getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR;
 		if(!enviarParaAlunos.isChecked() && !enviarParaOrientadores.isChecked()) {
-			Messagebox.show("√â necess√°rio informar para quem o e-mail ser√° enviado.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio informar para quem o e-mail ser· enviado.", "Aviso", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		if(corpoEmail == null || corpoEmail.getValue().equals("")) {
-			Messagebox.show("√â necess√°rio informar o corpo do e-mail.", "Aviso", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio informar o corpo do e-mail.", "Aviso", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
-		Messagebox.show("Voc√™ tem certeza que deseja enviar o e-mail?", "Confirma√ß√£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show("VocÍ tem certeza que deseja enviar o e-mail?", "ConfirmaÁ„o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 		    public void onEvent(Event evt) throws InterruptedException {
 		        if (evt.getName().equals("onYes")) {
 		        	String titulo = tituloEmail.getValue();
@@ -345,7 +345,7 @@ public class HomeProfessorController extends CommonsController {
 			}
 			
 		} else{
-			lbl.setValue("N√£o Informada");
+			lbl.setValue("N„o Informada");
 		}
 	}
 

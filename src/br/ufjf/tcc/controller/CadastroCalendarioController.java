@@ -57,7 +57,7 @@ public class CadastroCalendarioController extends CommonsController {
 			String errorMessage = "";
 			for (String error : calendarioSemestreBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos",
+			Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos",
 					Messagebox.OK, Messagebox.ERROR);
 		} else {
 			Map<String, Object> map = new HashMap<String, Object>();

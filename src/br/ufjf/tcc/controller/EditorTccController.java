@@ -130,10 +130,9 @@ public class EditorTccController extends CommonsController {
 					tcc.getAluno().setCurso(getUsuario().getCurso());
 				canChangeMatricula = true;
 			}
-			if (tcc == null || !canEdit()) 
+			if (tcc == null || !canEdit()) {
 				redirectHome();
-
-			 else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forÁado
+			} else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forÁado
 					verificarAtrasado();
 			 }
 		}
@@ -186,12 +185,12 @@ public class EditorTccController extends CommonsController {
 	public String getMensagem() {
 		if(tccAtrasado) {
 			String projeto = tcc.isProjeto() ? "projeto" : "trabalho";
-			return "Voc√™ perdeu a data para envio do " + projeto;
+			return "VocÍ perdeu a data para envio do " + projeto;
 		}
 		else if(tcc.getStatus() == TCC.TEPB) {
-			return "Esperando data de apresenta√ß√£o";
+			return "Esperando data de apresentaÁ„o";
 		}
-		return "Seu trabalho est√° sob avalia√ß√£o.";
+		return "Seu trabalho est· sob avaliaÁ„o.";
 	}
 	
 	public TCC getTcc() {
@@ -286,7 +285,7 @@ public class EditorTccController extends CommonsController {
 	public void setTempSala(Sala tempSala) {
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
-			Messagebox.show("N√£o √© poss√≠vel alterar a sala depois de ter marcado a defesa", "Opera√ß√£o inv√°lida", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel alterar a sala depois de ter marcado a defesa", "OperaÁ„o inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			this.tempSala= tcc.getSala();
 			return;
@@ -304,7 +303,7 @@ public class EditorTccController extends CommonsController {
 		System.out.println("Teste tempLinkSala: " + tempLinkSala);
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		if(tcc.getStatus() >= TCC.TEPB && tipoUsuario != Usuario.COORDENADOR) {
-			Messagebox.show("N√£o √© poss√≠vel alterar o link da sala depois de ter marcado a defesa", "Opera√ß√£o inv√°lida", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel alterar o link da sala depois de ter marcado a defesa", "OperaÁ„o inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			this.tempLinkSala= tcc.getLinkSala();
 			return;
@@ -326,12 +325,12 @@ public class EditorTccController extends CommonsController {
 			return;
 		}
 		if(!tccBusiness.validateDataApresentacao(tempDataApresentacao, tcc.getCalendarioSemestre())) {
-			Messagebox.show("A data informada est√° fora do prazo de apresenta√ß√£o", "Data inv√°lida", Messagebox.OK,
+			Messagebox.show("A data informada est· fora do prazo de apresentaÁ„o", "Data inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			tcc.setDataApresentacao(null);
 		}
 		if(tcc.getStatus() >= TCC.TEPB) {
-			Messagebox.show("N√£o √© poss√≠vel alterar a data de apresenta√ß√£o depois de ter marcado a defesa", "Opera√ß√£o inv√°lida", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel alterar a data de apresentaÁ„o depois de ter marcado a defesa", "OperaÁ„o inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			tempDataApresentacao = tcc.getDataApresentacao();
 			return;
@@ -352,12 +351,12 @@ public class EditorTccController extends CommonsController {
 					if (aluno.getTipoUsuario().getIdTipoUsuario() != Usuario.ALUNO
 							|| getUsuario().getTipoUsuario().getIdTipoUsuario() != Usuario.ADMINISTRADOR
 									&& aluno.getCurso().getIdCurso() != getUsuario().getCurso().getIdCurso()) {
-						lbl.setValue("Usu√°rio existe mas n√£o √© um aluno ou pertence a outro curso.");
+						lbl.setValue("Usu·rio existe mas n„o È um aluno ou pertence a outro curso.");
 						alunoEditBlock = true;
 						alunoVerified = false;
 					} else {
 						tcc.setAluno(aluno);
-						lbl.setValue("Usu√°rio j√° cadastrado.");
+						lbl.setValue("Usu·rio j· cadastrado.");
 						alunoEditBlock = true;
 						alunoVerified = true;
 						textb.setReadonly(true);
@@ -366,19 +365,19 @@ public class EditorTccController extends CommonsController {
 				} else {
 					if (getUsuario().getTipoUsuario().getIdTipoUsuario() != Usuario.ADMINISTRADOR) {
 						alunoEditBlock = false;
-						lbl.setValue("Usu√°rio ainda n√£o cadastrado.Fa√ßa o cadastro abaixo.");
+						lbl.setValue("Usu·rio ainda n„o cadastrado.FaÁa o cadastro abaixo.");
 						alunoVerified = true;
 						textb.setReadonly(true);
 						bt.setLabel("Editar");
 					} else {
 						alunoEditBlock = true;
-						lbl.setValue("Usu√°rio ainda n√£o cadastrado.Cadastre ele no menu de Usu√°rios.");
+						lbl.setValue("Usu·rio ainda n„o cadastrado.Cadastre ele no menu de Usu·rios.");
 						alunoVerified = false;
 					}
 				}
 			} else {
 				alunoEditBlock = true;
-				lbl.setValue("√â necess√°rio digitar a matr√≠cula.");
+				lbl.setValue("… necess·rio digitar a matrÌcula.");
 				alunoVerified = false;
 			}
 		} else {
@@ -410,8 +409,8 @@ public class EditorTccController extends CommonsController {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Command
 	public void upload(@BindingParam("evt") UploadEvent evt) {
-		String alerta1 = "Voc√™ est√° enviando a vers√£o final do seu trabalho?";
-		final String alerta2 = "Aten√ß√£o, ap√≥s submeter a vers√£o final do seu trabalho e clicar em atualizar, ele n√£o poder√° mais ser alterado. Deseja continuar?";
+		String alerta1 = "VocÍ est· enviando a vers„o final do seu trabalho?";
+		final String alerta2 = "AtenÁ„o, apÛs submeter a vers„o final do seu trabalho e clicar em atualizar, ele n„o poder· mais ser alterado. Deseja continuar?";
 		if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) {
 			if (tcc != null && tcc.getDataApresentacao() != null && tcc.isQuantidadeParticipacoesValidas()) {
 				if (!tcc.isProjeto() && tcc.getDataApresentacao().before(new Date())) {
@@ -442,7 +441,7 @@ public class EditorTccController extends CommonsController {
 
 		String fileName = evt.getMedia().getName();
 		if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
-			Messagebox.show("Este n√£o √© um arquivo v√°lido! Apenas PDF s√£o aceitos.", "Formato inv√°lido", Messagebox.OK,
+			Messagebox.show("Este n„o È um arquivo v·lido! Apenas PDF s„o aceitos.", "Formato inv·lido", Messagebox.OK,
 					Messagebox.ERROR);
 			tccFile = null;
 			return;
@@ -453,26 +452,26 @@ public class EditorTccController extends CommonsController {
 		tccFileChanged = true;
 		iframe.setContent(pdf);
 		logger.info("Upload de arquivo: " + evt.getMedia().getName());
-		Messagebox.show("Arquivo enviado com sucesso.", "Confirma√ß√£o", Messagebox.OK, Messagebox.INFORMATION);
+		Messagebox.show("Arquivo enviado com sucesso.", "ConfirmaÁ„o", Messagebox.OK, Messagebox.INFORMATION);
 	}
 	@Command
 	public void extraUpload(@BindingParam("evt") UploadEvent evt) {
 		String fileName = evt.getMedia().getName();
 		if (!FilenameUtils.getExtension(fileName).equals("zip")) {
-			Messagebox.show("Este n√£o √© um arquivo v√°lido! Apenas ZIP s√£o aceitos.", "Formato inv√°lido", Messagebox.OK,
+			Messagebox.show("Este n„o È um arquivo v·lido! Apenas ZIP s„o aceitos.", "Formato inv·lido", Messagebox.OK,
 					Messagebox.ERROR);
 			extraFile = null;
 			return;
 		}
 		extraFile = evt.getMedia().getStreamData();
 		extraFileChanged = true;
-		Messagebox.show("Arquivo enviado com sucesso.", "Confirma√ß√£o", Messagebox.OK, Messagebox.INFORMATION);
+		Messagebox.show("Arquivo enviado com sucesso.", "ConfirmaÁ„o", Messagebox.OK, Messagebox.INFORMATION);
 	}
 	@Command
 	public void uploadDocumentacao(@BindingParam("evt") UploadEvent evt) {
 		String fileName = evt.getMedia().getName();
 		if (!FilenameUtils.getExtension(fileName).equals("pdf")) {
-			Messagebox.show("Este n√£o √© um arquivo v√°lido! Apenas PDF s√£o aceitos.", "Formato inv√°lido", Messagebox.OK,
+			Messagebox.show("Este n„o È um arquivo v·lido! Apenas PDF s„o aceitos.", "Formato inv·lido", Messagebox.OK,
 					Messagebox.ERROR);
 			docFile = null;
 			return;
@@ -505,7 +504,7 @@ public class EditorTccController extends CommonsController {
 			Filedownload.save(is, "application/x-rar-compressed",
 					tcc.getNomeTCC() + "_documentacao.pdf");
 		else
-			Messagebox.show("O PDF n√£o foi encontrado!", "Erro",
+			Messagebox.show("O PDF n„o foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 	
@@ -520,7 +519,7 @@ public class EditorTccController extends CommonsController {
 			Filedownload.save(is, "application/x-rar-compressed",
 					tcc.getNomeTCC() + "_arquivoExtra.zip");
 		else
-			Messagebox.show("O ZIP n√£o foi encontrado!", "Erro",
+			Messagebox.show("O ZIP n„o foi encontrado!", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 	}
 
@@ -545,14 +544,14 @@ public class EditorTccController extends CommonsController {
 		if (tempUser != null) {
 			if (participacoesContains(tempUser)) {
 				Messagebox.show(
-						"Voc√™ escolheu um professor que j√° est√° inclu√≠do na Banca Examinadora. Se ele √© seu Orientador, por favor retire-o da Banca antes.",
-						"Inv√°lido", Messagebox.OK, Messagebox.ERROR);
+						"VocÍ escolheu um professor que j· est· incluÌdo na Banca Examinadora. Se ele È seu Orientador, por favor retire-o da Banca antes.",
+						"Inv·lido", Messagebox.OK, Messagebox.ERROR);
 			} else if (orientadorWindow && tcc.getCoOrientador() != null
 					&& tcc.getCoOrientador().getIdUsuario() == tempUser.getIdUsuario()) {
-				Messagebox.show("Voc√™ escolheu um professor que j√° √© seu Co-Orientador.", "Inv√°lido", Messagebox.OK,
+				Messagebox.show("VocÍ escolheu um professor que j· È seu Co-Orientador.", "Inv·lido", Messagebox.OK,
 						Messagebox.ERROR);
 			} else if (!orientadorWindow && tcc.getOrientador().getIdUsuario() == tempUser.getIdUsuario()) {
-				Messagebox.show("Voc√™ escolheu um professor que j√° √© seu Orientador.", "Inv√°lido", Messagebox.OK,
+				Messagebox.show("VocÍ escolheu um professor que j· È seu Orientador.", "Inv·lido", Messagebox.OK,
 						Messagebox.ERROR);
 			} else {
 				int tipoMembro = 0;
@@ -572,7 +571,7 @@ public class EditorTccController extends CommonsController {
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			}
 		} else
-			Messagebox.show("Voc√™ n√£o selecionou um professor.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("VocÍ n„o selecionou um professor.", "Erro", Messagebox.OK, Messagebox.ERROR);
 		tempUser = null;
 		BindUtils.postNotifyChange(null, null, this, "tempUser");
 		window.setVisible(false);
@@ -600,7 +599,7 @@ public class EditorTccController extends CommonsController {
 				tccBusiness.addParticipacao(tcc, tempUser, Participacao.BANCA, true);
 				BindUtils.postNotifyChange(null, null, this, "tcc");
 			} else {
-				Messagebox.show("Esse professor j√° est√° na lista ou √© o orientador/co-orientador do TCC", "Erro",
+				Messagebox.show("Esse professor j· est· na lista ou È o orientador/co-orientador do TCC", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 			}
 			tempUser = null;
@@ -640,16 +639,16 @@ public class EditorTccController extends CommonsController {
 		List<EnviadorEmailChain> emails = new ArrayList<EnviadorEmailChain>();
 		atualizarArquivos();
 		if (tipoUsuario == Usuario.SECRETARIA && (tcc.getArquivoTCC() == null && !tccFileChanged)) {
-			Messagebox.show("√â neces√°rio enviar o documento PDF.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio enviar o documento PDF.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		if (tipoUsuario == Usuario.SECRETARIA && (!validaAutor(tcc))) {
-			Messagebox.show("√â neces√°rio informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 
 		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) {
-			Messagebox.show("Antes de enviar √© neces√°rio validar a matricula do aluno no bot√£o de verificar.", "Erro",
+			Messagebox.show("Antes de enviar È necess·rio validar a matrÌcula do aluno no bot„o de verificar.", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
@@ -709,7 +708,7 @@ public class EditorTccController extends CommonsController {
 					email.enviarEmail(tcc, null);
 				}
 
-				Messagebox.show(alerta, "Confirma√ß√£o", Messagebox.OK, Messagebox.INFORMATION,
+				Messagebox.show(alerta, "ConfirmaÁ„o", Messagebox.OK, Messagebox.INFORMATION,
 						new org.zkoss.zk.ui.event.EventListener() {
 							public void onEvent(Event evt) throws InterruptedException {
 								if (evt.getName().equals("onOK")) {
@@ -719,7 +718,7 @@ public class EditorTccController extends CommonsController {
 						});
 
 				if (!new ParticipacaoBusiness().updateList(tcc)) {
-					Messagebox.show("N√£o foi poss√≠vel salvar as altera√ß√µes da Banca Examinadora.", "Erro",
+					Messagebox.show("N„o foi possÌvel salvar as alteraÁıes da Banca Examinadora.", "Erro",
 							Messagebox.OK, Messagebox.ERROR);
 
 					return;
@@ -730,7 +729,7 @@ public class EditorTccController extends CommonsController {
 			String errorMessage = "";
 			for (String error : tccBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos", Messagebox.OK, Messagebox.ERROR);
 		}
 	}
 
@@ -742,16 +741,16 @@ public class EditorTccController extends CommonsController {
 		atualizarArquivos();
 		
 		if (tipoUsuario == Usuario.SECRETARIA && (tcc.getArquivoTCC() == null && !tccFileChanged)) {
-			Messagebox.show("√â neces√°rio enviar o documento PDF.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio enviar o documento PDF.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		if (tipoUsuario == Usuario.SECRETARIA && (!validaAutor(tcc))) {
-			Messagebox.show("√â neces√°rio informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("… necess·rio informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		
 		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) {
-			Messagebox.show("Antes de enviar √© neces√°rio validar a matricula do aluno no bot√£o de verificar.", "Erro",
+			Messagebox.show("Antes de enviar È necess·rio validar a matricula do aluno no bot„o de verificar.", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
@@ -764,14 +763,14 @@ public class EditorTccController extends CommonsController {
 			UsuarioBusiness ub = new UsuarioBusiness();
 			Usuario aluno = tcc.getAluno();
 			if (!ub.editar(aluno)) {
-				Messagebox.show("Devido a um erro, o Aluno n√£o foi salvo.", "Erro", Messagebox.OK,
+				Messagebox.show("Devido a um erro, o Aluno n„o foi salvo.", "Erro", Messagebox.OK,
 						Messagebox.ERROR);
 			}
 		}
 		
 		if (tccBusiness.saveOrEdit(tcc)) {
 			if (!new ParticipacaoBusiness().updateList(tcc)) {
-				Messagebox.show("N√£o foi poss√≠vel salvar as altera√ß√µes da Banca Examinadora.", "Erro",
+				Messagebox.show("N„o foi possÌvel salvar as alteraÁıes da Banca Examinadora.", "Erro",
 						Messagebox.OK, Messagebox.ERROR);
 				
 				return;
@@ -779,10 +778,10 @@ public class EditorTccController extends CommonsController {
 			
 			String alerta = tcc.isProjeto() ? "Projeto salvo!\n" : "Trabalho salvo!\n";
 			if (tipoUsuario == Usuario.ALUNO) {
-				alerta  = alerta + "N√£o se esque√ßa de submet√™-lo quando estiver conclu√≠do.";
+				alerta  = alerta + "N„o se esqueÁa de submetÍ-lo quando estiver concluÌdo.";
 			}
 			
-			Messagebox.show(alerta, "Confirma√ß√£o", Messagebox.OK, Messagebox.EXCLAMATION,
+			Messagebox.show(alerta, "ConfirmaÁ„o", Messagebox.OK, Messagebox.EXCLAMATION,
 					new org.zkoss.zk.ui.event.EventListener() {
 						public void onEvent(Event evt) throws InterruptedException {
 							if (evt.getName().equals("onOK")) {
@@ -791,7 +790,7 @@ public class EditorTccController extends CommonsController {
 						}
 					});
 		} else {
-			Messagebox.show("Devido a um erro, o trabalho n√£o foi salvo.", "Erro", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show("Devido a um erro, o trabalho n„o foi salvo.", "Erro", Messagebox.OK, Messagebox.ERROR);
 		}
 
 
@@ -807,14 +806,14 @@ public class EditorTccController extends CommonsController {
 			tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
 			aluno.setTipoUsuario(tipoAluno);
 			if (!usuarioBusiness.salvar(aluno)) {
-				Messagebox.show("Devido a um erro, o Autor n√£o foi cadastrado.", "Erro", Messagebox.OK,
+				Messagebox.show("Devido a um erro, o Autor n„o foi cadastrado.", "Erro", Messagebox.OK,
 						Messagebox.ERROR);
 			}
 		} else {
 			String errorMessage = "Aluno:\n";
 			for (String error : usuarioBusiness.getErrors())
 				errorMessage += error;
-			Messagebox.show(errorMessage, "Dados insuficientes / inv√°lidos", Messagebox.OK, Messagebox.ERROR);
+			Messagebox.show(errorMessage, "Dados insuficientes / inv·lidos", Messagebox.OK, Messagebox.ERROR);
 		}
 	}
 
@@ -873,7 +872,7 @@ public class EditorTccController extends CommonsController {
 	}
 	
 	public void saveDocFile() {
-		logger.info("Salvando arquivo de documenta√ß√£o...");
+		logger.info("Salvando arquivo de documentaÁ„o...");
 		String newFileName = FileManager.saveFileInputSream(docFile, "pdf");
 		if (newFileName != null) {
 			if (tcc.getArquivoDocumentacao() != null) {
@@ -906,7 +905,7 @@ public class EditorTccController extends CommonsController {
 	@Command
 	public void validarSala( ) {
 		if(tcc.getStatus() >= TCC.TEPB) {
-			Messagebox.show("N√£o √© poss√≠vel alterar a sala depois de ter marcado a defesa", "Opera√ß√£o inv√°lida", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel alterar a sala depois de ter marcado a defesa", "OperaÁ„o inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			tempSala = tcc.getSala();
 			return;
@@ -978,7 +977,7 @@ public class EditorTccController extends CommonsController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Command("submit")
 	public void confirmarSubmit() {
-		Messagebox.show("Tem certeza que deseja submeter seu trabalho?.", "Confirma√ß√£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+		Messagebox.show("Tem certeza que deseja submeter seu trabalho?.", "ConfirmaÁ„o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
 				new org.zkoss.zk.ui.event.EventListener() {
 				public void onEvent(Event evt) throws InterruptedException {
 					if (evt.getName().equals("onYes")) {
@@ -1004,7 +1003,7 @@ public class EditorTccController extends CommonsController {
 	@NotifyChange({ "tcc" })
 	public void onCheckSuplente(@BindingParam("membro") Participacao p, @BindingParam("checked") boolean checked) {
 		if(p.getTipo() != Participacao.BANCA) {
-			Messagebox.show("N√£o √© poss√≠vel marcar o orientador/coorientador como suplente", "Opera√ß√£o inv√°lida", Messagebox.OK,
+			Messagebox.show("N„o È possÌvel marcar o orientador/coorientador como suplente", "OperaÁ„o inv·lida", Messagebox.OK,
 					Messagebox.ERROR);
 			return;
 		}
@@ -1012,7 +1011,7 @@ public class EditorTccController extends CommonsController {
 		if(tipoUsuario == Usuario.ALUNO) {
 //			if(verificarJaApresentou() && tcc.getStatus() > TCC.TI) {
 			if(tcc.getStatus() > TCC.TI) {
-				Messagebox.show("N√£o √© poss√≠vel alterar suplente depois da apresenta√ß√£o.", "Opera√ß√£o inv√°lida", Messagebox.OK,
+				Messagebox.show("N„o È possÌvel alterar suplente depois da apresentaÁ„o.", "OperaÁ„o inv·lida", Messagebox.OK,
 						Messagebox.ERROR);
 				return;
 			}

@@ -67,7 +67,7 @@ public class EmailListener {
 	}
 
 	public void verificarPrazos(CalendarioSemestre calendario, int diasParaAlerta) {
-		logger.info("Verificando prazos do calend√°rio de " + calendario.getCurso().getNomeCurso());
+		logger.info("Verificando prazos do calend·rio de " + calendario.getCurso().getNomeCurso());
 		List<Prazo> prazos = prazoBusiness.getPrazosByCalendario(calendario);
 		Calendar hoje = Calendar.getInstance();
 		List<TCC> tccs = this.tccBusiness.getTrabalhosAndProjetosByCalendar(calendario);
@@ -76,7 +76,7 @@ public class EmailListener {
 			Calendar dataPrazo = (dateToCalendar(prazo.getDataFinal()));
 			long diasEntre = this.compareCalendars(hoje, dataPrazo, false);
 			if ((diasEntre < 0 || diasEntre > diasParaAlerta)) {
-				logger.info("N√£o √© data para envio. Prazo: " + prazo.getTipo() + ". Data: " + dataPrazo.getTime());
+				logger.info("N„o È data para envio. Prazo: " + prazo.getTipo() + ". Data: " + dataPrazo.getTime());
 				continue;
 			}
 			switch (prazo.getTipo()) {

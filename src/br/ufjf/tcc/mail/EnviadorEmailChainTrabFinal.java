@@ -20,12 +20,12 @@ public class EnviadorEmailChainTrabFinal extends EnviadorEmailChain {
 		EmailBuilder emailBuilder = null;
 		if(tcc.isTrabFinal()) {
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
-			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho aguardando aprovaÃ§Ã£o - " + nomeAluno);
+			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho aguardando aprovação - " + nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) coordenador(a) de curso, ").breakLine().breakLine();
-			emailBuilder.appendMensagem("O aluno(a) <b>"+nomeAluno+"</b> enviou a versÃ£o final do seu trabalho de conclusÃ£o de curso e aguarda aprovaÃ§Ã£o da coordenaÃ§Ã£o de curso.").breakLine();
-			emailBuilder.appendMensagem(" ApÃ³s a aprovaÃ§Ã£o do trabalho, este estarÃ¡ disponÃ­vel para acesso pÃºblico no repositÃ³rio de trabalhos acadÃªmicos.").breakLine().breakLine();
-			emailBuilder.appendHtmlTopico("InformaÃ§Ãµes do trabalho:").breakLine().breakLine();
-			emailBuilder.appendHtmlTextBold("TÃ­tulo: ");
+			emailBuilder.appendMensagem("O aluno(a) <b>"+nomeAluno+"</b> enviou a versão final do seu trabalho de conclusão de curso e aguarda aprovação da coordenação de curso.").breakLine();
+			emailBuilder.appendMensagem(" Após a aprovação do trabalho, este estará disponível para acesso público no repositório de trabalhos acadêmicos.").breakLine().breakLine();
+			emailBuilder.appendHtmlTopico("Informações do trabalho:").breakLine().breakLine();
+			emailBuilder.appendHtmlTextBold("Título: ");
 			emailBuilder.appendMensagem(tcc.getNomeTCC()).breakLine();
 			emailBuilder.appendHtmlTextBold("Resumo: ");
 			emailBuilder.appendMensagem(tcc.getResumoTCC()).breakLine();
@@ -43,7 +43,7 @@ public class EnviadorEmailChainTrabFinal extends EnviadorEmailChain {
 			}
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 			String dataFormatada = formatter.format(tcc.getDataApresentacao().getTime());
-			emailBuilder.appendMensagem("<b>Data da apresentaÃ§Ã£o:</b> "+dataFormatada).breakLine();
+			emailBuilder.appendMensagem("<b>Data da apresentação:</b> "+dataFormatada).breakLine();
 			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSalaDefesa()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema();
 			UsuarioBusiness ub = new UsuarioBusiness();

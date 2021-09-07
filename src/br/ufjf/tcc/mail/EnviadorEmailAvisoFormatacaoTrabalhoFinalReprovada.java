@@ -28,16 +28,16 @@ public class EnviadorEmailAvisoFormatacaoTrabalhoFinalReprovada extends Enviador
 		String titulo = tcc.getNomeTCC();
 		String justificativa = tcc.getJustificativaReprovacao();
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Formata√ß√£o do Trabalho Final Reprovada - " + nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] FormataÁ„o do Trabalho Final Reprovada - " + nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ");
 		emailBuilder.breakLine().breakLine();
-		emailBuilder.appendMensagem("a Coordena√ß√£o  Reprovou a formata√ß√£o da vers√£o Final do seu Trabalho de Conclus√£o ");
+		emailBuilder.appendMensagem("a CoordenaÁ„o  Reprovou a formataÁ„o da vers„o Final do seu Trabalho de Conclus„o ");
 		emailBuilder.appendMensagem("de Curso <b>" + titulo + "</b> submetido no Sistema de Monografias.");
 		emailBuilder.breakLine().breakLine();
-		emailBuilder.appendMensagem("Segue abaixo o(s) motivo(s) da reprova√ß√£o:").breakLine().breakLine();
+		emailBuilder.appendMensagem("Segue abaixo o(s) motivo(s) da reprovaÁ„o:").breakLine().breakLine();
 		emailBuilder.appendMensagem( justificativa + ".").breakLine().breakLine();
-		emailBuilder.appendMensagem("O(a) discente tem at√© 2 (dois) dias ap√≥s o fim do prazo ");
-		emailBuilder.appendMensagem("para corrigir o TCC e enviar a nova vers√£o para ser avaliada.").breakLine();
+		emailBuilder.appendMensagem("O(a) discente tem atÈ 2 (dois) dias apÛs o fim do prazo ");
+		emailBuilder.appendMensagem("para corrigir o TCC e enviar a nova vers„o para ser avaliada.").breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
 		emailBuilder.appendMensagem("Coordenador(a) do Curso " + nomeCurso).breakLine();

@@ -19,10 +19,10 @@ public class EnviadorEmailChainTAACoordenador extends EnviadorEmailChain {
 			String nomeAluno = tcc.getAluno().getNomeUsuario();
 			emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Trabalho com defesa agendada - "+nomeAluno);
 			emailBuilder.appendMensagem("Prezado(a) coordenador(a) de curso, ").breakLine().breakLine();
-			emailBuilder.appendMensagem("O aluno(a) <b>" + nomeAluno + "</b> informou os dados da sua defesa de trabalho de conclusÃ£o de curso.");
-			emailBuilder.appendMensagem(" ApÃ³s a defesa, o aluno(a) deverÃ¡ enviar a versÃ£o final do trabalho para ser publicado no repositÃ³rio de trabalhos acadÃªmicos.").breakLine().breakLine();
-			emailBuilder.appendHtmlTopico("InformaÃ§Ãµes do trabalho:").breakLine().breakLine();
-			emailBuilder.appendHtmlTextBold("TÃ­tulo: ");
+			emailBuilder.appendMensagem("O aluno(a) <b>" + nomeAluno + "</b> informou os dados da sua defesa de trabalho de conclusão de curso.");
+			emailBuilder.appendMensagem(" Após a defesa, o aluno(a) deverá enviar a versão final do trabalho para ser publicado no repositório de trabalhos acadêmicos.").breakLine().breakLine();
+			emailBuilder.appendHtmlTopico("Informações do trabalho:").breakLine().breakLine();
+			emailBuilder.appendHtmlTextBold("Título: ");
 			emailBuilder.appendMensagem(tcc.getNomeTCC()).breakLine();
 			emailBuilder.appendHtmlTextBold("Resumo: ");
 			emailBuilder.appendMensagem(tcc.getResumoTCC()).breakLine();
@@ -40,7 +40,7 @@ public class EnviadorEmailChainTAACoordenador extends EnviadorEmailChain {
 			}
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
 			String dataFormatada = formatter.format(tcc.getDataApresentacao().getTime());
-			emailBuilder.appendMensagem("<b>Data da apresentaÃ§Ã£o:</b> "+dataFormatada).breakLine();
+			emailBuilder.appendMensagem("<b>Data da apresentação:</b> "+dataFormatada).breakLine();
 			emailBuilder.appendMensagem("<b>Local de defesa:</b> "+tcc.getSalaDefesa()).breakLine().breakLine();
 			emailBuilder.appendLinkSistema();
 			UsuarioBusiness ub = new UsuarioBusiness();

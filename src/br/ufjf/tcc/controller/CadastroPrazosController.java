@@ -140,16 +140,16 @@ public class CadastroPrazosController extends CommonsController {
 		if (prazoBusiness.validate(prazos)) {
 			if (editing) {
 				if (!new PrazoBusiness().editList(prazos)) {
-					Messagebox.show("NÃ£o foi possÃ­vel salvar o calendÃ¡rio",
+					Messagebox.show("Não foi possível salvar o calendário",
 							"Erro", Messagebox.OK, Messagebox.ERROR);
 					return;
 				}
 				if(!new CalendarioSemestreBusiness().updateFimSemCalendarById(prazos.get(prazos.size()-1).getDataFinal(), calendar.getIdCalendarioSemestre())){
-					Messagebox.show("NÃ£o foi possÃ­vel salvar o calendÃ¡rio",
+					Messagebox.show("Não foi possível salvar o calendário",
 							"Erro", Messagebox.OK, Messagebox.ERROR);
 					return;
 				}else{
-					Messagebox.show("CalendÃ¡rio atualizado com sucesso.", "ConcluÃ­do",
+					Messagebox.show("Calendário atualizado com sucesso.", "Concluído",
 							Messagebox.OK, Messagebox.INFORMATION, new EventListener() {
 								public void onEvent(Event evt)
 										throws InterruptedException {
@@ -166,18 +166,18 @@ public class CadastroPrazosController extends CommonsController {
 				calendar.setFinalSemestre(prazos.get(prazos.size()-1).getDataFinal());
 				if (new CalendarioSemestreBusiness().save(calendar)) {
 					if (!new PrazoBusiness().saveList(prazos)) {
-						Messagebox.show("NÃ£o foi possÃ­vel salvar o calendÃ¡rio",
+						Messagebox.show("Não foi possível salvar o calendário",
 								"Erro", Messagebox.OK, Messagebox.ERROR);
 						return;
 					}
 				} else {
-					Messagebox.show("NÃ£o foi possÃ­vel salvar o calendÃ¡rio",
+					Messagebox.show("Não foi possível salvar o calendário",
 							"Erro", Messagebox.OK, Messagebox.ERROR);
 					return;
 				}
 			}
 
-			Messagebox.show("CalendÃ¡rio cadastrado com sucesso.", "ConcluÃ­do",
+			Messagebox.show("Calendário cadastrado com sucesso.", "Concluído",
 					Messagebox.OK, Messagebox.INFORMATION, new EventListener() {
 						public void onEvent(Event evt)
 								throws InterruptedException {

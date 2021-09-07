@@ -26,10 +26,10 @@ public class ConfirmacaoEmailController extends CommonsController {
 			Usuario user = usuarioBusiness.getByMatricula(data[0]);
 			user.setEmail(data[1]);
 			usuarioBusiness.editar(user);
-			message = "O endereÃ§o de e-mail \"" + data[1]
+			message = "O endereço de e-mail \"" + data[1]
 					+ "\" foi confirmado com sucesso.";
 		} else {
-			message = "O prazo para a confirmaÃ§Ã£o de "
+			message = "O prazo para a confirmação de "
 					+ "e-mails terminou. Entre no sistema "
 					+ "com o e-mail anterior e tente novamente.";
 		}

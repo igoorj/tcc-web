@@ -42,16 +42,16 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		Prazo prazo = new PrazoBusiness().getPrazoByTipoAndCalendario(Prazo.ENTREGA_BANCA, tcc.getCalendarioSemestre());
 		String prazoString = formatter.format(prazo.getDataFinal());
 		
-		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de inclus√£o dos dados da Defesa - "+nomeAluno);
+		emailBuilder = new EmailBuilder(true).comTitulo("[TCC-WEB] Aviso de prazo de inclus„o dos dados da Defesa - "+nomeAluno);
 		emailBuilder.appendMensagem("Prezados <b>" + nomeAluno + "</b> e <b>" + nomeOrientador + "</b>, ").breakLine();
 		emailBuilder.appendMensagem("dentro de <b>2 dias (" + prazoString + ")</b> se encerra o prazo ");
 		emailBuilder.appendMensagem("para incluir no Sistema de Monografias os dados  da Defesa ");
-		emailBuilder.appendMensagem("do Trabalho de Conclus√£o de Curso (TCC) e submeter ");
-		emailBuilder.appendMensagem("a vers√£o do TCC a ser avaliado pelos membros da Banca Examinadora. ");
+		emailBuilder.appendMensagem("do Trabalho de Conclus„o de Curso (TCC) e submeter ");
+		emailBuilder.appendMensagem("a vers„o do TCC a ser avaliado pelos membros da Banca Examinadora. ");
 		emailBuilder.breakLine().breakLine();
 		
-		emailBuilder.appendMensagem("<b>√â preciso informar:</b> data, hora, local e ");
-		emailBuilder.appendMensagem("nome dos membros que far√£o parte da Banca Examinadora do TCC: ").breakLine(); 
+		emailBuilder.appendMensagem("<b>… preciso informar:</b> data, hora, local e ");
+		emailBuilder.appendMensagem("nome dos membros que far„o parte da Banca Examinadora do TCC: ").breakLine(); 
 		
 		
 		emailBuilder.appendMensagem("<ol>");
@@ -62,12 +62,12 @@ public class EnviadorEmailAlertaDadosDeDefesa extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("<li>Suplente</li>");
 		emailBuilder.appendMensagem("</ol>");
 		emailBuilder.breakLine();
-		emailBuilder.appendMensagem("√â preciso preencher todas as informa√ß√µes no sistema ");
+		emailBuilder.appendMensagem("… preciso preencher todas as informaÁıes no sistema ");
 		emailBuilder.appendMensagem("para esta atividade se tornar completa, pois ainda ");
-		emailBuilder.appendMensagem("n√£o consta que o(a) discente realizou esta atividade completamente.").breakLine(); 
-		emailBuilder.appendMensagem("Se essa tarefa n√£o for cumprida dentro do prazo, n√£o haver√° ");
+		emailBuilder.appendMensagem("n„o consta que o(a) discente realizou esta atividade completamente.").breakLine(); 
+		emailBuilder.appendMensagem("Se essa tarefa n„o for cumprida dentro do prazo, n„o haver· ");
 		emailBuilder.appendMensagem("como dar andamento das demais atividades, e dessa forma ");
-		emailBuilder.appendMensagem("n√£o ser√° poss√≠vel gerar a documenta√ß√£o necess√°ria para a Defesa do TCC.");
+		emailBuilder.appendMensagem("n„o ser· possÌvel gerar a documentaÁ„o necess·ria para a Defesa do TCC.");
 		emailBuilder.breakLine().breakLine();
 		emailBuilder.appendMensagem("Att.,").breakLine();
 //		emailBuilder.appendMensagem(nomeCoordenador).breakLine();
