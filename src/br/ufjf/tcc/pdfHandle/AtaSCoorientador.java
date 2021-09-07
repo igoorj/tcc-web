@@ -35,7 +35,7 @@ public class AtaSCoorientador extends Ata {
 		over.beginText();
 		over.setFontAndSize(bfTextoSimples, 12);
 
-		//inserirTabelaDinamica();
+		inserirTabelaDinamica();
 		inserirDadosPrimeiraPagina();
 		inserirDadosSegundaPagina();
 		fecharFluxos();
@@ -149,7 +149,7 @@ public class AtaSCoorientador extends Ata {
 		form.setField("nomeAvaliador2_2", "(" + avaliadores[2] + ")");
 		
 		
-		/*
+		
 		if (qtAvaliador >= 4) {
 			
 			form.setField("campoAvaliador3", "Avaliador 3:");
@@ -161,9 +161,10 @@ public class AtaSCoorientador extends Ata {
 			over.setTextMatrix(113, 125);
 			over.showText("__________________________");
 			over.setTextMatrix(154, 112);
-			over.showText("(" + avaliadores[3] + ")");
+			over.showText("(Avaliador 03)");
 
 		}
+		
 		if (qtAvaliador >= 5) {
 			
 			form.setField("campoAvaliador4", "Avaliador 4:");
@@ -175,9 +176,9 @@ public class AtaSCoorientador extends Ata {
 			over.setTextMatrix(357, 125);
 			over.showText("__________________________");
 			over.setTextMatrix(398, 112);
-			over.showText("(" + avaliadores[4] + ")");
+			over.showText("(Avaliador 04)");
 
-		} */
+		} 
 
 		// DATA SEGUNDA PAGINA
 		
@@ -192,33 +193,27 @@ public class AtaSCoorientador extends Ata {
 			throws BadElementException, MalformedURLException, IOException, DocumentException {
 		
 		Image tabela = null;
-		tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS+ "tablec3.png");
-		tabela.setAbsolutePosition(98, 437);
-		over.addImage(tabela);
-		over.setTextMatrix(102, 444);
-		over.showText("Avaliador(a) 3");
 		
-		/*
 		if (qtAvaliador == 4) {
 			
 			tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS+ "tablec3.png");
 			tabela.setAbsolutePosition(98, 437);
 			over.addImage(tabela);
 			over.setTextMatrix(102, 444);
-			over.showText(avaliadores[3]);
+			over.showText("Avaliador(a) 3");
 			
 		}
-
+		
 		if (qtAvaliador == 5) {
 			tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec4.png");
 			tabela.setAbsolutePosition(98, 417);
 			over.addImage(tabela);
 			over.setTextMatrix(102, 445);
-			over.showText(avaliadores[3]);
+			over.showText("Avaliador(a) 3");
 			over.setTextMatrix(102, 425);
-			over.showText(avaliadores[4]);
+			over.showText("Avaliador(a) 4");
 
-		}*/
+		}
 	}
 
 }

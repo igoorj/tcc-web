@@ -28,7 +28,7 @@ public class AtaCCoorientador extends Ata {
 		over = stamper.getOverContent(leitor.getNumberOfPages()-1);
 		over.beginText();
 		over.setFontAndSize(bfTextoSimples, 12);
-		//inserirTabelaDinamica();
+		inserirTabelaDinamica();
 		inserirDadosPrimeiraPagina();
 		inserirDadosSegundaPagina();
 		fecharFluxos();
@@ -94,7 +94,7 @@ public class AtaCCoorientador extends Ata {
 			over.setTextMatrix(118, 128);
 			over.showText("__________________________");
 			over.setTextMatrix(159, 115);
-			over.showText("(" + avaliadores[4] + ")");
+			over.showText("(Avaliador 03)");
 
 			if (qtAvaliador >= 6) {
 					form.setField("avaliador4_2", "6. "+avaliadores[5]);
@@ -103,7 +103,7 @@ public class AtaCCoorientador extends Ata {
 				over.setTextMatrix(358, 128);
 				over.showText("__________________________");
 				over.setTextMatrix(399, 115);
-				over.showText("(" + avaliadores[5] + ")");
+				over.showText("(Avaliador 04)");
 			}
 		}
 	}
@@ -149,7 +149,7 @@ public class AtaCCoorientador extends Ata {
 			over.setTextMatrix(113, 125);
 			over.showText("__________________________");
 			over.setTextMatrix(154, 112);
-			over.showText("(" + avaliadores[4] + ")");
+			over.showText("(Avaliador 03)");
 
 		}
 		if (qtAvaliador >= 6) {
@@ -161,7 +161,7 @@ public class AtaCCoorientador extends Ata {
 			over.setTextMatrix(357, 125);
 			over.showText("__________________________");
 			over.setTextMatrix(398, 112);
-			over.showText("(" + avaliadores[5] + ")");
+			over.showText("(Avaliador 04)");
 
 		}
 
@@ -175,29 +175,24 @@ public class AtaCCoorientador extends Ata {
 			throws BadElementException, MalformedURLException, IOException, DocumentException {
 		
 		Image tabela = null;
-		tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec3.png");
-		tabela.setAbsolutePosition(98, 417);
-		over.addImage(tabela);
-		over.setTextMatrix(102, 424);
-		over.showText("Avaliador(a) 3");
-		/*
+		
 		if (qtAvaliador == 5) {
 			tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec3.png");
 			tabela.setAbsolutePosition(98, 417);
 			over.addImage(tabela);
 			over.setTextMatrix(102, 424);
-			over.showText(avaliadores[4]);
+			over.showText("Avaliador(a) 3");
 		}
-
+		
 		if (qtAvaliador == 6) {
 			tabela = Image.getInstance(PASTA_COM_TEMPLATE_ATAS + "tablec4.png");
 			tabela.setAbsolutePosition(98, 397);
 			over.addImage(tabela);
 			over.setTextMatrix(102, 424);
-			over.showText(avaliadores[4]);
+			over.showText("Avaliador(a) 3");
 			over.setTextMatrix(102, 404);
-			over.showText(avaliadores[5]);
-		}*/
+			over.showText("Avaliador(a) 4");
+		}
 		
 	}
 	
