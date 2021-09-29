@@ -35,6 +35,7 @@ public class EnviadorEmailAvisoProjetoSubmetido extends EnviadorEmailChain{
 		
 		
 		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.add(ub.getCoordenadoresByCurso(tcc.getAluno().getCurso()).get(0));
 		destinatarios.addAll(ub.getSecretariasByCurso(tcc.getAluno().getCurso()));
 		inserirDestinatarios(destinatarios, emailBuilder);
 	

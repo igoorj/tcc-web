@@ -294,6 +294,7 @@ public class UsuarioBusiness {
 			int pos = rand.nextInt(charset.length());
 			sb.append(charset.charAt(pos));
 		}
+		
 		return sb.toString();
 	}
 

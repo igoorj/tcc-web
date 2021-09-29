@@ -3,6 +3,7 @@ package br.ufjf.tcc.mail;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufjf.tcc.business.UsuarioBusiness;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 
@@ -17,8 +18,8 @@ public class EnviadorEmailAvisoProjetoAprovado extends EnviadorEmailChain{
 	protected EmailBuilder gerarEmail(TCC tcc, String statusInicial) {
 		EmailBuilder emailBuilder = null;
 		
-//		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-//		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
+		UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+		List<Usuario> coordenadores = usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso());
 //		String nomeCoordenador = coordenadores.get(0).getNomeUsuario();
 		
 		String nomeAluno = tcc.getAluno().getNomeUsuario();
@@ -34,9 +35,10 @@ public class EnviadorEmailAvisoProjetoAprovado extends EnviadorEmailChain{
 		emailBuilder.appendMensagem("Att.,").breakLine();
 		emailBuilder.appendMensagem("Coordenação do Curso de " + nomeCurso).breakLine();
 		
-		List<Usuario> alunos = new ArrayList<>();
-		alunos.add(tcc.getAluno());
-		inserirDestinatarios(alunos, emailBuilder);
+		List<Usuario> destinatarios = new ArrayList<>();
+		destinatarios.add(tcc.getAluno());
+		destinatarios.add(usuarioBusiness.getCoordenadoresByCurso(tcc.getAluno().getCurso()).get(0));
+		inserirDestinatarios(destinatarios, emailBuilder);
 	
 		return emailBuilder;
 		

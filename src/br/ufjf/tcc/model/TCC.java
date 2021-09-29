@@ -416,6 +416,7 @@ public class TCC implements Serializable,Comparable<TCC> {
 	public void setPublicado(boolean publicado) {
 		this.publicado = publicado;
 	}
+	
 
 	public Usuario getAluno() {
 		return aluno;
@@ -598,7 +599,6 @@ public class TCC implements Serializable,Comparable<TCC> {
 	public void setLinkSala(String linkSala) {
 		this.linkSala = linkSala;
 	}
-	
 	
 	
 }

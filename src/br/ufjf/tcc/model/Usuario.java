@@ -331,7 +331,7 @@ public class Usuario implements Serializable {
 	public void setOrientador(Usuario orientador) {
 		this.orientador = orientador;
 	}
-
+	
 	public void copy(Usuario another) {
 		this.idUsuario = another.idUsuario;
 		this.matricula = another.matricula;
@@ -347,5 +347,4 @@ public class Usuario implements Serializable {
 		this.participacoes = another.participacoes;
 		this.editingStatus = another.editingStatus;
 	}
-
 }

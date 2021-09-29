@@ -673,7 +673,7 @@ public class EditorTccController extends CommonsController {
 				tcc.setStatus(TCC.TEPB);
 				emails.add(new EnviadorEmailInformesDadosDefesa());
 				emails.add(new EnviadorEmailChainTAAProfessor());
-				tccBusiness.marcarTcc(tcc);
+//				tccBusiness.marcarTcc(tcc);
 				break;
 			case TCC.TEPB:
 				tcc.setStatus(TCC.TAAO);

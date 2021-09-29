@@ -179,5 +179,5 @@ public class Curso implements Serializable {
 		this.calendarios = another.calendarios;
 		this.editingStatus = another.editingStatus;
 	}
-
+	
 }
