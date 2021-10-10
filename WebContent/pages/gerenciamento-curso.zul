@@ -8,7 +8,7 @@
 		<include src="@load(vm.menu)" />
 		<grid
 			model="@load(vm.filterCursos) @template(each.editingStatus ? 'editable' : 'noneditable')"
-			mold="paging" autopaging="true" vflex="true">
+			mold="paging" pageSize="14" vflex="true">
 			<auxhead sclass="text-center">
 				<auxheader label="Cursos cadastrados no sistema"
 					colspan="3" />

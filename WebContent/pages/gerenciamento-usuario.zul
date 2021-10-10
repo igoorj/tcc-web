@@ -4,11 +4,11 @@
 	<style src="/style.css" />
 	<div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('br.ufjf.tcc.controller.GerenciamentoUsuarioController')"
-		height="100%">
+		height="100%" style="margin-bottom:20px;">
 		<include src="@load(vm.menu)" />
 		<grid
 			model="@load(vm.filterUsuarios) @template(each.editingStatus ? 'editable' : 'noneditable')"
-			mold="paging" pageSize="10" vflex="true">
+			mold="paging" pageSize="14" vflex="true">
 			<auxhead sclass="text-center">
 				<auxheader label="Usuários cadastrados no sistema"
 					colspan="10" />
@@ -55,14 +55,14 @@
 				<column width="50px" label="id" sort="auto(idUsuario)" />
 				<column hflex="1" label="Matrícula"
 					sort="auto(matricula)" />
-				<column hflex="3" label="Nome" sort="auto(nomeUsuario)" />
+				<column hflex="2" label="Nome" sort="auto(nomeUsuario)" />
 				<column hflex="2" label="Email" sort="auto(email)" />
 				<column hflex="2" label="Curso ou Departamento"
 					sort="auto(cursoOuDepartamento)" />
 				<column label="Tipo" hflex="1"
 					sort="auto(tipoUsuario.nomeTipoUsuario)" />
 				<column label="Orientador" hflex="2" sort="auto(orientador)" />
-				<column hflex="1" label="Titulação"
+				<column hflex="2" label="Titulação"
 					sort="auto(titulacao)" />
 				<column width="50px" label="Ativo" sort="auto(ativo)" />
 				<column width="120px" label="Editar" />

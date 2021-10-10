@@ -39,8 +39,10 @@ public class UsuarioBusiness {
 		validarMatricula(usuario.getMatricula(), oldMatricula);
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
-		if (validateTipo)
+		if (validateTipo) {
 			validateTipo(usuario);
+		}
+		
 		removerCamposDesnecessarios(usuario);
 		return errors.size() == 0;
 	}
@@ -119,6 +121,7 @@ public class UsuarioBusiness {
 				errors.add("Tipo inválido de usuário.\n");
 			}
 		} else
+			System.out.println("Chegou aqui 4");
 			errors.add("Selecione o Tipo de Usuário.\n");
 	}
 	

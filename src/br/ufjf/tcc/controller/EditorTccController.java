@@ -636,6 +636,7 @@ public class EditorTccController extends CommonsController {
 	private void submit() {
 		int statusTCC = tcc.getStatus();
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		int idCursoUsuario = getUsuario().getCurso().getIdCurso();
 		List<EnviadorEmailChain> emails = new ArrayList<EnviadorEmailChain>();
 		atualizarArquivos();
 		if (tipoUsuario == Usuario.SECRETARIA && (tcc.getArquivoTCC() == null && !tccFileChanged)) {
@@ -646,29 +647,63 @@ public class EditorTccController extends CommonsController {
 			Messagebox.show("É necessário informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
+		
+		if(tipoUsuario == Usuario.SECRETARIA && (tcc.getAluno() == null)) {
+			Messagebox.show("Aluno sem tipo identificado!",  "Erro", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
 
-		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) {
+		/*
+		 * Essa condição adicionad é falsa porque na verdade já existe uma instância de aluno associado ao tcc
+		 * cadastrado pela secretaria*/
+		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) { 
 			Messagebox.show("Antes de enviar é necessário validar a matrícula do aluno no botão de verificar.", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		if (!alunoEditBlock) {
+			
+			/*
+			 * Tratamento Adicionado para evitar erro no cadastro de novos tccs pela secretaria
+			 * */
+				
+				Usuario alunoCadastrado = tcc.getAluno();
+				TipoUsuario tipoAluno = new TipoUsuario();
+				tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
+				alunoCadastrado.setTipoUsuario(tipoAluno);
+				tcc.setAluno(alunoCadastrado);
+			
+			System.out.println(tcc.getAluno());
 			updateTCCUser();
 		}
 		
 		if (tccBusiness.validateTCC(tcc, statusTCC)) {
 			switch (statusTCC) {
 			case TCC.PI:
+				System.out.println("Entrou aqui 1 PI");
 				tcc.setStatus(TCC.PAA);
+				
+				/*
+				 * Este if verifica se o usuário é da Secretaria de Licenciatura em Computação. Caso for, não
+				 * enviar email para o coordenador do curso solicitando a aprovação final do tcc. Para este curso
+				 * esta a avaliação não é necessária
+				 * */
+				if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+					break;
+				}
+				
 				emails.add(new EnviadorEmailAvisoProjetoSubmetido());
 				break;
 			case TCC.PAA:
+				System.out.println("Entrou aqui 2");
 				return;
 			case TCC.PR:
+				System.out.println("Entrou aqui 3");
 				tcc.setStatus(TCC.PAA);
 				emails.add(new EnviadorEmailAvisoProjetoSubmetido());
 				break;
 			case TCC.TI:
+				System.out.println("Entrou aqui 4");
 				tcc.setDataEnvioBanca(new Timestamp(new Date().getTime()));
 				tcc.setStatus(TCC.TEPB);
 				emails.add(new EnviadorEmailInformesDadosDefesa());
@@ -676,12 +711,15 @@ public class EditorTccController extends CommonsController {
 //				tccBusiness.marcarTcc(tcc);
 				break;
 			case TCC.TEPB:
+				System.out.println("Entrou aqui 5");
 				tcc.setStatus(TCC.TAAO);
 				emails.add(new EnviadorEmailAvisoTrabalhoFinalSubmetido());
 				break;
 			case TCC.TAAO:
+				System.out.println("Entrou aqui 6");
 				return;
 			case TCC.TRO:
+				System.out.println("Entrou aqui 7");
 				tcc.setStatus(TCC.TAAO);
 				emails.add(new EnviadorEmailAvisoTrabalhoFinalSubmetido());
 				break;
@@ -757,6 +795,12 @@ public class EditorTccController extends CommonsController {
 		
 		// Edita usuario
 		if (!alunoEditBlock) {
+			
+			Usuario alunoCadastrado = tcc.getAluno();
+			TipoUsuario tipoAluno = new TipoUsuario();
+			tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
+			alunoCadastrado.setTipoUsuario(tipoAluno);
+			tcc.setAluno(alunoCadastrado);
 			updateTCCUser();
 		}
 		if(alterouOrientador) {

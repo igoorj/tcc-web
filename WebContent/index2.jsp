@@ -229,7 +229,7 @@ th {
 
 
 		<div style="position: absolute; z-index: 3; font-size: 12px; width: 99.25%;">
-			<pg:pager id="p" maxPageItems="10" maxIndexPages="20" isOffset="true" export="offset,currentPageNumber=pageNumber"
+			<pg:pager id="p" maxPageItems="15" maxIndexPages="20" isOffset="true" export="offset,currentPageNumber=pageNumber"
 				scope="request">
 				<table class="table table-bordered"
 					style="z-index: 2; font-family: Arial, sans-serif; font-size: 12px; margin-bottom: 2px; border: 1px solid #cfcfcf">
@@ -306,7 +306,7 @@ th {
 
 				</table>
 
-				<div style="display: block; position: relative;">
+				<div style="display: block; position: relative; margin-bottom:20px">
 					<ul class="pagination pagination-sm" style="margin: auto">
 						<pg:index>
 

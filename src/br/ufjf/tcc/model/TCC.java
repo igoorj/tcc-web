@@ -598,7 +598,6 @@ public class TCC implements Serializable,Comparable<TCC> {
 	
 	public void setLinkSala(String linkSala) {
 		this.linkSala = linkSala;
-	}
-	
+	}	
 	
 }

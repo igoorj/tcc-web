@@ -7,7 +7,7 @@
 		height="100%" class="publicList">
 		<include src="@load(vm.menu)" />
 		<grid model="@load(vm.filterTccs) @template('lista')"
-			emptyMessage="@load(vm.emptyMessage)" mold="paging" pageSize="10"
+			emptyMessage="@load(vm.emptyMessage)" mold="paging" pageSize="14"
 			vflex="true">
 			<auxhead>
 				<auxheader colspan="10">
@@ -80,13 +80,13 @@
 				<column hflex="2" >
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de defesa" /> 
 				</column>
-				<column hflex="6" label="Autor"
+				<column hflex="5" label="Autor"
 					sort="auto(aluno.nomeUsuario)" />
-				<column hflex="6" label="Orientador" sort="auto(orientador.nomeUsuario)" />
-				<column hflex="2" >
+				<column hflex="4" label="Orientador" sort="auto(orientador.nomeUsuario)" />
+				<column hflex="3" >
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e horário de envio" /> 
 				</column>
-				<column hflex="3" label="Status" image="/img/help.gif"
+				<column hflex="5" label="Status" image="/img/help.gif"
 					tooltip="filterStatus" style="cursor: help" />
 				<column hflex="1"  label="Excluir" />
 			</columns>
