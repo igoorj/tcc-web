@@ -668,7 +668,7 @@ public class EditorTccController extends CommonsController {
 			/*
 			 * Tratamento Adicionado para evitar erro no cadastro de novos tccs pela secretaria
 			 * */
-			if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+			if (tipoUsuario == Usuario.SECRETARIA) {
 				
 				Usuario alunoCadastrado = tcc.getAluno();
 				TipoUsuario tipoAluno = new TipoUsuario();
@@ -798,7 +798,7 @@ public class EditorTccController extends CommonsController {
 			 * Define um usuario do tipo aluno na hora de cadastrar um novo TCC
 			 * */
 			
-			if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5 ) {
+			if(tipoUsuario == Usuario.SECRETARIA) {
 				Usuario alunoCadastrado = tcc.getAluno();
 				TipoUsuario tipoAluno = new TipoUsuario();
 				tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
