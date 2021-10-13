@@ -39,8 +39,10 @@ public class UsuarioBusiness {
 		validarMatricula(usuario.getMatricula(), oldMatricula);
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
-		if (validateTipo)
+		if (validateTipo) {
 			validateTipo(usuario);
+		}
+		
 		removerCamposDesnecessarios(usuario);
 		return errors.size() == 0;
 	}

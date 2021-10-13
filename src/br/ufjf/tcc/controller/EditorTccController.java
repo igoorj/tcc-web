@@ -130,11 +130,12 @@ public class EditorTccController extends CommonsController {
 					tcc.getAluno().setCurso(getUsuario().getCurso());
 				canChangeMatricula = true;
 			}
-			if (tcc == null || !canEdit()) {
+			if (tcc == null || !canEdit() && !(tipoUsuario == Usuario.SECRETARIA)) {
 				redirectHome();
-			} else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forçado
+				verificarAtrasado();
+			} /*else if(!(tipoUsuario == Usuario.SECRETARIA && idCursoOrigem == 5)) {  // Tratamento forçado
 					verificarAtrasado();
-			 }
+			 }*/
 		}
 		
 		if (tcc != null) {
@@ -639,6 +640,8 @@ public class EditorTccController extends CommonsController {
 	private void submit() {
 		int statusTCC = tcc.getStatus();
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		int idCursoUsuario = getUsuario().getCurso().getIdCurso();
+		
 		List<EnviadorEmailChain> emails = new ArrayList<EnviadorEmailChain>();
 		atualizarArquivos();
 		if (tipoUsuario == Usuario.SECRETARIA && (tcc.getArquivoTCC() == null && !tccFileChanged)) {
@@ -649,20 +652,51 @@ public class EditorTccController extends CommonsController {
 			Messagebox.show("É necessário informar os dados do Autor.", "Erro", Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
+		
+		if(tipoUsuario == Usuario.SECRETARIA && (tcc.getAluno() == null)) {
+			Messagebox.show("Aluno sem tipo identificado!",  "Erro", Messagebox.OK, Messagebox.ERROR);
+			return;
+		}
 
-		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) {
+		/*
+		 * Essa condição adicionad é falsa porque na verdade já existe uma instância de aluno associado ao tcc
+		 * cadastrado pela secretaria*/
+		if (tipoUsuario != Usuario.ALUNO && (tcc.getAluno() == null)) { 
 			Messagebox.show("Antes de enviar é necessário validar a matrícula do aluno no botão de verificar.", "Erro",
 					Messagebox.OK, Messagebox.ERROR);
 			return;
 		}
 		if (!alunoEditBlock) {
+			
+			/*
+			 * Tratamento Adicionado para evitar erro no cadastro de novos tccs pela secretaria
+			 * */
+			if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+				
+				Usuario alunoCadastrado = tcc.getAluno();
+				TipoUsuario tipoAluno = new TipoUsuario();
+				tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
+				alunoCadastrado.setTipoUsuario(tipoAluno);
+				tcc.setAluno(alunoCadastrado);	
+			}
+			
 			updateTCCUser();
 		}
 		
 		if (tccBusiness.validateTCC(tcc, statusTCC)) {
 			switch (statusTCC) {
-			case TCC.PI:
+			case TCC.PI:			
+				/*
+				 * Este if verifica se o usuário é da Secretaria de Licenciatura em Computação. Caso for, não
+				 * enviar email para o coordenador do curso solicitando a aprovação final do tcc. Para este curso
+				 * esta a avaliação não é necessária
+				 * */
 				tcc.setStatus(TCC.PAA);
+				
+				if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+					break;
+				}
+				
 				emails.add(new EnviadorEmailAvisoProjetoSubmetido());
 				break;
 			case TCC.PAA:
@@ -741,6 +775,8 @@ public class EditorTccController extends CommonsController {
 	@Command("updateTCC")
 	public void updateTCC() {
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
+		int idCursoUsuario = getUsuario().getCurso().getIdCurso();
+		
 		atualizarArquivos();
 		
 		if (tipoUsuario == Usuario.SECRETARIA && (tcc.getArquivoTCC() == null && !tccFileChanged)) {
@@ -760,6 +796,19 @@ public class EditorTccController extends CommonsController {
 		
 		// Edita usuario
 		if (!alunoEditBlock) {
+			
+			/*
+			 * Define um usuario do tipo aluno na hora de cadastrar um novo TCC
+			 * */
+			
+			if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5 ) {
+				Usuario alunoCadastrado = tcc.getAluno();
+				TipoUsuario tipoAluno = new TipoUsuario();
+				tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
+				alunoCadastrado.setTipoUsuario(tipoAluno);
+				tcc.setAluno(alunoCadastrado);				
+			}
+
 			updateTCCUser();
 		}
 		if(alterouOrientador) {

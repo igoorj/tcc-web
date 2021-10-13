@@ -347,4 +347,13 @@ public class Usuario implements Serializable {
 		this.participacoes = another.participacoes;
 		this.editingStatus = another.editingStatus;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario [idUsuario=" + idUsuario + ", email=" + email + ", nomeUsuario=" + nomeUsuario
+				+ ", tipoUsuario=" + tipoUsuario + ", curso=" + curso + ", orientador=" + orientador + "]";
+	}
+	
+	
+	
 }
