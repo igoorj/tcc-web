@@ -118,8 +118,10 @@ public class UsuarioBusiness {
 			default:
 				errors.add("Tipo inv·lido de usu·rio.\n");
 			}
-		} else
+		} else {
 			errors.add("Selecione o Tipo de Usu·rio.\n");
+		}
+			
 	}
 	
 	// TODO Remover campos desnecess√°rios de cada tipo de usu√°rio
@@ -143,6 +145,7 @@ public class UsuarioBusiness {
 			}
 		} else
 			errors.add("Selecione o Tipo de Usu·rio.\n");
+			
 	}
 
 	// comunica√ß√£o com o UsuarioDAO

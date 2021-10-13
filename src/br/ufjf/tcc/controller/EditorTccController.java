@@ -622,13 +622,16 @@ public class EditorTccController extends CommonsController {
 	}
 
 	public boolean validaAutor(TCC tcc) {
+		System.out.println(tcc.getAluno());
+	
 		if (tcc.getAluno().getMatricula() == null || tcc.getAluno().getMatricula().isEmpty())
 			return false;
 		if (tcc.getAluno().getNomeUsuario() == null || tcc.getAluno().getNomeUsuario().isEmpty())
 			return false;
 		if (tcc.getAluno().getEmail() == null || tcc.getAluno().getEmail().isEmpty())
 			return false;
-
+	
+		
 		return true;
 	}
 
