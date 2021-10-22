@@ -25,7 +25,7 @@ public class CalendarioSemestreDAO extends GenericoDAO {
 			query.setParameter("date", date);
 			query.setParameter("curso", curso);
 			
-			currentCalendar = (CalendarioSemestre) query.uniqueResult();
+			currentCalendar = (CalendarioSemestre) query.setMaxResults(1).uniqueResult();
 			
 			getSession().close();
 			return currentCalendar;	

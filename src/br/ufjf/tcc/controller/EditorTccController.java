@@ -106,6 +106,7 @@ public class EditorTccController extends CommonsController {
 		case Usuario.ADMINISTRADOR:
 
 		case Usuario.COORDENADOR:
+			canEditUser = true;
 			canChangeParticipacao = true;
 			canChangeBanca = true;
 			canChangeMatricula = true;
@@ -113,14 +114,27 @@ public class EditorTccController extends CommonsController {
 			canSubmitTCC = false;
 			canUpdateTCC = true;
 			canSubmitDocs = true;
+			break;
 			
 		case Usuario.SECRETARIA:
 			canEditUser = true;
 			canChangeOrientacao = true;
 			canSubmitDocs = true;
-			canUpdateTCC = true; // added
+			canUpdateTCC = true;
+			canSubmitTCC = false;
+			if(getUsuario().getCurso().getIdCurso() == 5) {
+				canUpdateTCC = false;
+				canSubmitTCC = true;
+			}
+			
+			break;
+
 			
 		default:
+			redirectHome(); // Conteudo do default foi movido para a condicao abaixo para o controle do switch ser melhor
+		}
+		
+		if(tipoUsuario != Usuario.ALUNO) {
 			if (tccId != null && tccId.trim().length() > 0) {
 				tcc = tccBusiness.getTCCById(Integer.parseInt(tccId.trim()));
 			} else if (canEditUser) {
@@ -137,6 +151,7 @@ public class EditorTccController extends CommonsController {
 					verificarAtrasado();
 			 }*/
 		}
+		
 		
 		if (tcc != null) {
 			tempSala = tcc.getSala();
@@ -623,7 +638,7 @@ public class EditorTccController extends CommonsController {
 	}
 
 	public boolean validaAutor(TCC tcc) {
-		System.out.println(tcc.getAluno());
+//		System.out.println(tcc.getAluno()); // Comentado pq tava dando erro
 	
 		if (tcc.getAluno().getMatricula() == null || tcc.getAluno().getMatricula().isEmpty())
 			return false;
