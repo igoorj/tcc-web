@@ -40,7 +40,7 @@ public class UsuarioBusiness {
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
 		if (validateTipo) {
-			System.out.println("Validando tipo do usuário");
+			System.out.println("Validando tipo do usuï¿½rio");
 			validateTipo(usuario);
 		}
 		
@@ -50,34 +50,34 @@ public class UsuarioBusiness {
 
 	public void validarNome(String nomeUsuario) {
 		if (nomeUsuario == null || nomeUsuario.trim().length() == 0)
-			errors.add("É necessário informar o nome;\n");
+			errors.add("ï¿½ necessï¿½rio informar o nome;\n");
 	}
 
 	public void validarMatricula(String matricula, String oldMatricula) {
 		if (matricula == null || matricula.trim().length() == 0)
-			errors.add("É necessário informar a matrícula;\n");
+			errors.add("ï¿½ necessï¿½rio informar a matrï¿½cula;\n");
 		else
 			jaExiste(matricula, oldMatricula);
 	}
 
 	public void validateEmail(String email, String retype) {
 		if (email == null || email.trim().length() == 0)
-			errors.add("É necessário informar o e-mail;\n");
+			errors.add("ï¿½ necessï¿½rio informar o e-mail;\n");
 		else if (email == null || !email.trim().matches(".+@.+\\.[a-zA-Z]+"))
-			errors.add("Informe um e-mail válido;\n");
+			errors.add("Informe um e-mail vï¿½lido;\n");
 		if (retype != null)
 			if (!email.equals(retype))
-				errors.add("Os emails não são iguais. Tente novamente.\n");
+				errors.add("Os emails nï¿½o sï¿½o iguais. Tente novamente.\n");
 	}
 
 	public void validatePasswords(String password, String retype) {
 		if (password == null || password.trim().length() == 0 || retype == null
 				|| retype.trim().length() == 0)
-			errors.add("A senha não pode estar em branco;\n");
+			errors.add("A senha nï¿½o pode estar em branco;\n");
 		else if (password.trim().length() < 6)
 			errors.add("A senha deve conter ao menos 6 caracteres;\n");
 		else if ((!password.equals(retype))) {
-			errors.add("As senhas não são iguais. Tente novamente.\n");
+			errors.add("As senhas nï¿½o sï¿½o iguais. Tente novamente.\n");
 		}
 	}
 
@@ -88,15 +88,15 @@ public class UsuarioBusiness {
 				if (usuario.getCurso() == null)
 					errors.add("Um aluno deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um aluno não pode pertencer a um departamento.\n");
+					errors.add("Um aluno nï¿½o pode pertencer a um departamento.\n");
 				if(usuario.getOrientador() == null)
-					errors.add("É necessário informar o orientador do aluno.\n");
+					errors.add("ï¿½ necessï¿½rio informar o orientador do aluno.\n");
 				if(usuario.getTitulacao() != null)
 					usuario.setTitulacao(null);
 				break;
 			case Usuario.PROFESSOR:
 				if (usuario.getCurso() != null)
-					errors.add("Um professor não deve pertencer a um curso.\n");
+					errors.add("Um professor nï¿½o deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() == null)
 					errors.add("Um professor deve pertencer a um departamento.\n");
 				break;
@@ -108,21 +108,24 @@ public class UsuarioBusiness {
 				break;
 			case Usuario.ADMINISTRADOR:
 				if (usuario.getCurso() != null)
-					errors.add("Um Administrador não deve pertencer a um curso.\n");
+					errors.add("Um Administrador nï¿½o deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um Administrador não deve pertencer a um departamento.\n");
+					errors.add("Um Administrador nï¿½o deve pertencer a um departamento.\n");
 				break;
 			case Usuario.SECRETARIA:
 				if (usuario.getCurso() == null)
-					errors.add("Um(a) secretário(a) deve pertencer a um curso.\n");
+					errors.add("Um(a) secretï¿½rio(a) deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um(a) secretário(a) não pode pertencer a um departamento.\n");
+					errors.add("Um(a) secretï¿½rio(a) nï¿½o pode pertencer a um departamento.\n");
 				break;
 			default:
-				errors.add("Tipo inválido de usuário.\n");
+				errors.add("Tipo invï¿½lido de usuï¿½rio.\n");
 			}
-		} else
-			errors.add("Selecione o Tipo de Usuário.\n");
+
+		} else {
+			errors.add("Selecione o Tipo de Usuï¿½rio.\n");
+		}
+			
 	}
 	
 	// TODO Remover campos desnecessÃ¡rios de cada tipo de usuÃ¡rio
@@ -142,10 +145,11 @@ public class UsuarioBusiness {
 			case Usuario.SECRETARIA:
 				break;
 			default:
-				errors.add("Tipo inválido de usuário.\n");
+				errors.add("Tipo invï¿½lido de usuï¿½rio.\n");
 			}
 		} else
-			errors.add("Selecione o Tipo de Usuário.\n");
+			errors.add("Selecione o Tipo de Usuï¿½rio.\n");
+			
 	}
 
 	// comunicaÃ§Ã£o com o UsuarioDAO
@@ -185,7 +189,7 @@ public class UsuarioBusiness {
 				usuarioIntegra = false;
 
 			} else {
-				errors.add("Identificador ou senha inválidos.");
+				errors.add("Identificador ou senha invï¿½lidos.");
 				return false;
 			}
 		}
@@ -208,12 +212,12 @@ public class UsuarioBusiness {
 				SessionManager.setAttribute("usuarios", usuarios);
 				return true;
 			} else {
-				errors.add("Usuário não está ativo no sistema.");
+				errors.add("Usuï¿½rio nï¿½o estï¿½ ativo no sistema.");
 				return false;
 			}
 		}else{
 			
-			errors.add("Usuário não cadastrado no sistema.");
+			errors.add("Usuï¿½rio nï¿½o cadastrado no sistema.");
 			return false;		
 		}
 	}
@@ -248,12 +252,12 @@ public class UsuarioBusiness {
 				SessionManager.setAttribute("usuarios", usuarios);
 				return true;
 			} else {
-				errors.add("Você não possui uma conta ativa. Por favor contate o coordenador de seu curso.");
+				errors.add("Vocï¿½ nï¿½o possui uma conta ativa. Por favor contate o coordenador de seu curso.");
 				return false;
 			}
 		}
 
-		errors.add("Identificador ou senha inválidos!");
+		errors.add("Identificador ou senha invï¿½lidos!");
 		return false;
 	}
 
@@ -357,7 +361,7 @@ public class UsuarioBusiness {
 	public boolean jaExiste(String matricula, String oldMatricula) {
 		errors.clear();
 		if (usuarioDAO.jaExiste(matricula, oldMatricula)) {
-			errors.add("Já existe um usuário com a matrícula informada.");
+			errors.add("Jï¿½ existe um usuï¿½rio com a matrï¿½cula informada.");
 			return true;
 		} else
 			return false;

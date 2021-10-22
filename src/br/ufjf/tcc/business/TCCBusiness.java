@@ -792,6 +792,9 @@ public class TCCBusiness {
 
 	public boolean isTarefasDentroDoPrazo(TCC tcc) {
 		boolean tarefasDentroDoPrazo = true;
+		
+		if(isTrabalhoAprovado(tcc))
+			return true;
 
 		DateTime diaHoje = new DateTime(new Date());
 		int ultimoPrazoPassado = -1; // caso nenhum prazo tenha passado

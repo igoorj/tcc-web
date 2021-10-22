@@ -77,7 +77,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	public void init() throws HibernateException, Exception {
 		if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ADMINISTRADOR)
 			allUsuarios = usuarioBusiness.getAll();
-		else if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR)
+		else if (getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.COORDENADOR || getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.SECRETARIA)
 			allUsuarios = usuarioBusiness.getAllByCurso(getUsuario().getCurso());
 		else {
 			redirectHome();
