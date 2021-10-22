@@ -598,6 +598,14 @@ public class TCC implements Serializable,Comparable<TCC> {
 	
 	public void setLinkSala(String linkSala) {
 		this.linkSala = linkSala;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "TCC [nomeTCC=" + nomeTCC + ", publicado=" + publicado + ", projeto=" + projeto + ", aluno=" + aluno
+				+ ", status=" + status + "]";
+	}
+	
+	
 	
 }

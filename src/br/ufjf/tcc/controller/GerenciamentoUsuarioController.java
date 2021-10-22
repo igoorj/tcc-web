@@ -368,7 +368,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@Command
 	public void submitUser(@BindingParam("window") final Window window) {
 		Clients.showBusy(window, "Processando...");
-
+		
 		if (!submitUserListenerExists) {
 			submitUserListenerExists = true;
 			window.addEventListener(Events.ON_CLIENT_INFO,
@@ -434,7 +434,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 								errorMessage += error;
 							Clients.clearBusy(window);
 							Messagebox.show(errorMessage,
-									"Dados insuficientes / inválidos",
+									"Dados insuficiente / inválidos",
 									Messagebox.OK, Messagebox.ERROR);
 						}
 					}

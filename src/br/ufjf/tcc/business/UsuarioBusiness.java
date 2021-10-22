@@ -40,6 +40,7 @@ public class UsuarioBusiness {
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
 		if (validateTipo) {
+			System.out.println("Validando tipo do usuário");
 			validateTipo(usuario);
 		}
 		
@@ -121,7 +122,6 @@ public class UsuarioBusiness {
 				errors.add("Tipo inválido de usuário.\n");
 			}
 		} else
-			System.out.println("Chegou aqui 4");
 			errors.add("Selecione o Tipo de Usuário.\n");
 	}
 	

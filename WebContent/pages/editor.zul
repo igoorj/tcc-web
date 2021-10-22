@@ -267,7 +267,7 @@
 					
 					</vlayout>
 				</groupbox>
-				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC}">
+				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC &amp;&amp; !(vm.userSecretaria &amp;&amp; (vm.tcc.aluno.curso.idCurso == 5))}">
 					<div hflex="1" align="center" style="margin:15px" >
 						<button label="Salvar"
 							onClick="@command('updateTCC')" width="100%" height="30px"/>
@@ -277,6 +277,13 @@
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
 				</hlayout>
+				<hlayout style="margin:5px;line-height:20px;" if="${vm.userSecretaria &amp;&amp; (vm.tcc.aluno.curso.idCurso == 5)}">
+					<div hflex="2" align="center" style="margin:15px" >
+						<button label="Publicar"
+							onClick="@command('submit')" width="100%" height="30px"/>
+					</div>
+				</hlayout>
+				
 				<hlayout style="margin:5px;line-height:20px;text-align: center" unless="${vm.canUpdateTCC}">
 					<label value="@load(vm.getMensagem())" />
 				</hlayout>

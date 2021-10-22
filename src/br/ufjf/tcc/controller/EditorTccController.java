@@ -632,12 +632,27 @@ public class EditorTccController extends CommonsController {
 
 		return true;
 	}
-
+	
 	// Submit do TCC
 	private void submit() {
+		
 		int statusTCC = tcc.getStatus();
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		int idCursoUsuario = getUsuario().getCurso().getIdCurso();
+		
+		/*
+		 * Lógica adicioanda para verificar se o usuário é de Secretaria de Licenciatura em Computação
+		 * Nesse caso, caso o tcc ja tenha sido publicado, um novo acesso indica que este tcc está sendo atualizado
+		 * */
+		if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5 && tcc.isPublicado()) {
+			System.out.println("Editando o tcc!");
+			updateTCC();
+			return;
+		}
+		
+		/* Setando o atributo "publicado" do objeto TCC como true */
+		System.out.println("Salvando o tcc!");
+		tcc.setPublicado(true);
 		
 		List<EnviadorEmailChain> emails = new ArrayList<EnviadorEmailChain>();
 		atualizarArquivos();
@@ -732,6 +747,7 @@ public class EditorTccController extends CommonsController {
 			}
 			
 			if (tccBusiness.saveOrEdit(tcc)) {
+				
 				String alerta;
 				if (tcc.isProjeto())
 					alerta = "Projeto salvo!";
@@ -765,8 +781,10 @@ public class EditorTccController extends CommonsController {
 				errorMessage += error;
 			Messagebox.show(errorMessage, "Dados insuficientes / inválidos", Messagebox.OK, Messagebox.ERROR);
 		}
+		
+		
 	}
-
+	
 	// Update do TCC
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Command("updateTCC")
