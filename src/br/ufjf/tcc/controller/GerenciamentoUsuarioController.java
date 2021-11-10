@@ -802,7 +802,16 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@Command
 	public void editUser(@BindingParam("window") final Window window)
 	{
-		
+		if(editUsuario.isAtivo()) {
+			Clients.clearBusy(window);
+			Messagebox.show(
+					"\nO usuario n„o pode ser editado.\n O usu·rio possui TCC(s) cadastrado(s).",
+					"Alerta", Messagebox.OK,
+					Messagebox.INFORMATION);
+			
+			window.setVisible(false);
+			return;
+		}
 		
 		if(usuarioBusiness.validate(editUsuario, editUsuario.getMatricula(), false))
 		{
@@ -817,7 +826,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			usuarioBusiness.editar(editUsuario);
 			Clients.clearBusy(window);
 			Messagebox.show(
-					"Usu√°rio salvo!",
+					"Usuario salvo!",
 					"Sucesso", Messagebox.OK,
 					Messagebox.INFORMATION);
 			
@@ -843,12 +852,16 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	{
 		String mensagem;
 		
-		if(check.isChecked())
-			mensagem = "Tem certeza que deseja ativar o usu·rio?";
-		else
+		if(check.isChecked()) {
+			mensagem = "\n Aluno: "+ usuario.getNomeUsuario();
+			mensagem += "\n Orientador: "+ usuario.getOrientador().getNomeUsuario();
+			mensagem += "\n\nEm caso de troca de Orientador, altere antes de ativa-lo.\n";
+			mensagem += "\n\nTem certeza que deseja ativar o usu·rio??\n";
+			
+		} else
 			mensagem = "Tem certeza que deseja desativar o usu·rio?";
 			
-		Messagebox.show(mensagem, "Confirma√ß√£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show(mensagem, "ConfirmaÁ„o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			    public void onEvent(Event evt) throws InterruptedException {
 		    	try {
 		    		TCC newTCC = null;

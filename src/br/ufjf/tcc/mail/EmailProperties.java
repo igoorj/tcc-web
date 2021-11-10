@@ -18,7 +18,7 @@ public class EmailProperties {
 //--------------------------------MAILTRAP--------------------------------	
 			propriedades.put("mail.smtp.host", "smtp.mailtrap.io");
 			propriedades.put("mail.smtp.port", "2525");
-			
+//-------------------------------------------------------------------------			
 			propriedades.put("mail.smtp.socketFactory.port", "465");
 			propriedades.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			propriedades.put("mail.smtp.auth", "true");
