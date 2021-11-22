@@ -250,7 +250,7 @@
 
 						<hlayout style="margin:5px;line-height:20px;">
 							<button hflex="1"
-								label="Selecionar arquivo (PDF)..." upload="true,maxsize=204800"
+								label="Selecionar arquivo..." upload="true,maxsize=204800"
 								onUpload="@command('upload', button=self, evt=event)" />
 							<button hflex="1"
 								label="Selecionar arquivo extra (ZIP)..." upload="true,maxsize=204800"
