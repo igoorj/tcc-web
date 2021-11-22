@@ -711,6 +711,20 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	public void editUsuario(@BindingParam("window") Window window, @BindingParam("usuario") Usuario user) {
 		editUsuario = user;
 		editUsuarioSenha = editUsuario.getSenha();
+		
+		// Veriricando se o coordenador está tentando editar um usuário que está ativo
+		if(editUsuario.isAtivo()) {
+			Clients.clearBusy(window);
+			Messagebox.show(
+					"\nO usuario não pode ser editado.\n O usuário possui TCC(s) cadastrado(s).",
+					"Alerta", Messagebox.OK,
+					Messagebox.INFORMATION);
+			
+			window.setVisible(false);
+			return;
+		}
+		// Fim da verificação
+		
 		((Combobox)window.getChildren().get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1)).setValue(editUsuario.getTipoUsuario().getNomeTipoUsuario());
 		((Textbox)window.getChildren().get(0).getChildren().get(1).getChildren().get(1).getChildren().get(1)).setValue(editUsuario.getMatricula());
 		((Textbox)window.getChildren().get(0).getChildren().get(1).getChildren().get(2).getChildren().get(1)).setValue(editUsuario.getNomeUsuario());
@@ -802,16 +816,6 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@Command
 	public void editUser(@BindingParam("window") final Window window)
 	{
-		if(editUsuario.isAtivo()) {
-			Clients.clearBusy(window);
-			Messagebox.show(
-					"\nO usuario não pode ser editado.\n O usuário possui TCC(s) cadastrado(s).",
-					"Alerta", Messagebox.OK,
-					Messagebox.INFORMATION);
-			
-			window.setVisible(false);
-			return;
-		}
 		
 		if(usuarioBusiness.validate(editUsuario, editUsuario.getMatricula(), false))
 		{

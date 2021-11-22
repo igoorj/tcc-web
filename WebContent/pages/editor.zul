@@ -248,19 +248,28 @@
 								hflex="1" maxlength="255" />
 						</hlayout>
 
-						<hlayout style="margin:5px;line-height:20px;">
-							<button hflex="1"
-								label="Selecionar arquivo (PDF)..." upload="true,maxsize=204800"
-								onUpload="@command('upload', button=self, evt=event)" />
-							<button hflex="1"
+						<hlayout style="margin:5px;line-height:20px; flex-direction: column; display:flex">
+					
+						
+							<button style="margin:0"
+								label="Selecionar arquivo (PDF) ..." upload="true,maxsize=204800"
+								onUpload="@command('upload', button=self, evt=event)" width="100%" height="30px"/>
+						
+						</hlayout>
+						<hlayout style="line-height:20px; flex-direction:column; display:flex">
+									
+							<button  style="margin:10px auto;"
 								label="Selecionar arquivo extra (ZIP)..." upload="true,maxsize=204800"
 								visible="@load(not vm.project)"
-								onUpload="@command('extraUpload', button=self, evt=event)" />
+								onUpload="@command('extraUpload', button=self, evt=event)" width="100%" height="30px" />
+							
 						</hlayout>
-						<hlayout style="margin:5px;line-height:20px;" if="${vm.canSubmitDocs()}">
-							<button hflex="1"
+						
+						<hlayout style="line-height:20px; flex-direction:column; display:flex" if="${vm.canSubmitDocs()}">
+							 
+							 <button style="margin:0 auto;"
 								label="Selecionar Ata..." upload="true,maxsize=204800"
-								onUpload="@command('uploadDocumentacao', button=self, evt=event)" />
+								onUpload="@command('uploadDocumentacao', button=self, evt=event)" width="100%" height="30px" />
 								
 						</hlayout>
 				
@@ -268,14 +277,17 @@
 					</vlayout>
 				</groupbox>
 				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC &amp;&amp; !(vm.userSecretaria &amp;&amp; (vm.tcc.aluno.curso.idCurso == 5))}">
+					
 					<div hflex="1" align="center" style="margin:15px" >
 						<button label="Salvar"
 							onClick="@command('updateTCC')" width="100%" height="30px"/>
 					</div>
+					
 					<div hflex="1" align="center" style="margin:15px" if="${vm.canSubmitTCC}">
 						<button label="Submeter"
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
+				
 				</hlayout>
 				<hlayout style="margin:5px;line-height:20px;" if="${vm.userSecretaria &amp;&amp; (vm.tcc.aluno.curso.idCurso == 5)}">
 					<div hflex="2" align="center" style="margin:15px" >
