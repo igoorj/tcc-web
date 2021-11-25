@@ -78,7 +78,7 @@
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de defesa" /> 
 				</column>
 				<column hflex="2" >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de defesa" /> 
+					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de defesa"/> 
 				</column>
 				<column hflex="5" label="Autor"
 					sort="auto(aluno.nomeUsuario)" />
@@ -118,7 +118,9 @@
 								<label
 									value="@load(each.palavrasChave)" />
 							</vlayout>
-						</popup>
+						</popup> 
+						
+					
 					</div>
 					<label value="@load(each.sala.nomeSala ne null ? each.sala.nomeSala : each.salaDefesa)" />
 					<label value="@load(each.aluno.nomeUsuario)" />

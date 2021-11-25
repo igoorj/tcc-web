@@ -254,14 +254,16 @@
 							<button style="margin:0"
 								label="Selecionar arquivo (PDF) ..." upload="true,maxsize=204800"
 								onUpload="@command('upload', button=self, evt=event)" width="100%" height="30px"/>
+								
 						
 						</hlayout>
-						<hlayout style="line-height:20px; flex-direction:column; display:flex">
+						<hlayout style="line-height:20px; flex-direction:column; display:flex;">
 									
 							<button  style="margin:10px auto;"
 								label="Selecionar arquivo extra (ZIP)..." upload="true,maxsize=204800"
 								visible="@load(not vm.project)"
 								onUpload="@command('extraUpload', button=self, evt=event)" width="100%" height="30px" />
+						
 							
 						</hlayout>
 						
@@ -278,12 +280,12 @@
 				</groupbox>
 				<hlayout style="margin:5px;line-height:20px;" if="${vm.canUpdateTCC &amp;&amp; !(vm.userSecretaria &amp;&amp; (vm.tcc.aluno.curso.idCurso == 5))}">
 					
-					<div hflex="1" align="center" style="margin:15px" >
+					<div hflex="1" align="center" style="margin:15px" tooltip="mensagemBotaoSalvar">
 						<button label="Salvar"
 							onClick="@command('updateTCC')" width="100%" height="30px"/>
 					</div>
 					
-					<div hflex="1" align="center" style="margin:15px" if="${vm.canSubmitTCC}">
+					<div hflex="1" align="center" style="margin:15px" if="${vm.canSubmitTCC}" tooltip="mensagemBotaoSubmeter">
 						<button label="Submeter"
 							onClick="@command('submit')" width="100%" height="30px"/>
 					</div>
@@ -358,4 +360,16 @@
 			</div>
 		</window>
 	</div>
+	<popup id="mensagemBotaoSalvar"  style="width: 300px; padding:0 10px;">
+		<html>
+			<h3 style="color:blue">Alerta!!</h3>
+			<p style="font-size:14px">Para enviar o projeto de forma definitiva, e necessario submete-lo no botao ao lado</p>
+		</html>
+	</popup>
+	<popup id="mensagemBotaoSubmeter">
+		<html>
+			<h3 style="color:blue">Alerta!!</h3>
+			<p style="font-size:14px">Voce esta enviando seu projeto em definitivo</p>
+		</html>
+	</popup>
 </zk>
