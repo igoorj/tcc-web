@@ -362,13 +362,11 @@
 	</div>
 	<popup id="mensagemBotaoSalvar"  style="width: 300px; padding:0 10px;">
 		<html>
-			<h3 style="color:blue">Alerta!!</h3>
-			<p style="font-size:14px">Para enviar o projeto de forma definitiva, e necessario submete-lo no botao ao lado</p>
+			<p style="font-size:14px">Voce esta salvando seu projeto, mas ainda e necessario submete-lo</p>
 		</html>
 	</popup>
 	<popup id="mensagemBotaoSubmeter">
 		<html>
-			<h3 style="color:blue">Alerta!!</h3>
 			<p style="font-size:14px">Voce esta enviando seu projeto em definitivo</p>
 		</html>
 	</popup>

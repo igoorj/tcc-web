@@ -36,7 +36,7 @@
 									</template>
 								</combobox>
 								
-								<label style="margin-top:6px" value="Tipos: " visible="true" />
+								<label style="margin-top:6px" value="Status: " visible="true" />
 																
 								<div visible="true">
 									<combobox id="status" value="Todos" onChange="@command('filtraProjeto',item=self.selectedIndex)">
@@ -87,7 +87,7 @@
 					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e horário de envio" /> 
 				</column>
 				<column hflex="5" label="Status" image="/img/help.gif"
-					tooltip="filterStatus" style="cursor: help" />
+					sort="auto(statusCorridoTCC)"	/>
 				<column hflex="1"  label="Excluir" />
 			</columns>
 			<template name="lista">
@@ -95,13 +95,13 @@
 					onClick="@command('visualizarTCC', idTCC=each.idTCC, btnAtualizarTCC=btnAtualizarTCC)"
 					tooltip="${forEachStatus.index}, position=at_pointer"
 					style="@load(!each.tarefasDentroDoPrazo ? 'text-decoration: line-through;' : '')">
-					<div>
+					<div  style="margin-top:10px">
 						<label value="@load(each.dataApresentacao eq null ? '' : vm.sdf.format(each.dataApresentacao).toString().substring(0,16))" />
 						<popup id="${forEachStatus.index}">
-							<vlayout width="550px">
-								<label value="Resumo"
-									style="font-size: 14px; font-weight: bold; text-align: justify; display: block;" />
-								<label value="@load(each.resumoTCC)" />
+							<vlayout width="250px">
+								<label value="Titulo"
+									style="font-size: 12px; font-weight: bold; text-align: justify; display: block;" />
+								<label value="@load(each.nomeTCC)" />
 								<hlayout>
 									<label value="Ano: "
 										style="font-weight:bold;" />
@@ -109,12 +109,12 @@
 										onCreate="@command('getEachTccYear', tcc=each, lbl=self)" />
 								</hlayout>
 								<label value="Orientador"
-									style="font-size: 14px; font-weight: bold; text-align: justify; display: block;" />
+									style="font-size: 12px; font-weight: bold; text-align: justify; display: block; padding-top:5px" />
 								<label
 									value="@load(each.orientador.nomeUsuario)" />
 								<label value="Palavras-chave"
 									visible="@load(not empty each.palavrasChave)"
-									style="font-size: 14px; font-weight: bold; text-align: justify; display: block;" />
+									style="font-size: 12px; font-weight: bold; text-align: justify; display: block; padding-top:5px" />
 								<label
 									value="@load(each.palavrasChave)" />
 							</vlayout>
