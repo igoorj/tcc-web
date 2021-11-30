@@ -368,7 +368,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	@Command
 	public void submitUser(@BindingParam("window") final Window window) {
 		Clients.showBusy(window, "Processando...");
-
+		
 		if (!submitUserListenerExists) {
 			submitUserListenerExists = true;
 			window.addEventListener(Events.ON_CLIENT_INFO,
@@ -434,7 +434,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 								errorMessage += error;
 							Clients.clearBusy(window);
 							Messagebox.show(errorMessage,
-									"Dados insuficientes / inválidos",
+									"Dados insuficiente / inválidos",
 									Messagebox.OK, Messagebox.ERROR);
 						}
 					}
@@ -711,6 +711,20 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	public void editUsuario(@BindingParam("window") Window window, @BindingParam("usuario") Usuario user) {
 		editUsuario = user;
 		editUsuarioSenha = editUsuario.getSenha();
+		
+		// Veriricando se o coordenador está tentando editar um usuário que está ativo
+		if(editUsuario.isAtivo()) {
+			Clients.clearBusy(window);
+			Messagebox.show(
+					"\nO usuario não pode ser editado.\n O usuário possui TCC(s) cadastrado(s).",
+					"Alerta", Messagebox.OK,
+					Messagebox.INFORMATION);
+			
+			window.setVisible(false);
+			return;
+		}
+		// Fim da verificação
+		
 		((Combobox)window.getChildren().get(0).getChildren().get(1).getChildren().get(0).getChildren().get(1)).setValue(editUsuario.getTipoUsuario().getNomeTipoUsuario());
 		((Textbox)window.getChildren().get(0).getChildren().get(1).getChildren().get(1).getChildren().get(1)).setValue(editUsuario.getMatricula());
 		((Textbox)window.getChildren().get(0).getChildren().get(1).getChildren().get(2).getChildren().get(1)).setValue(editUsuario.getNomeUsuario());
@@ -803,7 +817,6 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	public void editUser(@BindingParam("window") final Window window)
 	{
 		
-		
 		if(usuarioBusiness.validate(editUsuario, editUsuario.getMatricula(), false))
 		{
 			if(editUsuario.getSenha() != editUsuarioSenha)
@@ -817,7 +830,7 @@ public class GerenciamentoUsuarioController extends CommonsController {
 			usuarioBusiness.editar(editUsuario);
 			Clients.clearBusy(window);
 			Messagebox.show(
-					"UsuÃ¡rio salvo!",
+					"Usuario salvo!",
 					"Sucesso", Messagebox.OK,
 					Messagebox.INFORMATION);
 			
@@ -843,12 +856,16 @@ public class GerenciamentoUsuarioController extends CommonsController {
 	{
 		String mensagem;
 		
-		if(check.isChecked())
-			mensagem = "Tem certeza que deseja ativar o usuário?";
-		else
+		if(check.isChecked()) {
+			mensagem = "\n Aluno: "+ usuario.getNomeUsuario();
+			mensagem += "\n Orientador: "+ usuario.getOrientador().getNomeUsuario();
+			mensagem += "\n\nEm caso de troca de Orientador, altere antes de ativa-lo.\n";
+			mensagem += "\n\nTem certeza que deseja ativar o usuário??\n";
+			
+		} else
 			mensagem = "Tem certeza que deseja desativar o usuário?";
 			
-		Messagebox.show(mensagem, "ConfirmaÃ§Ã£o", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+		Messagebox.show(mensagem, "Confirmação", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 			    public void onEvent(Event evt) throws InterruptedException {
 		    	try {
 		    		TCC newTCC = null;

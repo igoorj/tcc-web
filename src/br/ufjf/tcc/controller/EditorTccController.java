@@ -121,11 +121,12 @@ public class EditorTccController extends CommonsController {
 			canChangeOrientacao = true;
 			canSubmitDocs = true;
 			canUpdateTCC = true;
-			canSubmitTCC = false;
+			canSubmitTCC = true;
+			/*
 			if(getUsuario().getCurso().getIdCurso() == 5) {
 				canUpdateTCC = false;
 				canSubmitTCC = true;
-			}
+			}*/
 			
 			break;
 
@@ -650,12 +651,91 @@ public class EditorTccController extends CommonsController {
 		
 		return true;
 	}
+	
+	/*
+	 * Lógica adicioanda para verificar se o usuário é de Secretaria de Licenciatura em Computação
+	 * Nesse caso, caso o tcc ja tenha sido publicado, um novo acesso indica que este tcc está sendo atualizado
+	 * */
+	
+	public boolean logicaSecretariaLicenciatura(int tipoUsuario, int idCursoUsuario ) {
 
+		if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+			
+			if(tcc.getStatus() == TCC.APROVADO) {
+				System.out.println("Editando tcc já cadastrado!");
+				updateTCC();
+				return true;
+			}
+			
+			/* Setando o atributo "publicado" do objeto TCC como true e o status do tcc para aprovado */
+			System.out.println("Cadastrando novo tcc!");
+			tcc.setPublicado(true);
+			tcc.setStatus(TCC.APROVADO);
+			return true;
+		}
+		
+		return false;
+		
+	}
+
+	/*
+	 * Lógica adicioanda para verificar se o usuário é de Secretaria de Licenciatura em Computação
+	 * Nesse caso, caso o tcc ja tenha sido publicado, um novo acesso indica que este tcc está sendo atualizado
+	 * */
+	
+	public boolean cadastroSecLicenciaturaComp(TCC tcc, int tipoUsuario, int idCursoUsuario) {
+		
+		if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+			
+			if(tcc.getStatus() == TCC.APROVADO) {
+				
+				System.out.println("Editando tcc já cadastrado");
+				updateTCC();
+			} else {
+				
+				System.out.println("Cadastrando um novo tcc!");
+				tcc.setStatus(TCC.APROVADO);
+				tcc.setPublicado(true);
+			}
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	public void isSecLicenciatura() {
+		
+	}
+	
 	// Submit do TCC
-	private void submit() {
+private void submit() {
+		
 		int statusTCC = tcc.getStatus();
 		int tipoUsuario = getUsuario().getTipoUsuario().getIdTipoUsuario();
 		int idCursoUsuario = getUsuario().getCurso().getIdCurso();
+		
+		/*
+		 * Lógica adicioanda para verificar se o usuário é de Secretaria de Licenciatura em Computação
+		 * Nesse caso, caso o tcc ja tenha sido publicado, um novo acesso indica que este tcc está sendo atualizado
+		 * */
+		
+		if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+			if(tcc.getStatus() == TCC.APROVADO) {
+				System.out.println("Editando tcc já cadastrado!");
+				updateTCC();
+				return;
+			}
+			
+			System.out.println("Cadastrando novo tcc!");
+			tcc.setPublicado(true);
+			tcc.setStatus(TCC.APROVADO);
+			System.out.println("Status de aprovado definido com sucesso!");
+		}
+		
+		/*
+		 * ==================================================================================================
+		 * */
 		
 		List<EnviadorEmailChain> emails = new ArrayList<EnviadorEmailChain>();
 		atualizarArquivos();
@@ -686,7 +766,7 @@ public class EditorTccController extends CommonsController {
 			/*
 			 * Tratamento Adicionado para evitar erro no cadastro de novos tccs pela secretaria
 			 * */
-			if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+			if (tipoUsuario == Usuario.SECRETARIA) {
 				
 				Usuario alunoCadastrado = tcc.getAluno();
 				TipoUsuario tipoAluno = new TipoUsuario();
@@ -706,12 +786,13 @@ public class EditorTccController extends CommonsController {
 				 * enviar email para o coordenador do curso solicitando a aprovação final do tcc. Para este curso
 				 * esta a avaliação não é necessária
 				 * */
-				tcc.setStatus(TCC.PAA);
 				
 				if (tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5) {
+					//tcc.setStatus(TCC.APROVADO);
 					break;
 				}
 				
+				tcc.setStatus(TCC.PAA);
 				emails.add(new EnviadorEmailAvisoProjetoSubmetido());
 				break;
 			case TCC.PAA:
@@ -744,12 +825,14 @@ public class EditorTccController extends CommonsController {
 				emails.add(new EnviadorEmailAvisoTrabalhoFinalAprovadoPorOrientador());
 				break;
 			case TCC.APROVADO:
+				tcc.setPublicado(true); // added
 				return;
 			default:
 				return;
 			}
 			
 			if (tccBusiness.saveOrEdit(tcc)) {
+				
 				String alerta;
 				if (tcc.isProjeto())
 					alerta = "Projeto salvo!";
@@ -783,8 +866,10 @@ public class EditorTccController extends CommonsController {
 				errorMessage += error;
 			Messagebox.show(errorMessage, "Dados insuficientes / inválidos", Messagebox.OK, Messagebox.ERROR);
 		}
+		
+		
 	}
-
+	
 	// Update do TCC
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Command("updateTCC")
@@ -816,7 +901,7 @@ public class EditorTccController extends CommonsController {
 			 * Define um usuario do tipo aluno na hora de cadastrar um novo TCC
 			 * */
 			
-			if(tipoUsuario == Usuario.SECRETARIA && idCursoUsuario == 5 ) {
+			if(tipoUsuario == Usuario.SECRETARIA) {
 				Usuario alunoCadastrado = tcc.getAluno();
 				TipoUsuario tipoAluno = new TipoUsuario();
 				tipoAluno.setIdTipoUsuario(Usuario.ALUNO);
