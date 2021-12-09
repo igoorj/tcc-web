@@ -93,7 +93,6 @@
 			<template name="lista">
 				<row xmlns:w="client"
 					onClick="@command('visualizarTCC', idTCC=each.idTCC, btnAtualizarTCC=btnAtualizarTCC)"
-					tooltip="${forEachStatus.index}, position=at_pointer"
 					style="@load(!each.tarefasDentroDoPrazo ? 'text-decoration: line-through;' : '')">
 					<div  style="margin-top:10px">
 						<label value="@load(each.dataApresentacao eq null ? '' : vm.sdf.format(each.dataApresentacao).toString().substring(0,16))" />

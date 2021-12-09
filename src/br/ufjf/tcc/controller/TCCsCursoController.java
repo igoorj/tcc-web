@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -352,8 +354,13 @@ public class TCCsCursoController extends CommonsController {
 			mensagem2 = "projeto";
 		else
 			mensagem2 = "trabalho";
-
-		Messagebox.show("Tem certeza que deseja excluir este " + mensagem2 + "?", "Sucesso",
+		
+		String nomeAutor = tcc.getAluno().getNomeUsuario().toUpperCase();
+		String tituloTCC = tcc.getNomeTCC().toUpperCase();
+		String mensagemConfirmacao = "";
+		mensagemConfirmacao += "Tem certeza que deseja excluir este ";
+		
+		Messagebox.show(mensagemConfirmacao + mensagem2 + "?" +"\n\nAutor: " +nomeAutor +"\n\nTitulo: " +tituloTCC , "Sucesso",
 				Messagebox.YES | Messagebox.NO, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
 					public void onEvent(Event evt) throws InterruptedException {
 						if (evt.getName().equals("onYes")) {

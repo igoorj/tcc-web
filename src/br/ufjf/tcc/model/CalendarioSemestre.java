@@ -139,4 +139,10 @@ public class CalendarioSemestre implements Serializable {
 		this.prazos = prazos;
 	}
 
+	@Override
+	public String toString() {
+		return "CalendarioSemestre [finalSemestre=" + finalSemestre + ", prazos=" + prazos + "]";
+	}
+	
+
 }

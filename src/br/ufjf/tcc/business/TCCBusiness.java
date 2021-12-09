@@ -491,6 +491,7 @@ public class TCCBusiness {
 			case Prazo.PRAZO_PROJETO:
 				if(prazo.getDataFinal().before(new Date()) && tcc.isProjeto())
 					return true;
+					
 				break;
 			case Prazo.ENTREGA_BANCA:
 				if(prazo.getDataFinal().before(new Date()) && status < TCC.TEPB)

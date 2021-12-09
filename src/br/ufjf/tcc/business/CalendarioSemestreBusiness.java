@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 
 import br.ufjf.tcc.model.CalendarioSemestre;
 import br.ufjf.tcc.model.Curso;
+import br.ufjf.tcc.model.Prazo;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.persistent.impl.CalendarioSemestreDAO;
 
@@ -48,8 +49,26 @@ public class CalendarioSemestreBusiness {
 		Calendar dataFinal = Calendar.getInstance();
 		dataFinal.setTime(calendario.getFinalSemestre());
 		dataFinal.set(Calendar.HOUR_OF_DAY, 23);
-		dataFinal.set(Calendar.MINUTE, 59);
+		dataFinal.set(Calendar.MINUTE, 59);		
 		calendario.setFinalSemestre(dataFinal.getTime());
+
+		
+		String imprimeDataFinal = "\nData Final";
+		imprimeDataFinal += "\ngetTime():" + dataFinal.getTime();
+		imprimeDataFinal += "\ngetTimeZone(): " + dataFinal.getTimeZone();
+		imprimeDataFinal += "\ngetDate(): " + dataFinal.getTime().getDate();
+		imprimeDataFinal += "\ngetMonth(): " + dataFinal.getTime().getMonth();
+		imprimeDataFinal += "\ngetHour(): " + dataFinal.getTime().getHours();
+		imprimeDataFinal += "\ngetMinute(): " + dataFinal.getTime().getMinutes();
+		
+		imprimeDataFinal += "\n\nCalendario Semestre Final";
+		imprimeDataFinal += "\ngetDate(): " +calendario.getFinalSemestre().getDate();
+		imprimeDataFinal += "\ngetMonth(): " +calendario.getFinalSemestre().getMonth();
+		imprimeDataFinal += "\ngetHour(): " +calendario.getFinalSemestre().getHours();
+		imprimeDataFinal += "\ngetMinute(): " + calendario.getFinalSemestre().getMinutes();
+	
+		System.out.println(imprimeDataFinal);
+	
 	}
 
 	public boolean save(CalendarioSemestre calendarioSemestre) {
