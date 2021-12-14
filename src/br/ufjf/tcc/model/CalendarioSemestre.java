@@ -1,5 +1,6 @@
 package br.ufjf.tcc.model;
-
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,6 +105,9 @@ public class CalendarioSemestre implements Serializable {
 	}
 
 	public void setFinalSemestre(Date finalSemestre) {
+		// Definindo o horário do final do semestre para 23h59
+		this.finalSemestre.setHours(23);
+		this.finalSemestre.setMinutes(59);
 		this.finalSemestre = finalSemestre;
 	}
 
@@ -137,6 +141,14 @@ public class CalendarioSemestre implements Serializable {
 
 	public void setPrazos(List<Prazo> prazos) {
 		this.prazos = prazos;
+		// Definindo o horário final dos prazos para 23h59
+		if(this.prazos != null) {
+			
+			for(Prazo prazo: this.prazos) {
+				prazo.getDataFinal().setHours(23);
+				prazo.getDataFinal().setMinutes(59);
+			}
+		}
 	}
 
 	@Override
@@ -144,5 +156,4 @@ public class CalendarioSemestre implements Serializable {
 		return "CalendarioSemestre [finalSemestre=" + finalSemestre + ", prazos=" + prazos + "]";
 	}
 	
-
 }

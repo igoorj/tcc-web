@@ -68,7 +68,6 @@ public class CalendarioSemestreBusiness {
 		imprimeDataFinal += "\ngetMinute(): " + calendario.getFinalSemestre().getMinutes();
 	
 		System.out.println(imprimeDataFinal);
-	
 	}
 
 	public boolean save(CalendarioSemestre calendarioSemestre) {

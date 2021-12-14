@@ -486,17 +486,27 @@ public class TCCBusiness {
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
 		List <Prazo> prazos = calendario.getPrazos();
 		
+		Date agora = new Date();
 		for (Prazo prazo : prazos) {
+						
 			switch (prazo.getTipo()) {
+			
 			case Prazo.PRAZO_PROJETO:
-				if(prazo.getDataFinal().before(new Date()) && tcc.isProjeto())
-					return true;
+				if(prazo.getDataFinal().before(agora) && tcc.isProjeto()) {
 					
+					String informaHoraAtual = "";
+					informaHoraAtual += "\nData: "+ agora.getDate();
+					informaHoraAtual += "\nHora: "+ agora.getHours() + "h" +agora.getMinutes();
+					
+					System.out.println(informaHoraAtual);
+					return true;				
+				}
 				break;
 			case Prazo.ENTREGA_BANCA:
 				if(prazo.getDataFinal().before(new Date()) && status < TCC.TEPB)
-					return true;
+					return true;		
 				break;
+				
 			case Prazo.ENTREGA_FINAL:
 				if(prazo.getDataFinal().before(new Date()) && status < TCC.APROVADO)
 					return true;
