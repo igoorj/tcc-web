@@ -208,7 +208,7 @@ public class MenuController extends CommonsController {
 				&& usuarioForm.getSenha() != null
 				&& usuarioForm.getMatricula().trim().length() > 0
 				&& usuarioForm.getSenha().trim().length() > 0) {
-			if (usuarioBusiness.login(usuarioForm.getMatricula(),
+			if (usuarioBusiness.login(usuarioForm.getMatricula().trim(),
 					usuarioForm.getSenha())) {
 				changeProfile(0);
 			} else {

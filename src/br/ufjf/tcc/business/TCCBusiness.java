@@ -486,7 +486,7 @@ public class TCCBusiness {
 		CalendarioSemestre calendario = new CalendarioSemestreBusiness().getCalendarByTCC(tcc);
 		List <Prazo> prazos = calendario.getPrazos();
 		
-		Date agora = new Date();
+		Date agora = new Date();	
 		for (Prazo prazo : prazos) {
 						
 			switch (prazo.getTipo()) {
