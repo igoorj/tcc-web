@@ -106,9 +106,9 @@ public class CalendarioSemestre implements Serializable {
 
 	public void setFinalSemestre(Date finalSemestre) {
 		// Definindo o horário do final do semestre para 23h59
+		this.finalSemestre = finalSemestre;
 		this.finalSemestre.setHours(23);
 		this.finalSemestre.setMinutes(59);
-		this.finalSemestre = finalSemestre;
 	}
 
 	public String getNomeCalendarioSemestre() {

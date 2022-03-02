@@ -82,10 +82,13 @@ public class MenuController extends CommonsController {
 		
 		return false;
 	}
+	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Command
 	public void gerarAta(){
+		
 		if (getUsuario() != null && getUsuario().getTipoUsuario().getIdTipoUsuario() == Usuario.ALUNO) { // verificando se o usuario eh do tipo aluno
+//			Messagebox.show("Mensagem de teste no card!\n", "Aviso", Messagebox.OK, Messagebox.EXCLAMATION);// mensagem de teste
 			if (getUsuario().getTcc() != null && getUsuario().getTcc().size() != 0) { // verificando se o usuario possui um tcc cadastrado
 				TCCBusiness tccBusiness = new TCCBusiness();
 				TCC tcc = getUsuario().getTcc().get(0); // recuperando o tcc cadastrado pelo aluno
@@ -109,7 +112,15 @@ public class MenuController extends CommonsController {
 								"Aviso", Messagebox.OK, Messagebox.EXCLAMATION);
 		}
 	}
-
+	
+	// 	Funcao de teste para gerar ata
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Command
+	public void gerarAta2(){
+		Messagebox.show("Mensagem de teste no card!\n", "Aviso", Messagebox.OK, Messagebox.EXCLAMATION);// mensagem de teste
+	}
+	// fim da funcao de teste
+	
 	@Command
 	public void generate() {
 						

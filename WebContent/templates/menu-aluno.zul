@@ -10,6 +10,8 @@
 				onClick="@command('myTcc')" />
 			<menuitem label="Gerar Ata"
 				onClick="@command('gerarAta')" />
+			<menuitem label="Gerar Ata 2"
+				onClick="@command('gerarAta2')" />
 			<menuitem label="Lista Pública" href="/" />
 			<menuitem label="Sair" onClick="@command('sair')"
 				style="float:right" />
