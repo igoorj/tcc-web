@@ -49,9 +49,12 @@ public class TCCBusiness {
 		validatePalavraChave(tcc.getPalavrasChave());
 		if (checkFile)
 			validateArquivo(tcc.getArquivoTCC());
-		//System.out.println(errors.size());
-		System.out.println("\nErros:\n");
-		errors.stream().forEach(System.out::println);
+		
+		if(errors.size() > 0) {
+			System.out.println("\nErros:\n");
+			System.out.println(errors.size());
+			errors.stream().forEach(System.out::println);	
+		}
 		return errors.size() == 0 ? false : true;
 	}
 

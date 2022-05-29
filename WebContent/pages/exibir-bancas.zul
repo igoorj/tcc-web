@@ -2,7 +2,7 @@
 <?init class="br.ufjf.tcc.controller.AuthController"?>
 <zk>
 	<script type="text/javascript">
-		function visualzarTCC(id) {
+	 function visualzarTCC(id) {
 		window.open('visualiza.zul?id='+id,'_blank'); }
 	</script>
 	<style src="/style.css" />
@@ -69,39 +69,49 @@
 			</auxhead>
 			<columns > 
 				<column hflex="2"  >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data de" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
 				</column>
 				<column hflex="2" >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Local de" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="defesa" />
 				</column>
-				<column hflex="8" label="Autor"
+				<column style="text-align:center;" hflex="5" label="Autor"
 					sort="auto(aluno.nomeUsuario)" />
-				<column hflex="7" label="Orientador" sort="auto(orientador.nomeUsuario)" />
+				<column style="text-align:center;" hflex="5" label="Orientador" sort="auto(orientador.nomeUsuario)" />
 				<column hflex="2" >
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="horário" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="de envio" />
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Data e" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="horário" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="de envio" />
 				</column>
 				<column hflex="2" label="Status" image="/img/help.gif"
-					tooltip="filterStatus" style="cursor: help" />
+					tooltip="filterStatus" style="text-align:center;cursor: help" />
 				<column hflex="2" align="left" > 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Entregou" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="documentos?" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Entregou" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="documentos?" /> 
 				 </column>
 				<column hflex="2">
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Enviou" /> 
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="trabalho" />
-					<label  style="font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="final?" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="Enviou" /> 
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold"  value="trabalho" />
+					<label  style="text-align:center;font-family:Arial,sans-serif;color:#636363;font-weight:bold" value="final?" /> 
 					  
 				</column>
-				<column hflex="2"  label="Marcar" />
+				<column style="text-align:center;" hflex="2"  label="Marcar" />
+				
+				<!-- CAMPO ABAIXO FOI ADICIONADO PARA TESTES -->
+				<column style="text-align:center;" hflex="2"  label="Acoes" />
+				<!-- FIM -->
+			
 			</columns>
 			<template name="lista">
-				<row xmlns:w="client"
+				<!-- <row xmlns:w="client"
 					w:onClick="visualzarTCC(${each.idTCC});"
-					tooltip="${forEachStatus.index}, position=at_pointer">
+					tooltip="${forEachStatus.index}, position=at_pointer"> -->
+				
+				<!-- CAMPO ABAIXO FOI ADICIONADO PARA TESTES -->
+				<row xmlns:w="client"
+					tooltip="${forEachStatus.index}">
+					<!-- FIM DO CAMPO DE TESTE -->
 					<div>
 						<label value="@load(each.dataApresentacao eq null ? '' : vm.sdf.format(each.dataApresentacao).toString().substring(0,16))" />
 						<popup id="${forEachStatus.index}">
@@ -141,7 +151,11 @@
 					<div align="center" >
 						<checkbox disabled="@load(each.dataApresentacao eq null)" style="center" checked="false" onCheck="@command('marcarTrabalho',tcc=each)" />
 					</div>
-					
+					<!-- CAMPO ABAIXO FOI ADICIOANDO PARA TESTES -->
+					<div align="center" style="text-align:center">
+						<button label="Visualizar" style="text-align:center;margin-right:70px" onClick="@command('exibirBancasApresentacao', tcc=each)" />
+					</div>
+					<!-- FIM DO CAMPO DE TESTES-->
 				</row>
 			</template>
 		</grid>

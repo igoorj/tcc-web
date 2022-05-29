@@ -628,10 +628,12 @@ public class TCCDAO extends GenericoDAO {
 	
 	public List<TCC> getAllTrabalhosByCurso(Curso curso){
 		 try {
+			 // Foi adicionado "LEFT JOIN FETCH t.sala " para resolver os problemas da filtragem de trabalhos
 			 Query query = getSession().createQuery(
 		                        "SELECT DISTINCT t FROM TCC AS t JOIN FETCH t.aluno AS a "
 		                        + "JOIN FETCH t.orientador LEFT JOIN FETCH t.coOrientador "
 		                        + "JOIN FETCH t.participacoes "
+		                        + "LEFT JOIN FETCH t.sala "
 		                        + "WHERE a.curso = :curso AND t.projeto = :projeto ORDER BY t.dataEnvioFinal DESC");
 		        query.setParameter("curso", curso);
 		        query.setParameter("projeto", false);

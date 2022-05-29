@@ -1,14 +1,14 @@
 <?init class="br.ufjf.tcc.controller.AuthController"?>
 <?script content="zk.useStack='auto'" ?>
 <zk>		
-	<window id="windowTCC" title="Visualizar Trabalho" width="85%" height="85%"
+	 <window id="windowTCC" title="Visualizar Trabalho" width="85%" height="85%"
 		border="normal" position="center,center" closable="true"
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('br.ufjf.tcc.controller.VisualizaTCCController')"
 		onCancel="self.onClose()" >
 		
 		<div height="100%">
-			<div height="100%" width="30%"
+			 <div height="100%" width="30%"
 				style="padding: 10px;float: left;background-color:#efefef;">
 				<tabbox id="tb" height="100%">
 					<tabs id="tabs" height="100%">
@@ -16,7 +16,7 @@
 						<tab id="B" label="Preencher ficha de respostas"
 							if="${vm.canAnswer}" />
 					</tabs>
-					<tabpanels height="100%">
+					 <tabpanels height="100%">
 						<tabpanel height="100%"
 							style="overflow:scroll;">
 							<div
@@ -162,7 +162,7 @@
 								</div>
 							</div>
 						</tabpanel>
-					</tabpanels>
+					</tabpanels> 
 				</tabbox>
 
 			</div>
@@ -187,3 +187,14 @@
 		</window>
 	</window>
 </zk>
+<!--
+<?init class="br.ufjf.tcc.controller.AuthController"?>
+<?script content="zk.useStack='auto'" ?>
+<zk>
+	<window id="windowTCC" title="Visualizar Trabalho" width="85%" height="85%"
+		border="normal" position="center,center" closable="true"
+		viewModel="@id('vm') @init('br.ufjf.tcc.controller.VisualizaTCCController')"
+		onCancel="self.onClose()" >
+	</window>
+</zk>
+-->

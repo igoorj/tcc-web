@@ -1,6 +1,7 @@
 <?page title="Gerenciamento de Trabalhos"?>
 <?init class="br.ufjf.tcc.controller.AuthController"?>
 <zk>
+	
 	<style src="/style.css" />
 	<window apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('br.ufjf.tcc.controller.TCCsCursoController')"
@@ -64,6 +65,10 @@
 								
 								<button label="Filtrar" width="60px"
 									onClick="@command('filtraProjeto', item=status.selectedIndex)" />
+									
+								<!-- <button label="Limpar Filtro"
+									onClick="limpaFiltro" /> -->
+								
 								<image src="/img/help.gif"
 									tooltip="filterHelp" style="cursor: help" />
 							</hlayout>

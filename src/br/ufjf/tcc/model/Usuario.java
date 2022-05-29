@@ -348,6 +348,7 @@ public class Usuario implements Serializable {
 		this.editingStatus = another.editingStatus;
 	}
 
+	
 	@Override
 	public String toString() {
 		return "Usuario [idUsuario=" + idUsuario + ", email=" + email + ", nomeUsuario=" + nomeUsuario

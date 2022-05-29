@@ -5,7 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.JOptionPane;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -15,12 +20,15 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zhtml.Filedownload;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Messagebox;
+import org.zkoss.zul.Window;
 
 import br.ufjf.tcc.business.TCCBusiness;
 import br.ufjf.tcc.library.FileManager;
 import br.ufjf.tcc.library.SessionManager;
+import br.ufjf.tcc.model.Participacao;
 import br.ufjf.tcc.model.TCC;
 import br.ufjf.tcc.model.Usuario;
 import br.ufjf.tcc.pdfHandle.Ata;
@@ -36,6 +44,7 @@ public class ExibirBancasController extends CommonsController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.S");
 	private List<TCC> trabalhosMarcados ;
 	private Ata ata;
+	private int idTccModal = 0; // added
 	
 	@Init
 	public void init() {
@@ -271,6 +280,25 @@ public class ExibirBancasController extends CommonsController {
 	}
 	
 	
+	// Método responsável por exibir dados da banca
+	
+	@SuppressWarnings({"unchecked","rawtypes"})
+	@Command
+	 public void exibirBancasApresentacao( @BindingParam("tcc") TCC tcc) {
+		 
+		 String mensagem = "\nAcademico(a): " + tcc.getAluno().getNomeUsuario();
+		 mensagem += "\n\nMatricula: " + tcc.getAluno().getMatricula();
+		 mensagem += "\n\nTitulo do Trabalho: " + tcc.getNomeTCC();
+		 mensagem += "\n\nResumo do Trabalho: " + tcc.getResumoTCC();
+		 mensagem += "\n\nData: " + tcc.getDataApresentacao();
+		 mensagem += "\nHorario: " + tcc.getDataApresentacao().getHours() + ":" +tcc.getDataApresentacao().getMinutes() + ":" +tcc.getDataApresentacao().getSeconds() ;
+		 mensagem += "\nSala: " + tcc.getSalaDefesa();
+		 mensagem += "\nOrientador: " + tcc.getOrientador().getNomeUsuario();		 
+		 
+		 Messagebox.show(mensagem, "Visualizar Banca",
+				 Messagebox.OK, Messagebox.INFORMATION);
+		
+	}	 
 	
 	
 	@SuppressWarnings({"unchecked","rawtypes"})

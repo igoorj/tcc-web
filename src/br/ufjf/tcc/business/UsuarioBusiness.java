@@ -32,7 +32,7 @@ public class UsuarioBusiness {
 		return errors;
 	}
 
-	// validação dos formulários
+	// validaÃ§Ã£o dos formulÃ¡rios
 	public boolean validate(Usuario usuario, String oldMatricula, boolean validateTipo) {
 		errors.clear();
 		
@@ -40,7 +40,7 @@ public class UsuarioBusiness {
 		validarNome(usuario.getNomeUsuario());
 		validateEmail(usuario.getEmail(), null);
 		if (validateTipo) {
-			System.out.println("Validando tipo do usu�rio");
+			System.out.println("Validando tipo do usuï¿½rio");
 			validateTipo(usuario);
 		}
 		
@@ -50,34 +50,34 @@ public class UsuarioBusiness {
 
 	public void validarNome(String nomeUsuario) {
 		if (nomeUsuario == null || nomeUsuario.trim().length() == 0)
-			errors.add("� necess�rio informar o nome;\n");
+			errors.add("ï¿½ necessï¿½rio informar o nome;\n");
 	}
 
 	public void validarMatricula(String matricula, String oldMatricula) {
 		if (matricula == null || matricula.trim().length() == 0)
-			errors.add("� necess�rio informar a matr�cula;\n");
+			errors.add("ï¿½ necessï¿½rio informar a matrï¿½cula;\n");
 		else
 			jaExiste(matricula, oldMatricula);
 	}
 
 	public void validateEmail(String email, String retype) {
 		if (email == null || email.trim().length() == 0)
-			errors.add("� necess�rio informar o e-mail;\n");
+			errors.add("ï¿½ necessï¿½rio informar o e-mail;\n");
 		else if (email == null || !email.trim().matches(".+@.+\\.[a-zA-Z]+"))
-			errors.add("Informe um e-mail v�lido;\n");
+			errors.add("Informe um e-mail vï¿½lido;\n");
 		if (retype != null)
 			if (!email.equals(retype))
-				errors.add("Os emails n�o s�o iguais. Tente novamente.\n");
+				errors.add("Os emails nï¿½o sï¿½o iguais. Tente novamente.\n");
 	}
 
 	public void validatePasswords(String password, String retype) {
 		if (password == null || password.trim().length() == 0 || retype == null
 				|| retype.trim().length() == 0)
-			errors.add("A senha n�o pode estar em branco;\n");
+			errors.add("A senha nï¿½o pode estar em branco;\n");
 		else if (password.trim().length() < 6)
 			errors.add("A senha deve conter ao menos 6 caracteres;\n");
 		else if ((!password.equals(retype))) {
-			errors.add("As senhas n�o s�o iguais. Tente novamente.\n");
+			errors.add("As senhas nï¿½o sï¿½o iguais. Tente novamente.\n");
 		}
 	}
 
@@ -88,15 +88,15 @@ public class UsuarioBusiness {
 				if (usuario.getCurso() == null)
 					errors.add("Um aluno deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um aluno n�o pode pertencer a um departamento.\n");
+					errors.add("Um aluno nï¿½o pode pertencer a um departamento.\n");
 				if(usuario.getOrientador() == null)
-					errors.add("� necess�rio informar o orientador do aluno.\n");
+					errors.add("ï¿½ necessï¿½rio informar o orientador do aluno.\n");
 				if(usuario.getTitulacao() != null)
 					usuario.setTitulacao(null);
 				break;
 			case Usuario.PROFESSOR:
 				if (usuario.getCurso() != null)
-					errors.add("Um professor n�o deve pertencer a um curso.\n");
+					errors.add("Um professor nï¿½o deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() == null)
 					errors.add("Um professor deve pertencer a um departamento.\n");
 				break;
@@ -108,27 +108,27 @@ public class UsuarioBusiness {
 				break;
 			case Usuario.ADMINISTRADOR:
 				if (usuario.getCurso() != null)
-					errors.add("Um Administrador n�o deve pertencer a um curso.\n");
+					errors.add("Um Administrador nï¿½o deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um Administrador n�o deve pertencer a um departamento.\n");
+					errors.add("Um Administrador nï¿½o deve pertencer a um departamento.\n");
 				break;
 			case Usuario.SECRETARIA:
 				if (usuario.getCurso() == null)
-					errors.add("Um(a) secret�rio(a) deve pertencer a um curso.\n");
+					errors.add("Um(a) secretï¿½rio(a) deve pertencer a um curso.\n");
 				if (usuario.getDepartamento() != null)
-					errors.add("Um(a) secret�rio(a) n�o pode pertencer a um departamento.\n");
+					errors.add("Um(a) secretï¿½rio(a) nï¿½o pode pertencer a um departamento.\n");
 				break;
 			default:
-				errors.add("Tipo inv�lido de usu�rio.\n");
+				errors.add("Tipo invï¿½lido de usuï¿½rio.\n");
 			}
 
 		} else {
-			errors.add("Selecione o Tipo de Usu�rio.\n");
+			errors.add("Selecione o Tipo de Usuï¿½rio.\n");
 		}
 			
 	}
 	
-	// TODO Remover campos desnecessários de cada tipo de usuário
+	// TODO Remover campos desnecessÃ¡rios de cada tipo de usuÃ¡rio
 	public void removerCamposDesnecessarios(Usuario usuario) {
 		if (usuario.getTipoUsuario() != null) {
 			switch (usuario.getTipoUsuario().getIdTipoUsuario()) {
@@ -145,10 +145,10 @@ public class UsuarioBusiness {
 			case Usuario.SECRETARIA:
 				break;
 			default:
-				errors.add("Tipo inv�lido de usu�rio.\n");
+				errors.add("Tipo invï¿½lido de usuï¿½rio.\n");
 			}
 		} else
-			errors.add("Selecione o Tipo de Usu�rio.\n");
+			errors.add("Selecione o Tipo de Usuï¿½rio.\n");
 			
 	}
 
@@ -168,7 +168,7 @@ public class UsuarioBusiness {
 		
 		if (login.matches("[0-9]+")) {
 			try {
-				logger.info("Fazendo login pelo Integra");
+				System.out.println("Fazendo login pelo Integra");
 				integra.doLogin(login, this.encripta(password, "md5"));
 				if (!integra.getProfiles().isEmpty()) {
 					users = usuarioDAO.getByMatricula(integra.getProfiles());
@@ -181,15 +181,15 @@ public class UsuarioBusiness {
 				return false;
 			}
 		} else {
-			logger.info("Login pelo banco de dados");
-			Usuario user = usuarioDAO.retornaUsuario(login, this.encripta(password));
+			System.out.println("Login pelo banco de dados");
+			Usuario user = usuarioDAO.retornaUsuario(login, this.encripta(password));			
 			if(user != null)
 			{
 				users.add(user);
 				usuarioIntegra = false;
 
 			} else {
-				errors.add("Identificador ou senha inv�lidos.");
+				errors.add("Identificador ou senha invalidos.");
 				return false;
 			}
 		}
@@ -252,12 +252,12 @@ public class UsuarioBusiness {
 				SessionManager.setAttribute("usuarios", usuarios);
 				return true;
 			} else {
-				errors.add("Voc� n�o possui uma conta ativa. Por favor contate o coordenador de seu curso.");
+				errors.add("Vocï¿½ nï¿½o possui uma conta ativa. Por favor contate o coordenador de seu curso.");
 				return false;
 			}
 		}
 
-		errors.add("Identificador ou senha inv�lidos!");
+		errors.add("Identificador ou senha invï¿½lidos!");
 		return false;
 	}
 
@@ -290,7 +290,7 @@ public class UsuarioBusiness {
 		return this.encripta(senha, "whirlpool-1");
 	}
 
-	/* Método para gerar a senha provisória (10 caracteres aleatórios). */
+	/* MÃ©todo para gerar a senha provisÃ³ria (10 caracteres aleatÃ³rios). */
 	public String generatePassword() {
 		final String charset = "0123456789" + "abcdefghijklmnopqrstuvwxyz"
 				+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -348,11 +348,11 @@ public class UsuarioBusiness {
 	public boolean exclui(Usuario usuario) {
 		errors.clear();
 		if (new TCCBusiness().userHasTCC(usuario)) {
-			errors.add("O usuário possui TCC(s) cadastrado(s);\n");
+			errors.add("O usuÃ¡rio possui TCC(s) cadastrado(s);\n");
 			return false;
 		}
 		if (new ParticipacaoBusiness().getParticipacoesByUser(usuario).size() > 0) {
-			errors.add("O usuário possui participações em TCCs;\n");
+			errors.add("O usuÃ¡rio possui participaÃ§Ãµes em TCCs;\n");
 			return false;
 		}
 		return usuarioDAO.exclui(usuario);
@@ -361,7 +361,7 @@ public class UsuarioBusiness {
 	public boolean jaExiste(String matricula, String oldMatricula) {
 		errors.clear();
 		if (usuarioDAO.jaExiste(matricula, oldMatricula)) {
-			errors.add("J� existe um usu�rio com a matr�cula informada.");
+			errors.add("Jï¿½ existe um usuï¿½rio com a matrï¿½cula informada.");
 			return true;
 		} else
 			return false;
